@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "Server.h"
+#include "Client.h"
 
 using namespace std;
 using namespace sf;
@@ -15,18 +16,24 @@ int main()
 	shape.setFillColor(Color::Green);
 	shape.setPosition(x, 10);
 
-	Server server(4567);
+	// Test-Server
+	Server server(1337);
 	server.start();
+
+	// Test Client
+	Client client(IpAddress::LocalHost, 1337);
 
 	while(true) {
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		{
+			client.send();
 			x--;
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 		{
+			client.send();
 			x++;
 		}
 

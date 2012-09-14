@@ -21,7 +21,6 @@ public:
 private:
 	
 	unsigned short port;
-	IpAddress address;
 	UdpSocket socket;
 	Thread *serverThread;
 

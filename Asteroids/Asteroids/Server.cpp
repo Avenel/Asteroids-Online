@@ -9,7 +9,6 @@ Server::Server(unsigned short port)
 {	
 	this->port = port;
 
-	this->address = IpAddress::LocalHost;
 	this->socket.setBlocking(false);
 	this->socket.bind(port);
 
@@ -35,16 +34,19 @@ void Server::stop()
 }
 
 void Server::listen() {	
+
+	IpAddress address;
+
 	while(true) {
 		Packet packet;
-		this->socket.receive(packet, this->address, this->port);
+		this->socket.receive(packet, address, this->port);
 		
-		char x[128];
-		if (packet >> x) {
+		std::string message;
+		if (packet >> message) {
 			// Show the address of the sender
 			cout << address << std::endl;
 			// Show the message
-			cout << x << std::endl; 
+			cout << message << std::endl; 
 		}
 	}
 }
