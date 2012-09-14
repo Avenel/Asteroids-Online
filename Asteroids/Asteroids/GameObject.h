@@ -14,23 +14,29 @@ class GameObject
 public:
 	GameObject(void);
 	GameObject(int id);
+	GameObject(int id, int type);
 	~GameObject(void);
 
 	void refresh(Packet packet);
-
+	
+	void setId(int id);
 	int getId();
+
+	int getType();
+	void setType(int type);
+
 	Packet getPacket();
 
-
 	// Temp!
-	int getX();
-	int getY();
-	void setId(int id);
 	void setX(int x);
+	int getX();
+	
 	void setY(int y);
+	int getY();
 
 protected:
 	int id;
+	int type;
 
 	// Temp!
 	int x;

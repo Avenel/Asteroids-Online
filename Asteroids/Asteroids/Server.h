@@ -27,7 +27,7 @@ public:
 	void deRegisterClient(IpAddress address);
 	void deRegisterObject(GameObject *object);
 
-	int createObjectId();
+	int generateObjectId();
 
 	virtual void refresh(Packet packet);
 
@@ -35,10 +35,16 @@ private:
 	
 	unsigned short port;
 	UdpSocket socket;
+	
+	// Später soll es mehrere Threads geben -> Skalierbarkeit
 	Thread *serverThread;
 
+
+	int lastObjectId;
 	std::vector<GameObject*> *objectList;
 	std::vector<IpAddress> *clientList;
+
+	GameObject* generateGameObject(int type, Packet packet);
 
 };
 
