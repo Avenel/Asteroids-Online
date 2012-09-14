@@ -2,6 +2,13 @@
 *.slo
 *.lo
 *.o
+*.manifest
+*.lastbuildstate
+*.log
+*.tlog
+*.obj
+*.idb
+*.pdb
 
 # Compiled Dynamic libraries
 *.so
@@ -10,3 +17,18 @@
 *.lai
 *.la
 *.a
+
+# Foo
+ipch/*
+*.ipch
+
+Debug/*
+*.exe
+
+#Project Files
+*.vcxproj
+*.filters
+*.user
+*.sln
+*.suo
+*.sdf
