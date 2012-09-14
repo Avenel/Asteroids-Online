@@ -16,17 +16,7 @@ GameObject::~GameObject(void)
 
 void GameObject::refresh(Packet packet)
 {
-	int id = 0;
-	int x = 0;
-	int y = 0;
-	packet >> id >> x >> y;
-
-	this->id = id;
-	this->x = x;
-	this->y = y;
-
-	cout << id << " " << x << " " << y << endl;
-	cout << this->id << " " << this->x << " " << this->y << endl;
+	packet >> this->id >> this->x >> this->y;
 }
 
 int GameObject::getId() 

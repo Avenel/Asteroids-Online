@@ -10,12 +10,11 @@ using namespace sf;
 
 int main()
 {	
-	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
+	sf::RenderWindow window(sf::VideoMode(200, 200), "Asteroids Online!");
 
-	int x = 10;
 	sf::CircleShape shape(10.f);
 	shape.setFillColor(Color::Green);
-	shape.setPosition(x, 10);
+	shape.setPosition(50, 20);
 	
 	// Test GameObject
 	GameObject ball(1);

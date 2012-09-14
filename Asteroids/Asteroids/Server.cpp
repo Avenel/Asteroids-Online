@@ -44,19 +44,11 @@ void Server::listen() {
 		this->socket.receive(packet, address, this->port);
 		
 		if (packet >> id >> x >> y) {
-			// Show the address of the sender
-			cout << address << std::endl;
-			// Show the message
-			cout << "Message has arrived!" << std::endl; 
-
 			packet << id << x << y;
 
 			for (vector<GameObject*>::iterator it = this->objectList.begin(); it != this->objectList.end(); ++it)
 			{
 				if ( (*it)->getId() == id) (*it)->refresh(packet);
-				cout << "Object "<< id << " refreshed!" << std::endl; 
-				cout << "X "<< x << " refreshed!" << std::endl; 
-				cout << "Y "<< y << " refreshed!" << std::endl; 
 			}
 
 		}
