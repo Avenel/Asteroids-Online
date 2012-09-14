@@ -21,10 +21,12 @@ Client::~Client(void)
 
 void Client::send()
 {
-	std::string message = "hello";
+	int id = 1;
+	int x = 10;
+	int y = 10;
 	Packet packet;
 
-	packet << message;
+	packet << id << x << y;
 
 	socket.send(packet, this->serverAddress, this->port);
 }

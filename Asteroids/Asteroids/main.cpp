@@ -2,6 +2,7 @@
 
 #include "Server.h"
 #include "Client.h"
+#include "GameObject.h"
 
 using namespace std;
 using namespace sf;
@@ -15,17 +16,26 @@ int main()
 	sf::CircleShape shape(10.f);
 	shape.setFillColor(Color::Green);
 	shape.setPosition(x, 10);
+	
+	// Test GameObject
+	GameObject ball(1);
+	ball.setX(50);
+	ball.setY(20);
 
 	// Test-Server
 	Server server(1337);
 	server.start();
 
+	server.registerObject(&ball);
+
 	// Test Client
-	Client client(IpAddress::LocalHost, 1337);
+	/*Client client(IpAddress::LocalHost, 1337);
+
+	client.send();*/
 
 	while(true) {
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		{
 			client.send();
 			x--;
@@ -35,7 +45,7 @@ int main()
 		{
 			client.send();
 			x++;
-		}
+		}*/
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 		{
@@ -45,7 +55,7 @@ int main()
 		}
 
 
-		shape.setPosition(x, 10);
+		shape.setPosition(ball.getX(), ball.getY());
 
 		window.clear();
 		window.draw(shape);
