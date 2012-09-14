@@ -33,3 +33,4 @@ Debug/*
 *.suo
 *.sdf
 *.ilk
+.opensdf
