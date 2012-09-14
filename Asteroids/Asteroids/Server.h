@@ -8,7 +8,7 @@
 using namespace sf;
 using namespace std;
 
-class Server
+class Server : GameObject
 {
 public:
 	Server();
@@ -21,8 +21,15 @@ public:
 
 	void listen();
 	
+	void registerClient(IpAddress address);
 	void registerObject(GameObject *object);
 
+	void deRegisterClient(IpAddress address);
+	void deRegisterObject(GameObject *object);
+
+	int createObjectId();
+
+	virtual void refresh(Packet packet);
 
 private:
 	
@@ -30,7 +37,8 @@ private:
 	UdpSocket socket;
 	Thread *serverThread;
 
-	std::vector<GameObject*> objectList;
+	std::vector<GameObject*> *objectList;
+	std::vector<IpAddress> *clientList;
 
 };
 

@@ -19,15 +19,20 @@ public:
 	void refresh(Packet packet);
 
 	int getId();
+	Packet getPacket();
+
+
+	// Temp!
 	int getX();
 	int getY();
-
 	void setId(int id);
 	void setX(int x);
 	void setY(int y);
 
-private:
+protected:
 	int id;
+
+	// Temp!
 	int x;
 	int y;
 };

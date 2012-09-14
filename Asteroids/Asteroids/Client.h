@@ -1,7 +1,10 @@
 #pragma once
 
 #include <SFML/Network.hpp>
+#include "GameObject.h"
 #include <iostream>
+#include <vector>
+
 using namespace sf;
 using namespace std;
 
@@ -16,9 +19,14 @@ public:
 
 	void send();
 
+	void registerObject(GameObject *object);
+	void registerToServer();
+
 private: 
 	IpAddress serverAddress;
 	UdpSocket socket;
 	unsigned short port;
+
+	std::vector<GameObject*> objectList;
 };
 

@@ -21,12 +21,24 @@ Client::~Client(void)
 
 void Client::send()
 {
-	int id = 1;
-	int x = 10;
-	int y = 10;
+	
+	for (vector<GameObject*>::iterator it = this->objectList.begin(); it != this->objectList.end(); ++it)
+	{
+		Packet packet = (*it)->getPacket();
+		socket.send(packet, this->serverAddress, this->port);		
+	}
+
+}
+
+void Client::registerObject(GameObject *object)
+{
+	this->objectList.push_back(object);
+}
+
+void Client::registerToServer()
+{
 	Packet packet;
+	packet << -1;
 
-	packet << id << x << y;
-
-	socket.send(packet, this->serverAddress, this->port);
+	socket.send(packet, this->serverAddress, this->port);		
 }
