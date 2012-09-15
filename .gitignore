@@ -34,3 +34,5 @@ Debug/*
 *.sdf
 *.ilk
 *.opensdf
+
+*.dll

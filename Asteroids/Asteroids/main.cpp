@@ -65,6 +65,11 @@ int main()
 			return 0;
 		}
 
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		{
+			ball.setX(100);
+		}
+
         shape.setPosition(ball.getX(), ball.getY());
 		shape2.setPosition(ball2.getX(), ball2.getY());
 
