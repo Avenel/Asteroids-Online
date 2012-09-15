@@ -8,13 +8,6 @@ GameObject::GameObject(void) {
 	this->y = 0;
 }
 
-GameObject::GameObject(int id) {
-	this->id = id;
-	this->type = 0;
-	this->x = 0;
-	this->y = 0;
-}
-
 GameObject::GameObject(int id, int type) {
 	this->id = id;
 	this->type = type;
@@ -61,8 +54,16 @@ void GameObject::setY(int y) {
 	this->y = y;
 }
 
-Packet GameObject::getPacket() {
+Packet GameObject::getPacket(int clientId) {
+
+	if (clientId != 0) this->clientId = clientId;
+
 	Packet packet;
-	packet << this->id << this->type << this->x << this->y;
+	char* uuid_str;
+	packet << this->id << this->clientId << this->type << this->x << this->y;
 	return packet;
+}
+
+int GameObject::getClientId() {
+	return this->clientId;
 }

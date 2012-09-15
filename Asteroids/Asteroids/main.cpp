@@ -1,15 +1,18 @@
 #include <SFML/Graphics.hpp>
-
 #include "Server.h"
 #include "Client.h"
 #include "GameObject.h"
+#include <iostream>
 
 using namespace std;
 using namespace sf;
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
+
+	cout << IpAddress().getPublicAddress().toInteger() << endl;
+
+	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
     
 	CircleShape shape(10.f);
 	shape.setFillColor(Color::Green);
@@ -24,11 +27,11 @@ int main()
 	shapes.push_back(shape);
 	shapes.push_back(shape2);
 
-	GameObject ball(1);
+	GameObject ball(0, 0);
 	ball.setX(10);
 	ball.setY(50);
 
-	GameObject ball2(2);
+	GameObject ball2(1, 0);
 	ball2.setX(150);
 	ball2.setY(150);
 
@@ -51,6 +54,7 @@ int main()
 		client.registerObject(&ball2);
 
 		server.registerObject(&ball2);
+		server.registerClient(IpAddress("192.168.2.101"));
 	}
 
 	bool active = true;
@@ -79,7 +83,6 @@ int main()
 				ball.setX(10);
 			} else {
 				ball2.setX(10);
-				client.registerToServer();
 				client.send();
 				cout << "Left" << endl;
 			}
@@ -112,5 +115,6 @@ int main()
 		window.display();
     }
 
+	system("PAUSE");
     return 0;
 }

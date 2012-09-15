@@ -53,6 +53,7 @@ void Server::listen() {
 
 	while(true) {
 		int id;
+		int clientId;
 		int type;
 
 		Packet packet;
@@ -60,7 +61,7 @@ void Server::listen() {
 		this->socket.receive(packet, address, temp);
 
 		bool ipFound = false;
-		if (packet >> id >> type) {
+		if (packet >> id >> clientId >> type) {
 			// Ip-Adresse bekannt?
 			for (vector<IpAddress>::iterator it = this->clientList->begin(); it != this->clientList->end(); ++it) {
 				if ( it->toInteger() == address.toInteger()) {
@@ -82,7 +83,7 @@ void Server::listen() {
 			cout << id << ", " << type << endl;
 			bool idFound = false;
 			for (vector<GameObject*>::iterator it = this->objectList->begin(); it != this->objectList->end(); ++it)	{ 
-				if ( (*it)->getId() == id) {
+				if ( (*it)->getId() == id && (*it)->getClientId() == clientId) {
 					(*it)->refresh(packet);
 					idFound = true;
 					break;
@@ -91,16 +92,16 @@ void Server::listen() {
 		
 			// GameObject noch nicht bekannt -> anlegen	
 			if (!idFound) {
-				this->registerObject(this->generateGameObject(type, packet));
+				this->registerObject(this->generateGameObject(id, type, packet));
 			}
 		}
 	}
 }
 
 void Server::registerObject(GameObject *object) {
-	cout << "Registered unknown Object: "<< object->getId() << endl;
+	//cout << "Registered unknown Object: "<< object->getId() << endl;
 	this->objectList->push_back(object);
-	this->lastObjectId++;
+	//this->lastObjectId++;
 }
 
 void Server::registerClient(IpAddress address) {
@@ -127,11 +128,12 @@ void Server::refresh(Packet packet) {
 	}
 }
 
-GameObject* Server::generateGameObject(int type, Packet packet) {
+GameObject* Server::generateGameObject(int id, int type, Packet packet) {
 	cout << "Generate Object: " << type << endl;
-	
-	int id = this->generateObjectId();
-	GameObject *temp = new GameObject(id);
+	int newId = id;
+	if (this->isMaster()) newId = this->generateObjectId();
+
+	GameObject *temp = new GameObject(0,0);
 
 	switch(type) {
 	// Default Typ
@@ -141,7 +143,7 @@ GameObject* Server::generateGameObject(int type, Packet packet) {
 		temp->setX(x);
 		temp->setY(y);
 
-		cout << "Create Type 0: " << x << ", " << y << endl;
+		//cout << "Create Type 0: " << temp->getId() << x << ", " << y << endl;
 
 		return temp;
 		break;
@@ -149,7 +151,7 @@ GameObject* Server::generateGameObject(int type, Packet packet) {
 	case 1:
 		break;
 	default:
-		return new GameObject(id);
+		return temp;
 	}
 }
 
@@ -161,7 +163,13 @@ void Server::sendDataTo() {
 	IpAddress address = this->localThreadAddress;
 	for (vector<GameObject*>::iterator it = this->objectList->begin(); it != this->objectList->end(); ++it) {
 		unsigned short temp = this->port;
-		this->socket.send((*it)->getPacket(), address, temp);
+		if ((*it)->getClientId() == 0) {
+			// Server hat dieses Objekt erstellt
+			this->socket.send((*it)->getPacket(IpAddress().getLocalAddress().toInteger()), address, temp);
+		} else {
+			// Objekt kommt von einem Clienten, verändere nicht die clientId
+			this->socket.send((*it)->getPacket(0), address, temp);
+		}
 	}
 }
 

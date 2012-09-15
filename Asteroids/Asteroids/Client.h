@@ -28,6 +28,7 @@ private:
 	IpAddress serverAddress;
 	UdpSocket socket;
 	unsigned short port;
+	int clientId;
 
 	std::vector<GameObject*> objectList;
 };

@@ -2,6 +2,7 @@
 
 #include <SFML/Network.hpp>
 #include <iostream>
+
 using namespace sf;
 using namespace std;
 
@@ -13,7 +14,6 @@ class GameObject
 {
 public:
 	GameObject(void);
-	GameObject(int id);
 	GameObject(int id, int type);
 	~GameObject(void);
 
@@ -22,10 +22,12 @@ public:
 	void setId(int id);
 	int getId();
 
+	int getClientId();
+
 	int getType();
 	void setType(int type);
 
-	Packet getPacket();
+	Packet getPacket(int clientId);
 
 	// Temp!
 	void setX(int x);
@@ -36,6 +38,7 @@ public:
 
 protected:
 	int id;
+	int clientId;
 	int type;
 
 	// Temp!

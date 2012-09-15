@@ -6,6 +6,7 @@
 #include "GameObject.h"
 #include <iostream>
 #include <vector>
+#include <Rpc.h>
 
 using namespace sf;
 using namespace std;
@@ -41,7 +42,6 @@ public:
 	std::vector<GameObject*>* getObjectList();
 	
 protected:
-	
 	bool master;
 
 	unsigned int port;
@@ -58,6 +58,6 @@ protected:
 	float updateTime;
 	IpAddress localThreadAddress;
 
-	GameObject* generateGameObject(int type, Packet packet);
+	GameObject* generateGameObject(int id, int type, Packet packet);
 };
 
