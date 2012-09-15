@@ -37,7 +37,7 @@ public:
 	
 protected:
 	
-	unsigned short port;
+	unsigned int port;
 	UdpSocket socket;
 	
 	// Später soll es mehrere Threads geben -> Skalierbarkeit

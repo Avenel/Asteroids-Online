@@ -31,7 +31,6 @@ int main()
 
 	// Test-Server
 	Server server(1337);
-	server.start();
 	
 	// Test Client
 	Client client(IpAddress::LocalHost, 1337);
@@ -43,11 +42,14 @@ int main()
 	server.registerObject(&ball2);
 	
 	client.registerObject(&ball);
-	client.registerObject(&ball2);
+	client.registerObject(&ball2); 
 	
+
+	server.start();
+
 	// Sende Testdaten
 	client.send();
-
+	
 	while(true) {
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 		{

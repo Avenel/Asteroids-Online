@@ -4,7 +4,6 @@
 Server::Server(void){}
 
 Server::Server(unsigned short port) {	
-	::GameObject(-1);
 	this->port = port;
 
 	this->socket.setBlocking(false);
@@ -18,6 +17,7 @@ Server::Server(unsigned short port) {
 
 	this->listenThread = new Thread(&Server::listen, this);
 	this->synchronizeThread = new Thread(&Server::synchronizeClients, this);
+	this->id = -1;
 }
 
 
@@ -36,12 +36,14 @@ Server::~Server(void) {
 void Server::start() {
 	this->registerObject(this);
 	this->registerClient(IpAddress::LocalHost);
+
 	this->listenThread->launch();
 	this->synchronizeThread->launch();
 }
 
 void Server::stop() {
 	this->listenThread->terminate();
+	this->synchronizeThread->terminate();
 }
 
 void Server::listen() {
@@ -50,7 +52,8 @@ void Server::listen() {
 
 	while(true) {
 		Packet packet;
-		this->socket.receive(packet, address, this->port);
+		unsigned short temp = this->port;
+		this->socket.receive(packet, address, temp);
 
 		// Ip-Adresse bekannt?
 		bool ipFound = false;
@@ -130,16 +133,15 @@ int Server::generateObjectId() {
 void Server::sendDataTo() {
 	IpAddress address = this->localThreadAddress;
 	for (vector<GameObject*>::iterator it = this->objectList->begin(); it != this->objectList->end(); ++it) {
-		this->socket.send((*it)->getPacket(), address, this->port);
+		unsigned short temp = this->port;
+		this->socket.send((*it)->getPacket(), address, temp);
 	}
 }
 
 void Server::synchronizeClients() {
 	// Update Clients every xx ms
-	cout << "Startet synchronizeClients" << endl;
 	Clock clock;
 	Time time = clock.getElapsedTime();
-
 	while(true) {
 		if (clock.getElapsedTime().asMilliseconds() >= time.asMilliseconds()+this->updateTime) {
 			// Starte für jeden Clienten einen eigenen Thread
