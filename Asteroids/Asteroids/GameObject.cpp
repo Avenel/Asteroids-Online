@@ -26,6 +26,7 @@ GameObject::~GameObject(void){}
 
 void GameObject::refresh(Packet packet){
 	packet >> this->x >> this->y;
+	cout << "Refresh: " << this->id << ", "<< x <<", "<< y << endl;
 }
 
 int GameObject::getId() { 
@@ -62,6 +63,6 @@ void GameObject::setY(int y) {
 
 Packet GameObject::getPacket() {
 	Packet packet;
-	packet << this->id << this->x << this->y;
+	packet << this->id << this->type << this->x << this->y;
 	return packet;
 }

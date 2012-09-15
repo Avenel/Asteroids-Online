@@ -20,6 +20,10 @@ int main()
 	shape2.setPosition(50, 50);
 
 	// Test GameObjects
+	vector<CircleShape> shapes;
+	shapes.push_back(shape);
+	shapes.push_back(shape2);
+
 	GameObject ball(1);
 	ball.setX(10);
 	ball.setY(50);
@@ -30,52 +34,81 @@ int main()
 
 	// Test-Server
 	Server server(1337);
-
-	// Test Client
-	Client client(IpAddress::LocalHost, 1337);
-
-	// Registriere die nötigen Objekte
-	client.registerToServer();
-
-	server.registerObject(&ball);
-	server.registerObject(&ball2);
-
-	client.registerObject(&ball);
-	client.registerObject(&ball2); 
-
-
+	server.setMaster(true);
 	server.start();
 
-	// Sende Testdaten
-	client.send();
+	// Test Client und Registrierung
+	Client client(IpAddress("192.168.2.101"), 1337);
 
-    while (window.isOpen())
-    {
+	if (server.isMaster()) {
+		client.setServerAddress(IpAddress("127.0.0.1"));
+		client.registerToServer();
+		client.registerObject(&ball);
+
+		server.registerObject(&ball);
+	} else {
+		client.registerToServer();
+		client.registerObject(&ball2);
+
+		server.registerObject(&ball2);
+	}
+
+	bool active = true;
+
+    while (window.isOpen()) {
         sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+				window.close();
+				server.stop();
+				return 0;
+			}
+
+			if (event.type == Event::GainedFocus) active = true;
+			if (event.type == Event::LostFocus) active = false;
         }
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-		{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && active) {
 			server.stop();
 			window.close();
 			return 0;
 		}
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		{
-			ball.setX(100);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && active) {
+			if (server.isMaster()) {
+				ball.setX(10);
+			} else {
+				ball2.setX(10);
+				client.registerToServer();
+				client.send();
+				cout << "Left" << endl;
+			}
+			
 		}
 
-        shape.setPosition(ball.getX(), ball.getY());
-		shape2.setPosition(ball2.getX(), ball2.getY());
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && active) {
+			if (server.isMaster()) {
+				ball.setX(150);
+			} else {
+				ball2.setX(150);
+				client.send();
+				cout << "Right" << endl;
+			}
+			
+		}
 
+
+		// TEMP Zeichne Kreise
 		window.clear();
-		window.draw(shape);
-		window.draw(shape2);
+		int i = -1;
+		for (vector<GameObject*>::iterator it = server.getObjectList()->begin(); it != server.getObjectList()->end(); ++it)	{ 
+			if (i>=0 && i < 2) {
+				shapes[i].setPosition((*it)->getX(), (*it)->getY());
+				window.draw(shapes[i]);
+			}
+			i++;
+		}
+       
 		window.display();
     }
 

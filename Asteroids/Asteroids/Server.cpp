@@ -9,7 +9,7 @@ Server::Server(unsigned short port) {
 	this->socket.setBlocking(false);
 	this->socket.bind(port);
 
-	this->updateTime = 10;
+	this->updateTime = 1000;
 
 	this->lastObjectId = -1;
 	this->objectList = new vector<GameObject*>();
@@ -18,6 +18,7 @@ Server::Server(unsigned short port) {
 	this->listenThread = new Thread(&Server::listen, this);
 	this->synchronizeThread = new Thread(&Server::synchronizeClients, this);
 	this->id = -1;
+	this->master = false;
 }
 
 
@@ -38,7 +39,8 @@ void Server::start() {
 	this->registerClient(IpAddress::LocalHost);
 
 	this->listenThread->launch();
-	this->synchronizeThread->launch();
+
+	if (this->master) this->synchronizeThread->launch();
 }
 
 void Server::stop() {
@@ -48,34 +50,47 @@ void Server::stop() {
 
 void Server::listen() {
 	IpAddress address;
-	int id;
 
 	while(true) {
+		int id;
+		int type;
+
 		Packet packet;
 		unsigned short temp = this->port;
 		this->socket.receive(packet, address, temp);
 
-		// Ip-Adresse bekannt?
 		bool ipFound = false;
-		for (vector<IpAddress>::iterator it = this->clientList->begin(); it != this->clientList->end(); ++it) {
-			if ( it->toInteger() == address.toInteger()) {
-				ipFound = true;
-				break;
+		if (packet >> id >> type) {
+			// Ip-Adresse bekannt?
+			for (vector<IpAddress>::iterator it = this->clientList->begin(); it != this->clientList->end(); ++it) {
+				if ( it->toInteger() == address.toInteger()) {
+					ipFound = true;
+					break;
+				}
 			}
-		}
 
-		if (!ipFound) continue;
-
-		// Id auspacken und weiterleiten, falls GameObject schon bekannt
-		if (packet >> id) {
-			for (vector<GameObject*>::iterator it = this->objectList->begin(); it != this->objectList->end(); ++it)
-			{ 
-				if ( (*it)->getId() == id) (*it)->refresh(packet);
+			if (!ipFound) {
+				cout << id << endl;
+				if (id == -1) {
+					// Client registrieren
+					this->refresh(packet);
+				}
+				continue;
 			}
-		} else {
-			// GameObject noch nicht bekannt -> anlegen
-			int type;
-			if (packet >> type) {
+		
+			// Id auspacken und weiterleiten, falls GameObject schon bekannt
+			cout << id << ", " << type << endl;
+			bool idFound = false;
+			for (vector<GameObject*>::iterator it = this->objectList->begin(); it != this->objectList->end(); ++it)	{ 
+				if ( (*it)->getId() == id) {
+					(*it)->refresh(packet);
+					idFound = true;
+					break;
+				}
+			}
+		
+			// GameObject noch nicht bekannt -> anlegen	
+			if (!idFound) {
 				this->registerObject(this->generateGameObject(type, packet));
 			}
 		}
@@ -83,7 +98,9 @@ void Server::listen() {
 }
 
 void Server::registerObject(GameObject *object) {
+	cout << "Registered unknown Object: "<< object->getId() << endl;
 	this->objectList->push_back(object);
+	this->lastObjectId++;
 }
 
 void Server::registerClient(IpAddress address) {
@@ -104,25 +121,35 @@ void Server::deRegisterClient(IpAddress address) {
 }
 
 void Server::refresh(Packet packet) {
-	String address;
+	string address;
 	if (packet >> address) {
 		this->registerClient(IpAddress(address));
 	}
 }
 
 GameObject* Server::generateGameObject(int type, Packet packet) {
+	cout << "Generate Object: " << type << endl;
+	
 	int id = this->generateObjectId();
+	GameObject *temp = new GameObject(id);
 
 	switch(type) {
 	// Default Typ
 	case 0:
-		&GameObject(id);
+		int x, y;
+		packet >> x >> y;
+		temp->setX(x);
+		temp->setY(y);
+
+		cout << "Create Type 0: " << x << ", " << y << endl;
+
+		return temp;
 		break;
 	// Schiff, Asteroid, etc...
 	case 1:
 		break;
 	default:
-		return &GameObject(id);
+		return new GameObject(id);
 	}
 }
 
@@ -140,6 +167,7 @@ void Server::sendDataTo() {
 
 void Server::synchronizeClients() {
 	// Update Clients every xx ms
+	cout << "Synchronize Thread startet" << endl;
 	Clock clock;
 	Time time = clock.getElapsedTime();
 	while(true) {
@@ -147,6 +175,9 @@ void Server::synchronizeClients() {
 			// Starte für jeden Clienten einen eigenen Thread
 			for (vector<IpAddress>::iterator it = this->clientList->begin(); it != this->clientList->end(); ++it) {
 				// Noch etwas "experimentell"...
+				// Keine Pakete an sich selbst versenden.
+				if (it->toInteger() == IpAddress::LocalHost.toInteger() || it->toInteger() == IpAddress().getLocalAddress().toInteger()) continue;
+
 				this->localThreadAddress = (*it);
 				Thread sendDataThread(&Server::sendDataTo, this);
 				sendDataThread.launch();
@@ -156,3 +187,15 @@ void Server::synchronizeClients() {
 	}
 }
 
+bool Server::isMaster() {
+	return this->master;
+}
+
+void Server::setMaster(bool master) {
+	this->master = master;
+}
+
+
+std::vector<GameObject*>* Server::getObjectList() {
+	return this->objectList;
+}

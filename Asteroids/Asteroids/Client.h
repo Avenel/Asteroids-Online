@@ -22,6 +22,8 @@ public:
 	void registerObject(GameObject *object);
 	void registerToServer();
 
+	void setServerAddress(IpAddress address);
+
 private: 
 	IpAddress serverAddress;
 	UdpSocket socket;

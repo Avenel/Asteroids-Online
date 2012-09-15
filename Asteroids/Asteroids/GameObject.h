@@ -17,7 +17,7 @@ public:
 	GameObject(int id, int type);
 	~GameObject(void);
 
-	void refresh(Packet packet);
+	virtual void refresh(Packet packet);
 	
 	void setId(int id);
 	int getId();

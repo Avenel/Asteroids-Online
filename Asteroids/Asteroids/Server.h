@@ -33,10 +33,17 @@ public:
 
 	int generateObjectId();
 
-	virtual void refresh(Packet packet);
+	void refresh(Packet packet);
+
+	bool isMaster();
+	void setMaster(bool master);
+
+	std::vector<GameObject*>* getObjectList();
 	
 protected:
 	
+	bool master;
+
 	unsigned int port;
 	UdpSocket socket;
 	
