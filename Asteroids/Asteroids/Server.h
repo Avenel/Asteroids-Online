@@ -1,6 +1,8 @@
 #pragma once
 
 #include <SFML/Network.hpp>
+#include <SFML/System/Clock.hpp>
+
 #include "GameObject.h"
 #include <iostream>
 #include <vector>
@@ -20,7 +22,9 @@ public:
 	void stop();
 
 	void listen();
-	
+	void synchronizeClients();
+	void sendDataTo();
+
 	void registerClient(IpAddress address);
 	void registerObject(GameObject *object);
 
@@ -30,21 +34,23 @@ public:
 	int generateObjectId();
 
 	virtual void refresh(Packet packet);
-
-private:
+	
+protected:
 	
 	unsigned short port;
 	UdpSocket socket;
 	
 	// Später soll es mehrere Threads geben -> Skalierbarkeit
-	Thread *serverThread;
-
+	Thread *listenThread;
+	Thread *synchronizeThread;
 
 	int lastObjectId;
 	std::vector<GameObject*> *objectList;
 	std::vector<IpAddress> *clientList;
 
-	GameObject* generateGameObject(int type, Packet packet);
+	float updateTime;
+	IpAddress localThreadAddress;
 
+	GameObject* generateGameObject(int type, Packet packet);
 };
 

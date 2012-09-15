@@ -10,17 +10,24 @@ Server::Server(unsigned short port) {
 	this->socket.setBlocking(false);
 	this->socket.bind(port);
 
+	this->updateTime = 10;
+
 	this->lastObjectId = -1;
 	this->objectList = new vector<GameObject*>();
 	this->clientList = new vector<IpAddress>();
 
-	this->serverThread = new Thread(&Server::listen, this);
+	this->listenThread = new Thread(&Server::listen, this);
+	this->synchronizeThread = new Thread(&Server::synchronizeClients, this);
 }
 
 
 Server::~Server(void) {
-	this->serverThread->terminate();
-	delete this->serverThread;
+	this->listenThread->terminate();
+	this->synchronizeThread->terminate();
+	this->socket.unbind();
+
+	delete this->listenThread;
+	delete this->synchronizeThread;
 	delete this->clientList;
 	delete this->objectList;
 }
@@ -29,11 +36,12 @@ Server::~Server(void) {
 void Server::start() {
 	this->registerObject(this);
 	this->registerClient(IpAddress::LocalHost);
-	this->serverThread->launch();
+	this->listenThread->launch();
+	this->synchronizeThread->launch();
 }
 
 void Server::stop() {
-	this->serverThread->terminate();
+	this->listenThread->terminate();
 }
 
 void Server::listen() {
@@ -118,3 +126,31 @@ GameObject* Server::generateGameObject(int type, Packet packet) {
 int Server::generateObjectId() {
 	return (this->lastObjectId+1);
 }
+
+void Server::sendDataTo() {
+	IpAddress address = this->localThreadAddress;
+	for (vector<GameObject*>::iterator it = this->objectList->begin(); it != this->objectList->end(); ++it) {
+		this->socket.send((*it)->getPacket(), address, this->port);
+	}
+}
+
+void Server::synchronizeClients() {
+	// Update Clients every xx ms
+	cout << "Startet synchronizeClients" << endl;
+	Clock clock;
+	Time time = clock.getElapsedTime();
+
+	while(true) {
+		if (clock.getElapsedTime().asMilliseconds() >= time.asMilliseconds()+this->updateTime) {
+			// Starte für jeden Clienten einen eigenen Thread
+			for (vector<IpAddress>::iterator it = this->clientList->begin(); it != this->clientList->end(); ++it) {
+				// Noch etwas "experimentell"...
+				this->localThreadAddress = (*it);
+				Thread sendDataThread(&Server::sendDataTo, this);
+				sendDataThread.launch();
+			}
+			time = clock.restart();
+		}
+	}
+}
+
