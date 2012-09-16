@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "Network\Server.h"
 #include "Network\Client.h"
-#include "Entity\GameObject.h"
+#include "Entity\Entity.h"
 #include <iostream>
 
 using namespace std;
@@ -19,17 +19,17 @@ int main()
 	shape2.setFillColor(Color::Red);
 	shape2.setPosition(50, 50);
 
-	// Test GameObjects
+	// Test Entitys
 	vector<CircleShape> shapes;
 	shapes.push_back(shape);
 	shapes.push_back(shape2);
 
-	GameObject ball(0, 0);
+	Entity ball(0, 0);
 	ball.setX(10);
 	ball.setY(50);
 	ball.setClientId(IpAddress().getLocalAddress().toInteger());
 
-	GameObject ball2(1, 0);
+	Entity ball2(1, 0);
 	ball2.setX(150);
 	ball2.setY(150);
 	ball2.setClientId(IpAddress().getLocalAddress().toInteger());
@@ -106,7 +106,7 @@ int main()
 		// TEMP Zeichne Kreise
 		window.clear();
 		int i = -1;
-		for (list<GameObject*>::iterator it = server.getObjectList()->begin(); it != server.getObjectList()->end(); ++it)	{ 
+		for (list<Entity*>::iterator it = server.getObjectList()->begin(); it != server.getObjectList()->end(); ++it)	{ 
 			if (i>=0 && i < 2) {
 				shapes[i].setPosition((*it)->getX(), (*it)->getY());
 				window.draw(shapes[i]);

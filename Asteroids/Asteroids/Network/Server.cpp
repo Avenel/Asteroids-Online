@@ -12,7 +12,7 @@ Server::Server(unsigned short port) {
 	this->updateTime = 5;
 
 	this->lastObjectId = -1;
-	this->objectList = new list<GameObject*>();
+	this->objectList = new list<Entity*>();
 	this->clientList = new list<IpAddress>();
 
 	this->listenThread = new Thread(&Server::listen, this);
@@ -79,9 +79,9 @@ void Server::listen() {
 				continue;
 			}
 		
-			// Id auspacken und weiterleiten, falls GameObject schon bekannt
+			// Id auspacken und weiterleiten, falls Entity schon bekannt
 			bool idFound = false;
-			for (list<GameObject*>::iterator it = this->objectList->begin(); it != this->objectList->end(); ++it)	{ 
+			for (list<Entity*>::iterator it = this->objectList->begin(); it != this->objectList->end(); ++it)	{ 
 				if ( ((*it)->getId() == id) && ((*it)->getClientId() == clientId)) {
 					(*it)->refresh(packet);
 					idFound = true;
@@ -89,15 +89,15 @@ void Server::listen() {
 				}
 			}
 		
-			// GameObject noch nicht bekannt -> anlegen	
+			// Entity noch nicht bekannt -> anlegen	
 			if (!idFound && id > -1) {
-				this->registerObject(this->generateGameObject(id, clientId, type, packet));
+				this->registerObject(this->generateEntity(id, clientId, type, packet));
 			}
 		}
 	}
 }
 
-void Server::registerObject(GameObject *object) {
+void Server::registerObject(Entity *object) {
 	//cout << "Registered unknown Object: "<< object->getId() << ", " << object->getClientId() << endl;
 	this->objectList->push_back(object);
 	this->lastObjectId++;
@@ -108,8 +108,8 @@ void Server::registerClient(IpAddress address) {
 	cout << "Registered Client: " << address.toString() << endl;
 }
 
-void Server::deRegisterObject(GameObject *object) {
-	for (list<GameObject*>::iterator it = this->objectList->begin(); it != this->objectList->end(); ++it) {
+void Server::deRegisterObject(Entity *object) {
+	for (list<Entity*>::iterator it = this->objectList->begin(); it != this->objectList->end(); ++it) {
 		if ( (*it)->getId() == id) this->objectList->erase(it);
 	}
 }
@@ -127,8 +127,8 @@ void Server::refresh(Packet packet) {
 	}
 }
 
-GameObject* Server::generateGameObject(int id, int clientId, int type, Packet packet) {	
-	GameObject *temp = new GameObject(0,0);
+Entity* Server::generateEntity(int id, int clientId, int type, Packet packet) {	
+	Entity *temp = new Entity(0,0);
 	temp->setClientId(clientId);
 	temp->setId(id);
 
@@ -155,7 +155,7 @@ int Server::generateObjectId() {
 	return (this->lastObjectId+1);
 }
 
-void Server::sendData(GameObject *object) {
+void Server::sendData(Entity *object) {
 	for (list<IpAddress>::iterator it = this->clientList->begin(); it != this->clientList->end(); ++it) {
 		// Keine Pakete an sich selbst versenden.
 		if (it->toInteger() == IpAddress::LocalHost.toInteger() || it->toInteger() == IpAddress().getLocalAddress().toInteger()) continue;
@@ -178,7 +178,7 @@ void Server::synchronizeClients() {
 	Time time = clock.getElapsedTime();
 	while(true) {
 		if (clock.getElapsedTime().asMilliseconds() >= time.asMilliseconds()+this->updateTime) {
-			for (list<GameObject*>::iterator it = this->objectList->begin(); it != this->objectList->end(); ++it) {
+			for (list<Entity*>::iterator it = this->objectList->begin(); it != this->objectList->end(); ++it) {
 				sendData((*it));
 			}
 			time = clock.restart();
@@ -195,6 +195,6 @@ void Server::setMaster(bool master) {
 }
 
 
-std::list<GameObject*>* Server::getObjectList() {
+std::list<Entity*>* Server::getObjectList() {
 	return this->objectList;
 }

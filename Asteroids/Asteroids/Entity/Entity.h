@@ -7,15 +7,15 @@ using namespace sf;
 using namespace std;
 
 /**
-	Ein "GameObject" dient als Grundlage aller Objekte die im Spiel vorkommen werden
+	Ein "Entity" dient als Grundlage aller Objekte die im Spiel vorkommen werden
 **/
 
-class GameObject
+class Entity
 {
 public:
-	GameObject(void);
-	GameObject(int id, int type);
-	~GameObject(void);
+	Entity(void);
+	Entity(int id, int type);
+	~Entity(void);
 
 	virtual void refresh(Packet packet);
 	

@@ -3,7 +3,7 @@
 #include <SFML/Network.hpp>
 #include <SFML/System/Clock.hpp>
 
-#include "..\Entity\GameObject.h"
+#include "..\Entity\Entity.h"
 #include <iostream>
 #include <list>
 #include <Rpc.h>
@@ -11,7 +11,7 @@
 using namespace sf;
 using namespace std;
 
-class Server : GameObject
+class Server : Entity
 {
 public:
 	Server();
@@ -24,13 +24,13 @@ public:
 
 	void listen();
 	void synchronizeClients();
-	void sendData(GameObject *object);
+	void sendData(Entity *object);
 
 	void registerClient(IpAddress address);
-	void registerObject(GameObject *object);
+	void registerObject(Entity *object);
 
 	void deRegisterClient(IpAddress address);
-	void deRegisterObject(GameObject *object);
+	void deRegisterObject(Entity *object);
 
 	int generateObjectId();
 
@@ -39,7 +39,7 @@ public:
 	bool isMaster();
 	void setMaster(bool master);
 
-	std::list<GameObject*>* getObjectList();
+	std::list<Entity*>* getObjectList();
 	
 protected:
 	bool master;
@@ -54,12 +54,12 @@ protected:
 	Thread *synchronizeThread;
 
 	int lastObjectId;
-	std::list<GameObject*> *objectList;
+	std::list<Entity*> *objectList;
 	std::list<IpAddress> *clientList;
 
 	float updateTime;
 	IpAddress localThreadAddress;
 
-	GameObject* generateGameObject(int id, int clientId, int type, Packet packet);
+	Entity* generateEntity(int id, int clientId, int type, Packet packet);
 };
 

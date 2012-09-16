@@ -11,7 +11,7 @@ Client::Client(IpAddress address, unsigned short port) {
 	this->socket.setBlocking(false);
 	
 	this->clientId = IpAddress().getPublicAddress().toInteger();
-	this->objectList = new list<GameObject*>();
+	this->objectList = new list<Entity*>();
 }
 
 
@@ -20,13 +20,13 @@ Client::~Client(void) {
 }
 
 void Client::send() {
-	for (list<GameObject*>::iterator it = this->objectList->begin(); it != this->objectList->end(); ++it) {
+	for (list<Entity*>::iterator it = this->objectList->begin(); it != this->objectList->end(); ++it) {
 		Packet packet = (*it)->getPacket(this->clientId);
 		socket.send(packet, this->serverAddress, this->port);		
 	}
 }
 
-void Client::registerObject(GameObject *object) {
+void Client::registerObject(Entity *object) {
 	this->objectList->push_back(object);
 }
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SFML/Network.hpp>
-#include "..\Entity\GameObject.h"
+#include "..\Entity\Entity.h"
 #include <iostream>
 #include <list>
 
@@ -19,7 +19,7 @@ public:
 
 	void send();
 
-	void registerObject(GameObject *object);
+	void registerObject(Entity *object);
 	void registerToServer();
 
 	void setServerAddress(IpAddress address);
@@ -30,6 +30,6 @@ private:
 	unsigned short port;
 	int clientId;
 
-	std::list<GameObject*> *objectList;
+	std::list<Entity*> *objectList;
 };
 
