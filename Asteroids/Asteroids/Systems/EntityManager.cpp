@@ -23,3 +23,7 @@ Entity* EntityManager::getEntity(int id, int clientId, int type) {
 	}
 	return 0;
 }
+
+hash_map<int, list<Entity*>*>* EntityManager::getClientEntities(int clientId) {
+	return this->clientEntities->find(clientId)->second;
+}

@@ -12,7 +12,7 @@ public:
 
 	void addEntity(Entity *newEntity);
 	Entity* getEntity(int id, int clientId, int type);
-	hash_map<int, Entity*>* getClientEntities(int clientId);
+	hash_map<int, list<Entity*>*>* getClientEntities(int clientId);
 
 private:
 	/** Es gibt 2 Hashmaps + 1 Liste:	1) Geordnet nach ClientIds
