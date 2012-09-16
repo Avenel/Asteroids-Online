@@ -6,14 +6,14 @@ Server::Server(void){}
 Server::Server(unsigned short port) {	
 	this->port = port;
 
-	this->socket.setBlocking(false);
+	this->socket.setBlocking(true);
 	this->socket.bind(port);
 
-	this->updateTime = 1000;
+	this->updateTime = 5;
 
 	this->lastObjectId = -1;
-	this->objectList = new vector<GameObject*>();
-	this->clientList = new vector<IpAddress>();
+	this->objectList = new list<GameObject*>();
+	this->clientList = new list<IpAddress>();
 
 	this->listenThread = new Thread(&Server::listen, this);
 	this->synchronizeThread = new Thread(&Server::synchronizeClients, this);
@@ -65,7 +65,7 @@ void Server::listen() {
 		if (packet >> id >> clientId >> type) {
 			//cout << "RECEIVED DATA: " << address.toString() << endl;
 			// Ip-Adresse bekannt?
-			for (vector<IpAddress>::iterator it = this->clientList->begin(); it != this->clientList->end(); ++it) {
+			for (list<IpAddress>::iterator it = this->clientList->begin(); it != this->clientList->end(); ++it) {
 				if ( it->toInteger() == address.toInteger()) {
 					ipFound = true;
 					break;
@@ -81,7 +81,7 @@ void Server::listen() {
 		
 			// Id auspacken und weiterleiten, falls GameObject schon bekannt
 			bool idFound = false;
-			for (vector<GameObject*>::iterator it = this->objectList->begin(); it != this->objectList->end(); ++it)	{ 
+			for (list<GameObject*>::iterator it = this->objectList->begin(); it != this->objectList->end(); ++it)	{ 
 				if ( ((*it)->getId() == id) && ((*it)->getClientId() == clientId)) {
 					(*it)->refresh(packet);
 					idFound = true;
@@ -109,13 +109,13 @@ void Server::registerClient(IpAddress address) {
 }
 
 void Server::deRegisterObject(GameObject *object) {
-	for (vector<GameObject*>::iterator it = this->objectList->begin(); it != this->objectList->end(); ++it) {
+	for (list<GameObject*>::iterator it = this->objectList->begin(); it != this->objectList->end(); ++it) {
 		if ( (*it)->getId() == id) this->objectList->erase(it);
 	}
 }
 
 void Server::deRegisterClient(IpAddress address) {
-	for (vector<IpAddress>::iterator it = this->clientList->begin(); it != this->clientList->end(); ++it) {
+	for (list<IpAddress>::iterator it = this->clientList->begin(); it != this->clientList->end(); ++it) {
 		if ( it->toInteger() == address.toInteger()) this->clientList->erase(it);
 	}
 }
@@ -155,16 +155,18 @@ int Server::generateObjectId() {
 	return (this->lastObjectId+1);
 }
 
-void Server::sendDataTo() {
-	IpAddress address = this->localThreadAddress;
-	for (vector<GameObject*>::iterator it = this->objectList->begin(); it != this->objectList->end(); ++it) {
+void Server::sendData(GameObject *object) {
+	for (list<IpAddress>::iterator it = this->clientList->begin(); it != this->clientList->end(); ++it) {
+		// Keine Pakete an sich selbst versenden.
+		if (it->toInteger() == IpAddress::LocalHost.toInteger() || it->toInteger() == IpAddress().getLocalAddress().toInteger()) continue;
+
 		unsigned short temp = this->port;
-		if ((*it)->getClientId() == 0) {
+		if (object->getClientId() == this->id) {
 			// Server hat dieses Objekt erstellt
-			this->socket.send((*it)->getPacket(IpAddress().getLocalAddress().toInteger()), address, temp);
+			this->socket.send(object->getPacket(IpAddress().getLocalAddress().toInteger()), (*it), temp);
 		} else {
 			// Objekt kommt von einem Clienten, verändere nicht die clientId
-			this->socket.send((*it)->getPacket(0), address, temp);
+			this->socket.send(object->getPacket(0), (*it), temp);
 		}
 	}
 }
@@ -176,15 +178,8 @@ void Server::synchronizeClients() {
 	Time time = clock.getElapsedTime();
 	while(true) {
 		if (clock.getElapsedTime().asMilliseconds() >= time.asMilliseconds()+this->updateTime) {
-			// Starte für jeden Clienten einen eigenen Thread
-			for (vector<IpAddress>::iterator it = this->clientList->begin(); it != this->clientList->end(); ++it) {
-				// Noch etwas "experimentell"...
-				// Keine Pakete an sich selbst versenden.
-				if (it->toInteger() == IpAddress::LocalHost.toInteger() || it->toInteger() == IpAddress().getLocalAddress().toInteger()) continue;
-
-				this->localThreadAddress = (*it);
-				Thread sendDataThread(&Server::sendDataTo, this);
-				sendDataThread.launch();
+			for (list<GameObject*>::iterator it = this->objectList->begin(); it != this->objectList->end(); ++it) {
+				sendData((*it));
 			}
 			time = clock.restart();
 		}
@@ -200,6 +195,6 @@ void Server::setMaster(bool master) {
 }
 
 
-std::vector<GameObject*>* Server::getObjectList() {
+std::list<GameObject*>* Server::getObjectList() {
 	return this->objectList;
 }

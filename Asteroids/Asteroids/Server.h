@@ -5,7 +5,7 @@
 
 #include "GameObject.h"
 #include <iostream>
-#include <vector>
+#include <list>
 #include <Rpc.h>
 
 using namespace sf;
@@ -24,7 +24,7 @@ public:
 
 	void listen();
 	void synchronizeClients();
-	void sendDataTo();
+	void sendData(GameObject *object);
 
 	void registerClient(IpAddress address);
 	void registerObject(GameObject *object);
@@ -39,7 +39,7 @@ public:
 	bool isMaster();
 	void setMaster(bool master);
 
-	std::vector<GameObject*>* getObjectList();
+	std::list<GameObject*>* getObjectList();
 	
 protected:
 	bool master;
@@ -54,8 +54,8 @@ protected:
 	Thread *synchronizeThread;
 
 	int lastObjectId;
-	std::vector<GameObject*> *objectList;
-	std::vector<IpAddress> *clientList;
+	std::list<GameObject*> *objectList;
+	std::list<IpAddress> *clientList;
 
 	float updateTime;
 	IpAddress localThreadAddress;

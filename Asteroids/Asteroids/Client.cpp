@@ -11,20 +11,23 @@ Client::Client(IpAddress address, unsigned short port) {
 	this->socket.setBlocking(false);
 	
 	this->clientId = IpAddress().getPublicAddress().toInteger();
+	this->objectList = new list<GameObject*>();
 }
 
 
-Client::~Client(void) {}
+Client::~Client(void) {
+	delete this->objectList;
+}
 
 void Client::send() {
-	for (vector<GameObject*>::iterator it = this->objectList.begin(); it != this->objectList.end(); ++it) {
+	for (list<GameObject*>::iterator it = this->objectList->begin(); it != this->objectList->end(); ++it) {
 		Packet packet = (*it)->getPacket(this->clientId);
 		socket.send(packet, this->serverAddress, this->port);		
 	}
 }
 
 void Client::registerObject(GameObject *object) {
-	this->objectList.push_back(object);
+	this->objectList->push_back(object);
 }
 
 void Client::registerToServer() {

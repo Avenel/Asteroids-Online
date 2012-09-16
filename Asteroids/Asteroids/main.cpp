@@ -36,7 +36,7 @@ int main()
 
 	// Test-Server
 	Server server(1337);
-	server.setMaster(true);
+	server.setMaster(false);
 	server.start();
 
 	// Test Client und Registrierung
@@ -106,7 +106,7 @@ int main()
 		// TEMP Zeichne Kreise
 		window.clear();
 		int i = -1;
-		for (vector<GameObject*>::iterator it = server.getObjectList()->begin(); it != server.getObjectList()->end(); ++it)	{ 
+		for (list<GameObject*>::iterator it = server.getObjectList()->begin(); it != server.getObjectList()->end(); ++it)	{ 
 			if (i>=0 && i < 2) {
 				shapes[i].setPosition((*it)->getX(), (*it)->getY());
 				window.draw(shapes[i]);

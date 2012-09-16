@@ -3,7 +3,7 @@
 #include <SFML/Network.hpp>
 #include "GameObject.h"
 #include <iostream>
-#include <vector>
+#include <list>
 
 using namespace sf;
 using namespace std;
@@ -30,6 +30,6 @@ private:
 	unsigned short port;
 	int clientId;
 
-	std::vector<GameObject*> objectList;
+	std::list<GameObject*> *objectList;
 };
 
