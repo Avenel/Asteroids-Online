@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SFML/Network.hpp>
-#include "GameObject.h"
+#include "..\Entity\GameObject.h"
 #include <iostream>
 #include <list>
 

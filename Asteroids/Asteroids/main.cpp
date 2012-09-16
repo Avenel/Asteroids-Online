@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
-#include "Server.h"
-#include "Client.h"
-#include "GameObject.h"
+#include "Network\Server.h"
+#include "Network\Client.h"
+#include "Entity\GameObject.h"
 #include <iostream>
 
 using namespace std;

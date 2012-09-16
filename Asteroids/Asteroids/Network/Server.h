@@ -3,7 +3,7 @@
 #include <SFML/Network.hpp>
 #include <SFML/System/Clock.hpp>
 
-#include "GameObject.h"
+#include "..\Entity\GameObject.h"
 #include <iostream>
 #include <list>
 #include <Rpc.h>
