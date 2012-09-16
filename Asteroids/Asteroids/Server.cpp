@@ -17,7 +17,8 @@ Server::Server(unsigned short port) {
 
 	this->listenThread = new Thread(&Server::listen, this);
 	this->synchronizeThread = new Thread(&Server::synchronizeClients, this);
-	this->id = -1;
+	this->id = IpAddress().getLocalAddress().toInteger();
+	this->clientId = IpAddress().getLocalAddress().toInteger();
 	this->master = false;
 }
 
@@ -62,6 +63,7 @@ void Server::listen() {
 
 		bool ipFound = false;
 		if (packet >> id >> clientId >> type) {
+			//cout << "RECEIVED DATA: " << address.toString() << endl;
 			// Ip-Adresse bekannt?
 			for (vector<IpAddress>::iterator it = this->clientList->begin(); it != this->clientList->end(); ++it) {
 				if ( it->toInteger() == address.toInteger()) {
@@ -70,20 +72,17 @@ void Server::listen() {
 				}
 			}
 
-			if (!ipFound) {
-				cout << id << endl;
-				if (id == -1) {
-					// Client registrieren
-					this->refresh(packet);
-				}
+			if (!ipFound && id == -1) {
+				// Client registrieren
+				packet << address.toString();
+				this->refresh(packet);
 				continue;
 			}
 		
 			// Id auspacken und weiterleiten, falls GameObject schon bekannt
-			cout << id << ", " << type << endl;
 			bool idFound = false;
 			for (vector<GameObject*>::iterator it = this->objectList->begin(); it != this->objectList->end(); ++it)	{ 
-				if ( (*it)->getId() == id && (*it)->getClientId() == clientId) {
+				if ( ((*it)->getId() == id) && ((*it)->getClientId() == clientId)) {
 					(*it)->refresh(packet);
 					idFound = true;
 					break;
@@ -91,17 +90,17 @@ void Server::listen() {
 			}
 		
 			// GameObject noch nicht bekannt -> anlegen	
-			if (!idFound) {
-				this->registerObject(this->generateGameObject(id, type, packet));
+			if (!idFound && id > -1) {
+				this->registerObject(this->generateGameObject(id, clientId, type, packet));
 			}
 		}
 	}
 }
 
 void Server::registerObject(GameObject *object) {
-	//cout << "Registered unknown Object: "<< object->getId() << endl;
+	//cout << "Registered unknown Object: "<< object->getId() << ", " << object->getClientId() << endl;
 	this->objectList->push_back(object);
-	//this->lastObjectId++;
+	this->lastObjectId++;
 }
 
 void Server::registerClient(IpAddress address) {
@@ -128,12 +127,10 @@ void Server::refresh(Packet packet) {
 	}
 }
 
-GameObject* Server::generateGameObject(int id, int type, Packet packet) {
-	cout << "Generate Object: " << type << endl;
-	int newId = id;
-	if (this->isMaster()) newId = this->generateObjectId();
-
+GameObject* Server::generateGameObject(int id, int clientId, int type, Packet packet) {	
 	GameObject *temp = new GameObject(0,0);
+	temp->setClientId(clientId);
+	temp->setId(id);
 
 	switch(type) {
 	// Default Typ
@@ -143,16 +140,15 @@ GameObject* Server::generateGameObject(int id, int type, Packet packet) {
 		temp->setX(x);
 		temp->setY(y);
 
-		//cout << "Create Type 0: " << temp->getId() << x << ", " << y << endl;
-
-		return temp;
 		break;
 	// Schiff, Asteroid, etc...
 	case 1:
 		break;
 	default:
-		return temp;
+		break;
 	}
+
+	return temp;
 }
 
 int Server::generateObjectId() {

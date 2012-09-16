@@ -9,9 +9,6 @@ using namespace sf;
 
 int main()
 {
-
-	cout << IpAddress().getPublicAddress().toInteger() << endl;
-
 	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
     
 	CircleShape shape(10.f);
@@ -30,10 +27,12 @@ int main()
 	GameObject ball(0, 0);
 	ball.setX(10);
 	ball.setY(50);
+	ball.setClientId(IpAddress().getLocalAddress().toInteger());
 
 	GameObject ball2(1, 0);
 	ball2.setX(150);
 	ball2.setY(150);
+	ball2.setClientId(IpAddress().getLocalAddress().toInteger());
 
 	// Test-Server
 	Server server(1337);
@@ -45,19 +44,19 @@ int main()
 
 	if (server.isMaster()) {
 		client.setServerAddress(IpAddress("127.0.0.1"));
-		client.registerToServer();
 		client.registerObject(&ball);
-
 		server.registerObject(&ball);
 	} else {
 		client.registerToServer();
 		client.registerObject(&ball2);
-
 		server.registerObject(&ball2);
 		server.registerClient(IpAddress("192.168.2.101"));
 	}
 
 	bool active = true;
+	bool leftKeyPressed = false;
+	bool rightKeyPressed = false;
+
 
     while (window.isOpen()) {
         sf::Event event;
@@ -70,6 +69,11 @@ int main()
 
 			if (event.type == Event::GainedFocus) active = true;
 			if (event.type == Event::LostFocus) active = false;
+
+			if (event.type = Event::KeyReleased) {
+				leftKeyPressed = false;
+				rightKeyPressed = false;
+			}
         }
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && active) {
@@ -78,28 +82,26 @@ int main()
 			return 0;
 		}
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && active) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && active && !leftKeyPressed) {
 			if (server.isMaster()) {
 				ball.setX(10);
 			} else {
 				ball2.setX(10);
 				client.send();
-				cout << "Left" << endl;
 			}
-			
+			leftKeyPressed = true;
 		}
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && active) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && active && !rightKeyPressed) {
 			if (server.isMaster()) {
 				ball.setX(150);
 			} else {
 				ball2.setX(150);
 				client.send();
-				cout << "Right" << endl;
 			}
-			
+			rightKeyPressed = true;
 		}
-
+		
 
 		// TEMP Zeichne Kreise
 		window.clear();

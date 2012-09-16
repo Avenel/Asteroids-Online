@@ -44,6 +44,8 @@ public:
 protected:
 	bool master;
 
+	int serverId;
+
 	unsigned int port;
 	UdpSocket socket;
 	
@@ -58,6 +60,6 @@ protected:
 	float updateTime;
 	IpAddress localThreadAddress;
 
-	GameObject* generateGameObject(int id, int type, Packet packet);
+	GameObject* generateGameObject(int id, int clientId, int type, Packet packet);
 };
 

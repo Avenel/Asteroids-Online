@@ -29,7 +29,7 @@ void Client::registerObject(GameObject *object) {
 
 void Client::registerToServer() {
 	Packet packet;
-	packet << -1 << 0 << 0 << IpAddress().getLocalAddress().toString();
+	packet << -1 << this->clientId << 0;
 
 	socket.send(packet, this->serverAddress, this->port);
 }

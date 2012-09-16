@@ -23,6 +23,7 @@ public:
 	int getId();
 
 	int getClientId();
+	void setClientId(int clientId);
 
 	int getType();
 	void setType(int type);
