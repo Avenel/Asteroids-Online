@@ -1,10 +1,13 @@
 #pragma once
 #include "gameobject.h"
+#include <SFML/Graphics/ConvexShape.hpp>
 
-class Starship : public GameObject
+class Starship : public GameObject, public sf::ConvexShape
 {
 public:
-	Starship(void);
+	Starship(sf::Color color);
 	~Starship(void);
+private:
+
 };
 
