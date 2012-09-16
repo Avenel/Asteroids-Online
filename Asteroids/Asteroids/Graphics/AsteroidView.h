@@ -1,6 +1,7 @@
 #pragma once
+#include "View.h"
 
-class AsteroidView
+class AsteroidView : public View
 {
 public:
 	AsteroidView(void);

@@ -1,5 +1,7 @@
 #pragma once
-class StarshipView
+#include "View.h"
+
+class StarshipView : public View
 {
 public:
 	StarshipView(void);

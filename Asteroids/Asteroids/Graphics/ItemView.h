@@ -1,5 +1,7 @@
 #pragma once
-class ItemView
+#include "View.h"
+
+class ItemView : public View
 {
 public:
 	ItemView(void);
