@@ -1,7 +1,6 @@
 #pragma once
-#include "gameobject.h"
-class Asteroid :
-	public GameObject
+
+class Asteroid
 {
 public:
 	Asteroid(void);

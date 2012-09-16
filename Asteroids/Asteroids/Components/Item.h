@@ -1,7 +1,6 @@
 #pragma once
-#include "gameobject.h"
 
-class Item : public GameObject
+class Item
 {
 public:
 	Item(void);
