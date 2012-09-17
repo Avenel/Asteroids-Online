@@ -2,6 +2,8 @@
 #include "Network\Server.h"
 #include "Network\Client.h"
 #include "Entity\Entity.h"
+#include "Systems\SystemManager.h"
+#include "Systems\MotionControlSystem.h"
 #include <iostream>
 
 using namespace std;
@@ -11,8 +13,18 @@ int mainMB()
 {
 	sf::RenderWindow window(sf::VideoMode(200, 200), "Asteroids Online!");
     
+	// SystemManager
+	SystemManager systemManager;
+
 	// EntityManager
 	EntityManager entityManager;
+
+	// MotionControlSystem
+	MotionControlSystem motionCtrlSystem;
+
+	// Systeme hinzufügen
+	systemManager.addSystem(&entityManager);
+	systemManager.addSystem(&motionCtrlSystem);
 
 	// Test-Server
 	Server server(1337, &entityManager);

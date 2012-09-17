@@ -1,10 +1,12 @@
 #pragma once
 
 #include "..\Entity\Entity.h"
+#include "SystemCore.h"
+
 #include <list>
 #include <map>
 
-class EntityManager
+class EntityManager : public SystemCore
 {
 public:
 	EntityManager(void);
