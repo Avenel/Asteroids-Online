@@ -128,7 +128,7 @@ void Server::refresh(sf::Packet packet) {
 }
 
 Entity* Server::generateEntity(int id, int clientId, int type, sf::Packet packet) {	
-	Entity *temp = new Entity(0,0);
+	Entity *temp = new Entity(0,Entity::EntityType(type));
 	temp->setClientId(clientId);
 	temp->setId(id);
 

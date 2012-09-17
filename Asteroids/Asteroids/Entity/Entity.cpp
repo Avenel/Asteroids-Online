@@ -3,14 +3,14 @@
 
 Entity::Entity(void) {
 	this->id = 0;
-	this->type = 0;
+	this->type = EntityType::OBJECT;
 	this->x = 0;
 	this->y = 0;
 
 	this->units = new list<Unit*>();
 }
 
-Entity::Entity(int id, int type) {
+Entity::Entity(int id, EntityType type) {
 	this->id = id;
 	this->type = type;
 	this->x = 0;
@@ -43,7 +43,7 @@ void Entity::setId(int id) {
 	this->id = id;
 }
 
-void Entity::setType(int type) {
+void Entity::setType(EntityType type) {
 	this->type = type;
 }
 

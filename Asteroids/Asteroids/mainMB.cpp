@@ -24,12 +24,12 @@ int mainMB()
 	shapes.push_back(shape);
 	shapes.push_back(shape2);
 
-	Entity ball(0, 0);
+	Entity ball(0, Entity::EntityType::OBJECT);
 	ball.setX(10);
 	ball.setY(50);
 	ball.setClientId(IpAddress().getLocalAddress().toInteger());
 
-	Entity ball2(1, 0);
+	Entity ball2(1, Entity::EntityType::OBJECT);
 	ball2.setX(150);
 	ball2.setY(150);
 	ball2.setClientId(IpAddress().getLocalAddress().toInteger());
@@ -39,7 +39,7 @@ int mainMB()
 
 	// Test-Server
 	Server server(1337, &entityManager);
-	server.setMaster(false);
+	server.setMaster(true);
 	server.start();
 
 	// Test Client und Registrierung

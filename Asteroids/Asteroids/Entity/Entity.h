@@ -7,6 +7,9 @@
 
 using namespace std;
 
+
+
+
 /**
 	Ein "Entity" dient als Grundlage aller Objekte die im Spiel vorkommen werden
 **/
@@ -14,8 +17,17 @@ using namespace std;
 class Entity
 {
 public:
+
+	/**
+		Verschiedene Entity-Typen werden hier hinzugefügt.
+	**/
+	enum EntityType {
+		SERVER,
+		OBJECT
+	};
+
 	Entity(void);
-	Entity(int id, int type);
+	Entity(int id, EntityType type);
 	~Entity(void);
 
 	virtual void refresh(sf::Packet packet);
@@ -27,7 +39,7 @@ public:
 	void setClientId(int clientId);
 
 	int getType();
-	void setType(int type);
+	void setType(EntityType type);
 
 	sf::Packet getPacket(int clientId);
 
@@ -45,7 +57,7 @@ public:
 protected:
 	int id;
 	int clientId;
-	int type;
+	EntityType type;
 
 	// Temp!
 	int x;
