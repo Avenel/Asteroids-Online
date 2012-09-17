@@ -32,8 +32,6 @@ public:
 	void deRegisterClient(sf::IpAddress address);
 	void deRegisterObject(Entity *object);
 
-	int generateObjectId();
-
 	void refresh(sf::Packet packet);
 
 	bool isMaster();
@@ -53,7 +51,6 @@ protected:
 	sf::Thread *listenThread;
 	sf::Thread *synchronizeThread;
 
-	int lastObjectId;
 	std::list<sf::IpAddress> *clientList;
 
 	float updateTime;

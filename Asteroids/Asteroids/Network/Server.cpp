@@ -15,7 +15,6 @@ Server::Server(unsigned short port, EntityManager *manager) {
 	
 	this->updateTime = 5;
 
-	this->lastObjectId = -1;
 	this->clientList = new list<sf::IpAddress>();
 
 	this->listenThread = new sf::Thread(&Server::listen, this);
@@ -102,7 +101,6 @@ void Server::listen() {
 void Server::registerObject(Entity *object) {
 	//cout << "Registered unknown Object: "<< object->getId() << ", " << object->getClientId() << endl;
 	this->entityManager->addEntity(object);
-	this->lastObjectId++;
 }
 
 void Server::registerClient(sf::IpAddress address) {
@@ -149,10 +147,6 @@ Entity* Server::generateEntity(int id, int clientId, int type, sf::Packet packet
 	}
 
 	return temp;
-}
-
-int Server::generateObjectId() {
-	return (this->lastObjectId+1);
 }
 
 void Server::sendData(Entity *object) {

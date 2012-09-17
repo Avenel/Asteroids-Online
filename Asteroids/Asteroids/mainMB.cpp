@@ -9,31 +9,8 @@ using namespace sf;
 
 int mainMB()
 {
-	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
+	sf::RenderWindow window(sf::VideoMode(200, 200), "Asteroids Online!");
     
-	CircleShape shape(10.f);
-	shape.setFillColor(Color::Green);
-	shape.setPosition(50, 20);
-
-	CircleShape shape2(10.f);
-	shape2.setFillColor(Color::Red);
-	shape2.setPosition(50, 50);
-
-	// Test Entitys
-	vector<CircleShape> shapes;
-	shapes.push_back(shape);
-	shapes.push_back(shape2);
-
-	Entity ball(0, Entity::EntityType::OBJECT);
-	ball.setX(10);
-	ball.setY(50);
-	ball.setClientId(IpAddress().getLocalAddress().toInteger());
-
-	Entity ball2(1, Entity::EntityType::OBJECT);
-	ball2.setX(150);
-	ball2.setY(150);
-	ball2.setClientId(IpAddress().getLocalAddress().toInteger());
-
 	// EntityManager
 	EntityManager entityManager;
 
