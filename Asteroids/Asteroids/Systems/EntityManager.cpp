@@ -63,3 +63,5 @@ int EntityManager::getNextId(int clientId, int type) {
 	return (*(*this->clientEntities)[clientId])[type]->size();
 }
 
+void EntityManager::update() {
+}

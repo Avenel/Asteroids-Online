@@ -21,6 +21,8 @@ public:
 	std::map<int, std::map<int, std::map<int, Entity*>*> *>* getAllEntitiesMap();
 	map<int, map<int, Entity*>*>* getClientEntities(int clientId);
 
+	void update();
+
 private:
 	/** Es gibt 3 Hashmaps:	1) Geordnet nach ClientIds
 							2) Geordnet nach Types
