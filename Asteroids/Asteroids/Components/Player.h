@@ -1,8 +1,8 @@
 #pragma once
-#include "gameobject.h"
+#include "..\Entity\Entity.h"
 #include "Starship.h"
 
-class Player : public GameObject
+class Player : public Entity
 {
 public:
 	Player(void);
