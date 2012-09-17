@@ -4,21 +4,27 @@
 EntityManager::EntityManager(void) {
 	this->clientEntities = new std::map<int, std::map<int, Entity*>*>();
 	this->entitiesFlat = new list<Entity*>();
+	this->familyManager = 0;
+}
+
+EntityManager::EntityManager(FamilyManager *familyManager) {
+	this->clientEntities = new std::map<int, std::map<int, Entity*>*>();
+	this->entitiesFlat = new list<Entity*>();
+	this->familyManager = familyManager;
 }
 
 
 EntityManager::~EntityManager(void) {
 	delete this->clientEntities;
-
-	for (list<Entity*>::iterator it = this->entitiesFlat->begin(); it != this->entitiesFlat->end(); ++it) {
-		//delete (*it);
-	}
 	delete this->entitiesFlat;
 }
 
 void EntityManager::addEntity(Entity *entity) {
 	if ((*this->clientEntities)[entity->getClientId()] == 0 ) (*this->clientEntities)[entity->getClientId()] =  new std::map<int, Entity*>();
 	(*(*this->clientEntities)[entity->getClientId()])[entity->getId()] = entity;
+
+	// Entity einer Familie hinzufügen
+	this->familyManager->addEntityToFamilies(entity);
 
 	this->entitiesFlat->push_back(entity);
 }
@@ -43,6 +49,8 @@ void EntityManager::deleteEntity(Entity *entity) {
 			delete (*it);
 		}
 	}
+
+	this->familyManager->removeEntityFromFamilies(entity);
 }
 
 list<Entity*>* EntityManager::getAllEntitiesFlat() {

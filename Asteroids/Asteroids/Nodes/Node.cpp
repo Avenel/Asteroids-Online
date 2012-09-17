@@ -13,3 +13,11 @@ Node::~Node(void)
 {
 	delete this->entity;
 }
+
+int Node::getEntityId() {
+	return this->entity->getId();
+}
+
+int Node::getEntityClientId() {
+	return this->entity->getClientId();
+}

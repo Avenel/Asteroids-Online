@@ -29,7 +29,7 @@ void Entity::setId(int id) {
 sf::Packet Entity::getPacket(int clientId) {
 	if (clientId != 0) this->clientId = clientId;
 	sf::Packet packet;
-	packet << this->id << this->clientId;
+	packet << this->clientId << this->id;
 	return packet;
 }
 

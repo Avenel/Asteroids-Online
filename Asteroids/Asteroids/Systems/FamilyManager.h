@@ -1,6 +1,7 @@
 #pragma once
 
 #include "..\Nodes\Node.h"
+#include "..\Nodes\RenderNode.h"
 
 class FamilyManager
 {
@@ -15,8 +16,11 @@ public:
 	FamilyManager(void);
 	~FamilyManager(void);
 
+	void addEntityToFamilies(Entity* entity);
 	void addMemberToFamily(Family family, Node* node);
 	std::list<Node*>* getMemberOfFamilies(Family family);
+
+	void removeEntityFromFamilies(Entity* entity);
 
 private:
 	std::map<Family, std::list<Node*>*> *families;
