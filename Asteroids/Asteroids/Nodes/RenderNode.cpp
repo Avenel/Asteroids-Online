@@ -1,9 +1,8 @@
 #include "RenderNode.h"
 
-
 RenderNode::RenderNode(Entity* entity)
 {
-	::Node(entity);
+	//::Node(entity);
 	list<Unit*>* units;
 	units = entity->getAllUnits();
 	for (list<Unit*>::iterator it = units->begin(); it != units->end(); ++it) {
