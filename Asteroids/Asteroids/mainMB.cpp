@@ -21,22 +21,14 @@ int mainMB()
 
 	// Test Client und Registrierung
 	Client client(IpAddress("192.168.2.101"), 1337);
-
 	if (server.isMaster()) {
 		client.setServerAddress(IpAddress("127.0.0.1"));
-		client.registerObject(&ball);
-		server.registerObject(&ball);
 	} else {
 		client.registerToServer();
-		client.registerObject(&ball2);
-		server.registerObject(&ball2);
 		server.registerClient(IpAddress("192.168.2.101"));
 	}
 
 	bool active = true;
-	bool leftKeyPressed = false;
-	bool rightKeyPressed = false;
-
 
     while (window.isOpen()) {
         sf::Event event;
@@ -49,51 +41,9 @@ int mainMB()
 
 			if (event.type == Event::GainedFocus) active = true;
 			if (event.type == Event::LostFocus) active = false;
-
-			if (event.type = Event::KeyReleased) {
-				leftKeyPressed = false;
-				rightKeyPressed = false;
-			}
         }
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && active) {
-			server.stop();
-			window.close();
-			return 0;
-		}
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && active && !leftKeyPressed) {
-			if (server.isMaster()) {
-				ball.setX(10);
-			} else {
-				ball2.setX(10);
-				client.send();
-			}
-			leftKeyPressed = true;
-		}
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && active && !rightKeyPressed) {
-			if (server.isMaster()) {
-				ball.setX(150);
-			} else {
-				ball2.setX(150);
-				client.send();
-			}
-			rightKeyPressed = true;
-		}
-
-
-		// TEMP Zeichne Kreise
 		window.clear();
-		int i = -1;
-		for (list<Entity*>::iterator it = server.getObjectList()->begin(); it != server.getObjectList()->end(); ++it)	{ 
-			if (i>=0 && i < 2) {
-				shapes[i].setPosition((*it)->getX(), (*it)->getY());
-				window.draw(shapes[i]);
-			}
-			i++;
-		}
-       
 		window.display();
     }
 
