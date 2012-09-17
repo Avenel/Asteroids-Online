@@ -26,6 +26,8 @@ private:
 			//clientid     type		entities      
 	std::map<int, std::map<int, std::map<int, Entity*>*> *> *clientEntities;
 
+	int getNextId(int clientId, int type);
+
 	// Flache Hierarchie um schnell alle Entities durchgehen zu können
 	list<Entity*> *entitiesFlat;
 };

@@ -11,7 +11,7 @@ EntityManager::~EntityManager(void) {
 	delete this->clientEntities;
 
 	for (list<Entity*>::iterator it = this->entitiesFlat->begin(); it != this->entitiesFlat->end(); ++it) {
-		delete (*it);
+		//delete (*it);
 	}
 	delete this->entitiesFlat;
 }
@@ -55,3 +55,11 @@ list<Entity*>* EntityManager::getAllEntitiesFlat() {
 std::map<int, std::map<int, std::map<int, Entity*>*> *>* EntityManager::getAllEntitiesMap() {
 	return this->clientEntities;
 }
+
+int EntityManager::getNextId(int clientId, int type) {
+	if ((*this->clientEntities)[clientId] == 0 ) return 0;
+	if ((*(*this->clientEntities)[clientId])[type] == 0 ) return 0;
+
+	return (*(*this->clientEntities)[clientId])[type]->size();
+}
+
