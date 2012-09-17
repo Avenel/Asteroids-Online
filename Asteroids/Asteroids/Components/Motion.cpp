@@ -10,3 +10,8 @@ Motion::Motion(void)
 Motion::~Motion(void)
 {
 }
+
+sf::Packet Motion::getPacket() {
+	sf::Packet packet;
+	return packet;
+}

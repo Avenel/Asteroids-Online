@@ -18,3 +18,8 @@ void Display::setDisplayObject(View* view) {
 View* Display::getDisplayObject() {
 	return this->displayObject;
 }
+
+sf::Packet Display::getPacket() {
+	sf::Packet packet;
+	return packet;
+}

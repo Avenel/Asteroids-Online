@@ -133,11 +133,6 @@ Entity* Server::generateEntity(int id, int clientId, int type, sf::Packet packet
 	switch(type) {
 	// Default Typ
 	case 0:
-		int x, y;
-		packet >> x >> y;
-		temp->setX(x);
-		temp->setY(y);
-
 		break;
 	// Schiff, Asteroid, etc...
 	case 1:

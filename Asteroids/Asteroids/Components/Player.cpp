@@ -9,3 +9,8 @@ Player::Player(void)
 Player::~Player(void)
 {
 }
+
+sf::Packet Player::getPacket() {
+	sf::Packet packet;
+	return packet;
+}

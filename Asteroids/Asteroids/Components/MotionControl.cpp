@@ -10,3 +10,8 @@ MotionControl::MotionControl(void)
 MotionControl::~MotionControl(void)
 {
 }
+
+sf::Packet MotionControl::getPacket() {
+	sf::Packet packet;
+	return packet;
+}

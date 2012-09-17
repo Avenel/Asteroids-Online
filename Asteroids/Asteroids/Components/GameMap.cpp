@@ -10,3 +10,8 @@ GameMap::GameMap(void)
 GameMap::~GameMap(void)
 {
 }
+
+sf::Packet GameMap::getPacket() {
+	sf::Packet packet;
+	return packet;
+}

@@ -10,3 +10,8 @@ GunControl::GunControl(void)
 GunControl::~GunControl(void)
 {
 }
+
+sf::Packet GunControl::getPacket() {
+	sf::Packet packet;
+	return packet;
+}

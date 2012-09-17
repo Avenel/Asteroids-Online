@@ -6,5 +6,7 @@ class Gun : public Unit
 public:
 	Gun(void);
 	~Gun(void);
+
+	sf::Packet getPacket();
 };
 

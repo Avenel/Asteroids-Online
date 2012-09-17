@@ -47,21 +47,10 @@ public:
 	void deleteUnit(Unit *unit);
 	list<Unit*>* getAllUnits();
 
-	// Temp!
-	void setX(int x);
-	int getX();
-	
-	void setY(int y);
-	int getY();
-
 protected:
 	int id;
 	int clientId;
 	EntityType type;
-
-	// Temp!
-	int x;
-	int y;
 
 private:
 	list<Unit*> *units;

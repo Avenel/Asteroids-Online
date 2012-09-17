@@ -10,3 +10,8 @@ Gun::Gun(void)
 Gun::~Gun(void)
 {
 }
+
+sf::Packet Gun::getPacket() {
+	sf::Packet packet;
+	return packet;
+}

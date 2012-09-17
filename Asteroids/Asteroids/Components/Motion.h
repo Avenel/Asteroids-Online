@@ -7,6 +7,7 @@ public:
 	Motion(void);
 	~Motion(void);
 
+	sf::Packet getPacket();
 private:
 	float speedX;
 	float speedY;

@@ -28,3 +28,8 @@ int Position::getX() {
 int Position::getY() {
 	return y;
 }
+
+sf::Packet Position::getPacket() {
+	sf::Packet packet;
+	return packet;
+}

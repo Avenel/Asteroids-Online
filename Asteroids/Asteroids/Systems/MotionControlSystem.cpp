@@ -11,7 +11,6 @@ MotionControlSystem::~MotionControlSystem(void)
 }
 
 void MotionControlSystem::update() {
-	cout << "Taste gedrueckt" << endl;
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
 		cout << "Links" << endl;
 	}

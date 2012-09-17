@@ -10,3 +10,8 @@ Item::Item(void)
 Item::~Item(void)
 {
 }
+
+sf::Packet Item::getPacket() {
+	sf::Packet packet;
+	return packet;
+}

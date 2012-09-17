@@ -7,6 +7,7 @@ public:
 	MotionControl(void);
 	~MotionControl(void);
 
+	sf::Packet getPacket();
 private:
 	int left;
 	int right;

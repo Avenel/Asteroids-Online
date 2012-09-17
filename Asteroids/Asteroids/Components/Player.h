@@ -9,6 +9,8 @@ public:
 	~Player(void);
 	void setStarship();
 	Starship* getStarship();
+
+	sf::Packet getPacket();
 private:
 	Starship* starship;
 };

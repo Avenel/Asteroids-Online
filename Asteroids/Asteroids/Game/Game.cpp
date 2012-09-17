@@ -21,7 +21,7 @@ void Game::startUp() {
 
 	// Netzwerk
 	this->server = new Server(1337, this->entityManager);
-	server->setMaster(true);
+	server->setMaster(false);
 	server->start();
 
 	this->client = new Client(sf::IpAddress("192.168.2.101"), 1337);
@@ -34,9 +34,9 @@ void Game::startUp() {
 }
 
 void Game::addSystems() {
+	this->systemManager->addSystem(this->motionControlSystem);
 	this->systemManager->addSystem(this->entityManager);
 	this->systemManager->addSystem(this->gameManager);
-	this->systemManager->addSystem(this->motionControlSystem);
 	this->systemManager->addSystem(this->renderSystem);
 }
 
@@ -60,7 +60,7 @@ void Game::run() {
 			if (event.type == sf::Event::LostFocus) active = false;
         }
 
-		//systemManager->updateSystems();
+		systemManager->updateSystems();
 
 		window.clear();
 		window.display();

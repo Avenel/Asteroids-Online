@@ -1,4 +1,5 @@
 #pragma once
+#include <SFML/Network.hpp>
 
 class Unit
 {
@@ -20,6 +21,8 @@ public:
 	};
 	void setType(UnitType type);
 	UnitType getType();
+
+	virtual sf::Packet getPacket();
 private:
 	UnitType type;
 };

@@ -9,6 +9,8 @@ public:
 	~Display(void);
 	void setDisplayObject(View* view);
 	View* getDisplayObject();
+
+	sf::Packet getPacket();
 private:
 	View* displayObject;
 };

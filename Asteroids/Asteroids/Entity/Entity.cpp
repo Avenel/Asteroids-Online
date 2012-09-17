@@ -4,18 +4,12 @@
 Entity::Entity(void) {
 	this->id = 0;
 	this->type = EntityType::OBJECT;
-	this->x = 0;
-	this->y = 0;
-
 	this->units = new list<Unit*>();
 }
 
 Entity::Entity(int id, EntityType type) {
 	this->id = id;
 	this->type = type;
-	this->x = 0;
-	this->y = 0;
-
 	this->units = new list<Unit*>();
 }
 
@@ -24,19 +18,10 @@ Entity::~Entity(void){
 }
 
 void Entity::refresh(sf::Packet packet){
-	packet >> this->x >> this->y;
 }
 
 int Entity::getId() { 
 	return this->id;
-}
-
-int Entity::getX() {
-	return this->x;
-}
-
-int Entity::getY() {
-	return this->y;
 }
 
 void Entity::setId(int id) {
@@ -51,19 +36,10 @@ int Entity::getType() {
 	return this->type;
 }
 
-void Entity::setX(int x) {
-	this->x = x;
-}
-
-void Entity::setY(int y) {
-	this->y = y;
-}
-
 sf::Packet Entity::getPacket(int clientId) {
-
 	if (clientId != 0) this->clientId = clientId;
 	sf::Packet packet;
-	packet << this->id << this->clientId << this->type << this->x << this->y;
+	packet << this->id << this->clientId << this->type;
 	return packet;
 }
 

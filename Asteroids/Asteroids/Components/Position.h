@@ -11,6 +11,7 @@ public:
 	int getX();
 	int getY();
 
+	sf::Packet getPacket();
 private:
 	int x;
 	int y;

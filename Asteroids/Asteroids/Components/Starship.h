@@ -6,5 +6,7 @@ class Starship : public Unit
 public:
 	Starship();
 	~Starship(void);
+
+	sf::Packet getPacket();
 };
 
