@@ -55,9 +55,8 @@ void Server::listen() {
 
 	int id;
 	int clientId;
-	int type;
-	Entity* temp;
 	unsigned short tempPort;
+	Entity* temp;
 
 	while(true) {
 		sf::Packet packet;
@@ -65,7 +64,7 @@ void Server::listen() {
 		this->socket.receive(packet, address, tempPort);
 
 		bool ipFound = false;
-		if (packet >> id >> clientId >> type) {
+		if (packet >> id >> clientId) {
 			//cout << "RECEIVED DATA: " << address.toString() << endl;
 			// Ip-Adresse bekannt?
 			for (list<sf::IpAddress>::iterator it = this->clientList->begin(); it != this->clientList->end(); ++it) {
@@ -85,13 +84,13 @@ void Server::listen() {
 			// Id auspacken und weiterleiten, falls Entity schon bekannt
 			bool idFound = false;
 			
-			temp = this->entityManager->getEntity(id, clientId, type);
+			temp = this->entityManager->getEntity(id, clientId);
 			if (temp != 0) {
 				temp->refresh(packet);
 			} else {
 				// Entity noch nicht bekannt -> anlegen	
 				if (id > -1) {
-					this->registerObject(this->generateEntity(id, clientId, type, packet));
+					this->registerObject(this->generateEntity(id, clientId, packet));
 				}
 			}
 		}
@@ -125,21 +124,12 @@ void Server::refresh(sf::Packet packet) {
 	}
 }
 
-Entity* Server::generateEntity(int id, int clientId, int type, sf::Packet packet) {	
-	Entity *temp = new Entity(0,Entity::EntityType(type));
+Entity* Server::generateEntity(int id, int clientId, sf::Packet packet) {	
+	Entity *temp = new Entity(0);
 	temp->setClientId(clientId);
 	temp->setId(id);
-
-	switch(type) {
-	// Default Typ
-	case 0:
-		break;
-	// Schiff, Asteroid, etc...
-	case 1:
-		break;
-	default:
-		break;
-	}
+	
+	// CREATE ENTITY mit dem EntityCreator
 
 	return temp;
 }

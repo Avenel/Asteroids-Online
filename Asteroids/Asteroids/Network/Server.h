@@ -57,9 +57,9 @@ protected:
 	sf::IpAddress localThreadAddress;
 
 	EntityManager *entityManager;
-	std::map<int, std::map<int, std::map<int, Entity*>*> *>* entityMap;
-	list<Entity*>* entitiesFlat;
+	std::map<int, std::map<int, Entity*>*>* entityMap;
+	std::list<Entity*>* entitiesFlat;
 
-	Entity* generateEntity(int id, int clientId, int type, sf::Packet packet);
+	Entity* generateEntity(int id, int clientId, sf::Packet packet);
 };
 

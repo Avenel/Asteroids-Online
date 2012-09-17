@@ -2,7 +2,7 @@
 
 
 EntityManager::EntityManager(void) {
-	this->clientEntities = new std::map<int, std::map<int, std::map<int, Entity*>*> *>();
+	this->clientEntities = new std::map<int, std::map<int, Entity*>*>();
 	this->entitiesFlat = new list<Entity*>();
 }
 
@@ -17,26 +17,23 @@ EntityManager::~EntityManager(void) {
 }
 
 void EntityManager::addEntity(Entity *entity) {
-	if ((*this->clientEntities)[entity->getClientId()] == 0 ) (*this->clientEntities)[entity->getClientId()] =  new std::map<int, std::map<int, Entity*>*>();
-	if ((*(*this->clientEntities)[entity->getClientId()])[entity->getType()] == 0 ) (*(*this->clientEntities)[entity->getClientId()])[entity->getType()] =  new std::map<int, Entity*>();	
-	(*(*(*this->clientEntities)[entity->getClientId()])[entity->getType()])[entity->getId()] = entity;
+	if ((*this->clientEntities)[entity->getClientId()] == 0 ) (*this->clientEntities)[entity->getClientId()] =  new std::map<int, Entity*>();
+	(*(*this->clientEntities)[entity->getClientId()])[entity->getId()] = entity;
 
 	this->entitiesFlat->push_back(entity);
 }
 
-Entity* EntityManager::getEntity(int id, int clientId, int type) {
+Entity* EntityManager::getEntity(int id, int clientId) {
 	if ((*this->clientEntities)[clientId] == 0) return 0;
-	if ((*(*this->clientEntities)[clientId])[type] == 0) return 0;
-
-	return (*(*(*this->clientEntities)[clientId])[type])[id];
+	return (*(*this->clientEntities)[clientId])[id];
 }
 
-map<int, map<int, Entity*>*>* EntityManager::getClientEntities(int clientId) {
+map<int,Entity*>* EntityManager::getClientEntities(int clientId) {
 	return (*this->clientEntities)[clientId];
 }
 
 void EntityManager::deleteEntity(Entity *entity) {
-	(*(*(*this->clientEntities)[entity->getClientId()])[entity->getType()]).erase(entity->getId());
+	(*(*this->clientEntities)[entity->getClientId()]).erase(entity->getId());
 
 	// Leider noch etwas "teuer" ...
 	int findId = entity->getId();
@@ -52,15 +49,13 @@ list<Entity*>* EntityManager::getAllEntitiesFlat() {
 	return this->entitiesFlat;
 }
 
-std::map<int, std::map<int, std::map<int, Entity*>*> *>* EntityManager::getAllEntitiesMap() {
+std::map<int, std::map<int, Entity*>*>* EntityManager::getAllEntitiesMap() {
 	return this->clientEntities;
 }
 
-int EntityManager::getNextId(int clientId, int type) {
+int EntityManager::getNextId(int clientId) {
 	if ((*this->clientEntities)[clientId] == 0 ) return 0;
-	if ((*(*this->clientEntities)[clientId])[type] == 0 ) return 0;
-
-	return (*(*this->clientEntities)[clientId])[type]->size();
+	return (*this->clientEntities)[clientId]->size();
 }
 
 void EntityManager::update() {

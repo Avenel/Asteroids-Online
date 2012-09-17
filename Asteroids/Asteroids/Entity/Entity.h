@@ -18,16 +18,8 @@ class Entity
 {
 public:
 
-	/**
-		Verschiedene Entity-Typen werden hier hinzugefügt.
-	**/
-	enum EntityType {
-		SERVER,
-		OBJECT
-	};
-
 	Entity(void);
-	Entity(int id, EntityType type);
+	Entity(int id);
 	~Entity(void);
 
 	virtual void refresh(sf::Packet packet);
@@ -38,9 +30,6 @@ public:
 	int getClientId();
 	void setClientId(int clientId);
 
-	int getType();
-	void setType(EntityType type);
-
 	sf::Packet getPacket(int clientId);
 
 	void addUnit(Unit *unit);
@@ -50,7 +39,6 @@ public:
 protected:
 	int id;
 	int clientId;
-	EntityType type;
 
 private:
 	list<Unit*> *units;

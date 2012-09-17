@@ -3,13 +3,11 @@
 
 Entity::Entity(void) {
 	this->id = 0;
-	this->type = EntityType::OBJECT;
 	this->units = new list<Unit*>();
 }
 
-Entity::Entity(int id, EntityType type) {
+Entity::Entity(int id) {
 	this->id = id;
-	this->type = type;
 	this->units = new list<Unit*>();
 }
 
@@ -28,18 +26,10 @@ void Entity::setId(int id) {
 	this->id = id;
 }
 
-void Entity::setType(EntityType type) {
-	this->type = type;
-}
-
-int Entity::getType() {
-	return this->type;
-}
-
 sf::Packet Entity::getPacket(int clientId) {
 	if (clientId != 0) this->clientId = clientId;
 	sf::Packet packet;
-	packet << this->id << this->clientId << this->type;
+	packet << this->id << this->clientId;
 	return packet;
 }
 
