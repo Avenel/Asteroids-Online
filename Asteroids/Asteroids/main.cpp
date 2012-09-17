@@ -11,13 +11,6 @@ int main()
 {
 	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
 
-	StarshipView starship1;
-	window.draw(starship1);
-	window.display();
-	while (true)
-	{
-	}
-    
 	sf::CircleShape shape(10.f);
 	shape.setFillColor(sf::Color::Green);
 	shape.setPosition(50, 20);
