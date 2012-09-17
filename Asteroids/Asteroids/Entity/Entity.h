@@ -3,7 +3,6 @@
 #include <SFML/Network.hpp>
 #include <iostream>
 
-using namespace sf;
 using namespace std;
 
 /**
@@ -17,7 +16,7 @@ public:
 	Entity(int id, int type);
 	~Entity(void);
 
-	virtual void refresh(Packet packet);
+	virtual void refresh(sf::Packet packet);
 	
 	void setId(int id);
 	int getId();
@@ -28,7 +27,7 @@ public:
 	int getType();
 	void setType(int type);
 
-	Packet getPacket(int clientId);
+	sf::Packet getPacket(int clientId);
 
 	// Temp!
 	void setX(int x);

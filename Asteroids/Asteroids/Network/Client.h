@@ -5,7 +5,6 @@
 #include <iostream>
 #include <list>
 
-using namespace sf;
 using namespace std;
 
 class Client
@@ -13,7 +12,7 @@ class Client
 public:
 	Client(void);
 
-	Client(IpAddress address, unsigned short port);
+	Client(sf::IpAddress address, unsigned short port);
 
 	~Client(void);
 
@@ -22,11 +21,11 @@ public:
 	void registerObject(Entity *object);
 	void registerToServer();
 
-	void setServerAddress(IpAddress address);
+	void setServerAddress(sf::IpAddress address);
 
 private: 
-	IpAddress serverAddress;
-	UdpSocket socket;
+	sf::IpAddress serverAddress;
+	sf::UdpSocket socket;
 	unsigned short port;
 	int clientId;
 

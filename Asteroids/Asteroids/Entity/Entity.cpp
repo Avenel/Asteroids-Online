@@ -17,7 +17,7 @@ Entity::Entity(int id, int type) {
 
 Entity::~Entity(void){}
 
-void Entity::refresh(Packet packet){
+void Entity::refresh(sf::Packet packet){
 	packet >> this->x >> this->y;
 }
 
@@ -53,10 +53,10 @@ void Entity::setY(int y) {
 	this->y = y;
 }
 
-Packet Entity::getPacket(int clientId) {
+sf::Packet Entity::getPacket(int clientId) {
 
 	if (clientId != 0) this->clientId = clientId;
-	Packet packet;
+	sf::Packet packet;
 	packet << this->id << this->clientId << this->type << this->x << this->y;
 	return packet;
 }

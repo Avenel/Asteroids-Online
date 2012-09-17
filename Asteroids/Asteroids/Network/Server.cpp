@@ -13,12 +13,12 @@ Server::Server(unsigned short port) {
 
 	this->lastObjectId = -1;
 	this->objectList = new list<Entity*>();
-	this->clientList = new list<IpAddress>();
+	this->clientList = new list<sf::IpAddress>();
 
-	this->listenThread = new Thread(&Server::listen, this);
-	this->synchronizeThread = new Thread(&Server::synchronizeClients, this);
-	this->id = IpAddress().getLocalAddress().toInteger();
-	this->clientId = IpAddress().getLocalAddress().toInteger();
+	this->listenThread = new sf::Thread(&Server::listen, this);
+	this->synchronizeThread = new sf::Thread(&Server::synchronizeClients, this);
+	this->id = sf::IpAddress().getLocalAddress().toInteger();
+	this->clientId = sf::IpAddress().getLocalAddress().toInteger();
 	this->master = false;
 }
 
@@ -37,7 +37,7 @@ Server::~Server(void) {
 
 void Server::start() {
 	this->registerObject(this);
-	this->registerClient(IpAddress::LocalHost);
+	this->registerClient(sf::IpAddress::LocalHost);
 
 	this->listenThread->launch();
 
@@ -50,14 +50,14 @@ void Server::stop() {
 }
 
 void Server::listen() {
-	IpAddress address;
+	sf::IpAddress address;
 
 	while(true) {
 		int id;
 		int clientId;
 		int type;
 
-		Packet packet;
+		sf::Packet packet;
 		unsigned short temp = this->port;
 		this->socket.receive(packet, address, temp);
 
@@ -65,7 +65,7 @@ void Server::listen() {
 		if (packet >> id >> clientId >> type) {
 			//cout << "RECEIVED DATA: " << address.toString() << endl;
 			// Ip-Adresse bekannt?
-			for (list<IpAddress>::iterator it = this->clientList->begin(); it != this->clientList->end(); ++it) {
+			for (list<sf::IpAddress>::iterator it = this->clientList->begin(); it != this->clientList->end(); ++it) {
 				if ( it->toInteger() == address.toInteger()) {
 					ipFound = true;
 					break;
@@ -103,7 +103,7 @@ void Server::registerObject(Entity *object) {
 	this->lastObjectId++;
 }
 
-void Server::registerClient(IpAddress address) {
+void Server::registerClient(sf::IpAddress address) {
 	this->clientList->push_back(address);
 	cout << "Registered Client: " << address.toString() << endl;
 }
@@ -114,20 +114,20 @@ void Server::deRegisterObject(Entity *object) {
 	}
 }
 
-void Server::deRegisterClient(IpAddress address) {
-	for (list<IpAddress>::iterator it = this->clientList->begin(); it != this->clientList->end(); ++it) {
+void Server::deRegisterClient(sf::IpAddress address) {
+	for (list<sf::IpAddress>::iterator it = this->clientList->begin(); it != this->clientList->end(); ++it) {
 		if ( it->toInteger() == address.toInteger()) this->clientList->erase(it);
 	}
 }
 
-void Server::refresh(Packet packet) {
+void Server::refresh(sf::Packet packet) {
 	string address;
 	if (packet >> address) {
-		this->registerClient(IpAddress(address));
+		this->registerClient(sf::IpAddress(address));
 	}
 }
 
-Entity* Server::generateEntity(int id, int clientId, int type, Packet packet) {	
+Entity* Server::generateEntity(int id, int clientId, int type, sf::Packet packet) {	
 	Entity *temp = new Entity(0,0);
 	temp->setClientId(clientId);
 	temp->setId(id);
@@ -156,14 +156,14 @@ int Server::generateObjectId() {
 }
 
 void Server::sendData(Entity *object) {
-	for (list<IpAddress>::iterator it = this->clientList->begin(); it != this->clientList->end(); ++it) {
+	for (list<sf::IpAddress>::iterator it = this->clientList->begin(); it != this->clientList->end(); ++it) {
 		// Keine Pakete an sich selbst versenden.
-		if (it->toInteger() == IpAddress::LocalHost.toInteger() || it->toInteger() == IpAddress().getLocalAddress().toInteger()) continue;
+		if (it->toInteger() == sf::IpAddress::LocalHost.toInteger() || it->toInteger() == sf::IpAddress().getLocalAddress().toInteger()) continue;
 
 		unsigned short temp = this->port;
 		if (object->getClientId() == this->id) {
 			// Server hat dieses Objekt erstellt
-			this->socket.send(object->getPacket(IpAddress().getLocalAddress().toInteger()), (*it), temp);
+			this->socket.send(object->getPacket(sf::IpAddress().getLocalAddress().toInteger()), (*it), temp);
 		} else {
 			// Objekt kommt von einem Clienten, verändere nicht die clientId
 			this->socket.send(object->getPacket(0), (*it), temp);
@@ -174,8 +174,8 @@ void Server::sendData(Entity *object) {
 void Server::synchronizeClients() {
 	// Update Clients every xx ms
 	cout << "Synchronize Thread startet" << endl;
-	Clock clock;
-	Time time = clock.getElapsedTime();
+	sf::Clock clock;
+	sf::Time time = clock.getElapsedTime();
 	while(true) {
 		if (clock.getElapsedTime().asMilliseconds() >= time.asMilliseconds()+this->updateTime) {
 			for (list<Entity*>::iterator it = this->objectList->begin(); it != this->objectList->end(); ++it) {

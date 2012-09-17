@@ -18,28 +18,28 @@ int main()
 	{
 	}
     
-	CircleShape shape(10.f);
-	shape.setFillColor(Color::Green);
+	sf::CircleShape shape(10.f);
+	shape.setFillColor(sf::Color::Green);
 	shape.setPosition(50, 20);
 
-	CircleShape shape2(10.f);
-	shape2.setFillColor(Color::Red);
+	sf::CircleShape shape2(10.f);
+	shape2.setFillColor(sf::Color::Red);
 	shape2.setPosition(50, 50);
 
 	// Test Entitys
-	vector<CircleShape> shapes;
+	vector<sf::CircleShape> shapes;
 	shapes.push_back(shape);
 	shapes.push_back(shape2);
 
 	Entity ball(0, 0);
 	ball.setX(10);
 	ball.setY(50);
-	ball.setClientId(IpAddress().getLocalAddress().toInteger());
+	ball.setClientId(sf::IpAddress().getLocalAddress().toInteger());
 
 	Entity ball2(1, 0);
 	ball2.setX(150);
 	ball2.setY(150);
-	ball2.setClientId(IpAddress().getLocalAddress().toInteger());
+	ball2.setClientId(sf::IpAddress().getLocalAddress().toInteger());
 
 	// Test-Server
 	Server server(1337);
@@ -47,17 +47,17 @@ int main()
 	server.start();
 
 	// Test Client und Registrierung
-	Client client(IpAddress("192.168.2.101"), 1337);
+	Client client(sf::IpAddress("192.168.2.101"), 1337);
 
 	if (server.isMaster()) {
-		client.setServerAddress(IpAddress("127.0.0.1"));
+		client.setServerAddress(sf::IpAddress("127.0.0.1"));
 		client.registerObject(&ball);
 		server.registerObject(&ball);
 	} else {
 		client.registerToServer();
 		client.registerObject(&ball2);
 		server.registerObject(&ball2);
-		server.registerClient(IpAddress("192.168.2.101"));
+		server.registerClient(sf::IpAddress("192.168.2.101"));
 	}
 
 	bool active = true;
@@ -74,10 +74,10 @@ int main()
 				return 0;
 			}
 
-			if (event.type == Event::GainedFocus) active = true;
-			if (event.type == Event::LostFocus) active = false;
+			if (event.type == sf::Event::GainedFocus) active = true;
+			if (event.type == sf::Event::LostFocus) active = false;
 
-			if (event.type = Event::KeyReleased) {
+			if (event.type = sf::Event::KeyReleased) {
 				leftKeyPressed = false;
 				rightKeyPressed = false;
 			}
