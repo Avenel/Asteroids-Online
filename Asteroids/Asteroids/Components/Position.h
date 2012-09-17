@@ -2,7 +2,15 @@
 class Position
 {
 public:
-	Position(void);
+	Position(int x, int y);
 	~Position(void);
+	void setX(int x);
+	void setY(int y);
+	int getX();
+	int getY();
+
+private:
+	int x;
+	int y;
 };
 

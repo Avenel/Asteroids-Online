@@ -1,5 +1,7 @@
 #include "StarshipView.h"
 
+//Groesse des Starship
+float const ::StarshipView::size( 16.0 ); 
 
 StarshipView::StarshipView(void)
 {

@@ -9,6 +9,6 @@ public:
 	~StarshipView(void);
 
 private:	
-	const float size = 15.0; 
+	static float const size; 
 };
 
