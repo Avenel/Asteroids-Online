@@ -9,6 +9,10 @@ EntityManager::EntityManager(void) {
 
 EntityManager::~EntityManager(void) {
 	delete this->clientEntities;
+
+	for (list<Entity*>::iterator it = this->entitiesFlat->begin(); it != this->entitiesFlat->end(); ++it) {
+		delete (*it);
+	}
 	delete this->entitiesFlat;
 }
 
@@ -39,6 +43,7 @@ void EntityManager::deleteEntity(Entity *entity) {
 	for (list<Entity*>::iterator it = this->entitiesFlat->begin(); it != this->entitiesFlat->end(); ++it) {
 		if ((*it)->getId() == findId) {
 			this->entitiesFlat->erase(it);
+			delete (*it);
 		}
 	}
 }
