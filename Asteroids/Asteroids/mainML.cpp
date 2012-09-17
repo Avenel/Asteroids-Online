@@ -2,24 +2,26 @@
 #include <SFML\Window.hpp>
 #include "Systems\MotionControlSystem.h"
 #include "Graphics\StarshipView.h"
+#include "Systems\EntityManager.h"
+#include "Entity\EntityCreator.h"
 
 int mainML() {
 
 	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-	MotionControlSystem mcs;
+	MotionControlSystem motionControlSystem;
+	EntityManager entityManager;
+	EntityCreator entityCreator;
 
-	StarshipView* starship1 = new StarshipView();
-	window.draw(*starship1);
-	window.display();
-	//Display.setView(starship1);
-
+	//Starship erstellen
+	entityManager.addEntity(entityCreator.createStarship());
+	
 	while (window.isOpen())
 	{
 		sf::Event event1;
 		while(window.pollEvent(event1))
 		{
 			if(event1.type == sf::Event::KeyPressed) {
-				mcs.update();
+				motionControlSystem.update();
 			}
 		}
 	}

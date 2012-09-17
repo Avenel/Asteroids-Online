@@ -6,6 +6,8 @@ Entity::Entity(void) {
 	this->type = 0;
 	this->x = 0;
 	this->y = 0;
+
+	this->units = new list<Unit*>();
 }
 
 Entity::Entity(int id, int type) {
@@ -13,9 +15,13 @@ Entity::Entity(int id, int type) {
 	this->type = type;
 	this->x = 0;
 	this->y = 0;
+
+	this->units = new list<Unit*>();
 }
 
-Entity::~Entity(void){}
+Entity::~Entity(void){
+	delete this->units;
+}
 
 void Entity::refresh(sf::Packet packet){
 	packet >> this->x >> this->y;
@@ -67,4 +73,16 @@ int Entity::getClientId() {
 
 void Entity::setClientId(int clientId) {
 	this->clientId = clientId;
+}
+
+void Entity::addUnit(Unit *unit) {
+	this->units->push_back(unit);
+}
+
+void Entity::deleteUnit(Unit *unit) {
+	this->units->remove(unit);
+}
+
+list<Unit*>* Entity::getAllUnits() {
+	return this->units;
 }

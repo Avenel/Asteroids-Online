@@ -1,5 +1,7 @@
 #pragma once
-class MotionControl
+#include "Unit.h"
+
+class MotionControl : public Unit
 {
 public:
 	MotionControl(void);

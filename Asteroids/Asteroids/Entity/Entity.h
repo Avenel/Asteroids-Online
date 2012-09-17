@@ -2,6 +2,8 @@
 
 #include <SFML/Network.hpp>
 #include <iostream>
+#include "..\Components\Unit.h"
+#include <list>
 
 using namespace std;
 
@@ -29,6 +31,10 @@ public:
 
 	sf::Packet getPacket(int clientId);
 
+	void addUnit(Unit *unit);
+	void deleteUnit(Unit *unit);
+	list<Unit*>* getAllUnits();
+
 	// Temp!
 	void setX(int x);
 	int getX();
@@ -44,5 +50,8 @@ protected:
 	// Temp!
 	int x;
 	int y;
+
+private:
+	list<Unit*> *units;
 };
 

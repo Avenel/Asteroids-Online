@@ -1,6 +1,7 @@
 #pragma once
+#include "Unit.h"
 
-class Starship
+class Starship : public Unit
 {
 public:
 	Starship();

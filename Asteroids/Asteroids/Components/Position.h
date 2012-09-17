@@ -1,5 +1,7 @@
 #pragma once
-class Position
+#include "Unit.h"
+
+class Position : public Unit
 {
 public:
 	Position(int x, int y);

@@ -1,5 +1,7 @@
 #pragma once
-class GunControl
+#include "Unit.h"
+
+class GunControl : public Unit
 {
 public:
 	GunControl(void);

@@ -1,6 +1,7 @@
 #pragma once
+#include "Unit.h"
 
-class GameMap
+class GameMap : public Unit
 {
 public:
 	GameMap(void);
