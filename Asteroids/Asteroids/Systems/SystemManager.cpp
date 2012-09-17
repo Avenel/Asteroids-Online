@@ -13,3 +13,9 @@ SystemManager::~SystemManager(void) {
 void SystemManager::addSystem(SystemCore* system) {
 	this->systems->push_back(system);
 }
+
+void SystemManager::updateSystems() {
+	for (list<SystemCore*>::iterator it = this->systems->begin(); it != this->systems->end(); ++it) {
+		(*it)->update();
+	}
+}
