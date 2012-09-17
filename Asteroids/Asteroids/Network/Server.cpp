@@ -54,14 +54,16 @@ void Server::stop() {
 void Server::listen() {
 	sf::IpAddress address;
 
-	while(true) {
-		int id;
-		int clientId;
-		int type;
+	int id;
+	int clientId;
+	int type;
+	Entity* temp;
+	unsigned short tempPort;
 
+	while(true) {
 		sf::Packet packet;
-		unsigned short temp = this->port;
-		this->socket.receive(packet, address, temp);
+		tempPort = this->port;
+		this->socket.receive(packet, address, tempPort);
 
 		bool ipFound = false;
 		if (packet >> id >> clientId >> type) {
@@ -84,7 +86,7 @@ void Server::listen() {
 			// Id auspacken und weiterleiten, falls Entity schon bekannt
 			bool idFound = false;
 			
-			Entity* temp = this->entityManager->getEntity(id, clientId, type);
+			temp = this->entityManager->getEntity(id, clientId, type);
 			if (temp != 0) {
 				temp->refresh(packet);
 			} else {
