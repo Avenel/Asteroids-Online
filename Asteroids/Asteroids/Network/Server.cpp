@@ -83,8 +83,8 @@ void Server::listen() {
 		
 			// Id auspacken und weiterleiten, falls Entity schon bekannt
 			bool idFound = false;
-
-			Entity* temp = (*(*(*this->entityMap)[clientId])[type])[id];
+			
+			Entity* temp = this->entityManager->getEntity(id, clientId, type);
 			if (temp != 0) {
 				temp->refresh(packet);
 			} else {
