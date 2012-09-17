@@ -37,5 +37,3 @@ Debug/*
 
 *.dll
 *.vsp
-Asteroids/Asteroids/Debug/Asteroids.unsuccessfulbuild
-Asteroids/Asteroids/main.cpp
