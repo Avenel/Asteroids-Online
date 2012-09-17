@@ -3,16 +3,19 @@
 
 Server::Server(void){}
 
-Server::Server(unsigned short port) {	
+Server::Server(unsigned short port, EntityManager *manager) {	
 	this->port = port;
 
 	this->socket.setBlocking(true);
 	this->socket.bind(port);
 
+	this->entityManager = manager;
+	this->entityMap = manager->getAllEntitiesMap();
+	this->entitiesFlat = manager->getAllEntitiesFlat();
+	
 	this->updateTime = 5;
 
 	this->lastObjectId = -1;
-	this->objectList = new list<Entity*>();
 	this->clientList = new list<sf::IpAddress>();
 
 	this->listenThread = new sf::Thread(&Server::listen, this);
@@ -31,7 +34,6 @@ Server::~Server(void) {
 	delete this->listenThread;
 	delete this->synchronizeThread;
 	delete this->clientList;
-	delete this->objectList;
 }
 
 
@@ -81,17 +83,15 @@ void Server::listen() {
 		
 			// Id auspacken und weiterleiten, falls Entity schon bekannt
 			bool idFound = false;
-			for (list<Entity*>::iterator it = this->objectList->begin(); it != this->objectList->end(); ++it)	{ 
-				if ( ((*it)->getId() == id) && ((*it)->getClientId() == clientId)) {
-					(*it)->refresh(packet);
-					idFound = true;
-					break;
+
+			Entity* temp = (*(*(*this->entityMap)[clientId])[type])[id];
+			if (temp != 0) {
+				temp->refresh(packet);
+			} else {
+				// Entity noch nicht bekannt -> anlegen	
+				if (id > -1) {
+					this->registerObject(this->generateEntity(id, clientId, type, packet));
 				}
-			}
-		
-			// Entity noch nicht bekannt -> anlegen	
-			if (!idFound && id > -1) {
-				this->registerObject(this->generateEntity(id, clientId, type, packet));
 			}
 		}
 	}
@@ -99,7 +99,7 @@ void Server::listen() {
 
 void Server::registerObject(Entity *object) {
 	//cout << "Registered unknown Object: "<< object->getId() << ", " << object->getClientId() << endl;
-	this->objectList->push_back(object);
+	this->entityManager->addEntity(object);
 	this->lastObjectId++;
 }
 
@@ -109,9 +109,7 @@ void Server::registerClient(sf::IpAddress address) {
 }
 
 void Server::deRegisterObject(Entity *object) {
-	for (list<Entity*>::iterator it = this->objectList->begin(); it != this->objectList->end(); ++it) {
-		if ( (*it)->getId() == id) this->objectList->erase(it);
-	}
+	this->entityManager->deleteEntity(object);
 }
 
 void Server::deRegisterClient(sf::IpAddress address) {
@@ -178,7 +176,7 @@ void Server::synchronizeClients() {
 	sf::Time time = clock.getElapsedTime();
 	while(true) {
 		if (clock.getElapsedTime().asMilliseconds() >= time.asMilliseconds()+this->updateTime) {
-			for (list<Entity*>::iterator it = this->objectList->begin(); it != this->objectList->end(); ++it) {
+			for (list<Entity*>::iterator it = this->entitiesFlat->begin(); it != this->entitiesFlat->end(); ++it) {
 				sendData((*it));
 			}
 			time = clock.restart();
@@ -196,5 +194,5 @@ void Server::setMaster(bool master) {
 
 
 std::list<Entity*>* Server::getObjectList() {
-	return this->objectList;
+	return this->entitiesFlat;
 }

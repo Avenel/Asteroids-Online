@@ -4,6 +4,7 @@
 #include <SFML/System/Clock.hpp>
 
 #include "..\Entity\Entity.h"
+#include "..\Systems\EntityManager.h"
 #include <iostream>
 #include <list>
 #include <Rpc.h>
@@ -14,7 +15,7 @@ class Server : Entity
 {
 public:
 	Server();
-	Server(unsigned short port);
+	Server(unsigned short port, EntityManager *manager);
 
 	~Server(void);
 
@@ -53,11 +54,14 @@ protected:
 	sf::Thread *synchronizeThread;
 
 	int lastObjectId;
-	std::list<Entity*> *objectList;
 	std::list<sf::IpAddress> *clientList;
 
 	float updateTime;
 	sf::IpAddress localThreadAddress;
+
+	EntityManager *entityManager;
+	std::map<int, std::map<int, std::map<int, Entity*>*> *>* entityMap;
+	list<Entity*>* entitiesFlat;
 
 	Entity* generateEntity(int id, int clientId, int type, sf::Packet packet);
 };
