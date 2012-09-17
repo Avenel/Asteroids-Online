@@ -3,6 +3,7 @@
 
 GameMap::GameMap(void)
 {
+	this->setType(GAMEMAP);
 }
 
 

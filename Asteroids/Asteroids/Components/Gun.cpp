@@ -3,6 +3,7 @@
 
 Gun::Gun(void)
 {
+	this->setType(GUN);
 }
 
 

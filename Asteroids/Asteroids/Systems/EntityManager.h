@@ -1,6 +1,7 @@
 #pragma once
 
 #include "..\Entity\Entity.h"
+#include "..\Nodes\RenderNode.h"
 #include "SystemCore.h"
 
 #include <list>
@@ -32,4 +33,5 @@ private:
 
 	// Flache Hierarchie um schnell alle Entities durchgehen zu können
 	list<Entity*> *entitiesFlat;
+	list<RenderNode*> *renderNodes;
 };

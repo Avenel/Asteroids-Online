@@ -14,6 +14,9 @@ int mainML() {
 
 	//Starship erstellen
 	entityManager.addEntity(entityCreator.createStarship());
+
+	//Darzustellende Objekte registrieren
+
 	
 	while (window.isOpen())
 	{

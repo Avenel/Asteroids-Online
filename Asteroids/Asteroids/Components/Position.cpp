@@ -3,6 +3,7 @@
 
 Position::Position(int x, int y)
 {
+	this->setType(POSITION);
 	this->x = x;
 	this->y = y;
 }

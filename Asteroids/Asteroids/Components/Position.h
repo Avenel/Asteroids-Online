@@ -14,5 +14,6 @@ public:
 private:
 	int x;
 	int y;
+	int rotation;
 };
 

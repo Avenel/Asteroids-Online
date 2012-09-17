@@ -3,6 +3,7 @@
 
 Item::Item(void)
 {
+	this->setType(ITEM);
 }
 
 

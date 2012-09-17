@@ -3,6 +3,7 @@
 
 MotionControl::MotionControl(void)
 {
+	this->setType(MOTIONCONTROL);
 }
 
 

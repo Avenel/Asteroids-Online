@@ -3,6 +3,7 @@
 
 Asteroid::Asteroid(void)
 {
+	this->setType(ASTEROID);
 }
 
 

@@ -37,4 +37,4 @@ Debug/*
 
 *.dll
 *.vsp
-Asteroids/Asteroids/main.cpp
+/Asteroids/Asteroids/main.cpp

@@ -3,6 +3,7 @@
 
 Display::Display(void)
 {
+	this->setType(DISPLAY);
 }
 
 

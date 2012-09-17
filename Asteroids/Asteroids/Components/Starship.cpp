@@ -3,6 +3,7 @@
 
 Starship::Starship()
 {
+	this->setType(STARSHIP);
 }
 
 

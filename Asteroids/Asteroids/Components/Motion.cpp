@@ -3,6 +3,7 @@
 
 Motion::Motion(void)
 {
+	this->setType(MOTION);
 }
 
 
