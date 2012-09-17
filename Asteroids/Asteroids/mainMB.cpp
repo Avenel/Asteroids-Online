@@ -55,6 +55,8 @@ int mainMB()
 			if (event.type == Event::LostFocus) active = false;
         }
 
+		systemManager.updateSystems();
+
 		window.clear();
 		window.display();
     }

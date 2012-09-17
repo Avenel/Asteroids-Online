@@ -13,6 +13,8 @@ public:
 
 	void addSystem(SystemCore *system);
 
+	void updateSystems();
+
 private:
 	list<SystemCore*> *systems;
 };
