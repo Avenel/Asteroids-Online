@@ -3,13 +3,20 @@
 #include "Network\Client.h"
 #include "Entity\Entity.h"
 #include <iostream>
+#include "Graphics\StarshipView.h"
 
 using namespace std;
-using namespace sf;
 
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
+
+	StarshipView starship1;
+	window.draw(starship1);
+	window.display();
+	while (true)
+	{
+	}
     
 	CircleShape shape(10.f);
 	shape.setFillColor(Color::Green);
