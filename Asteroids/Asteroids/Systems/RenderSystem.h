@@ -1,6 +1,8 @@
 #pragma once
 
-class RenderSystem
+#include "SystemCore.h"
+
+class RenderSystem : public SystemCore
 {
 public:
 	RenderSystem(void);
