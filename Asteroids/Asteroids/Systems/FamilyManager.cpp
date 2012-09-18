@@ -28,6 +28,16 @@ void FamilyManager::addEntityToFamilies(Entity* entity) {
 	if(RenderNode().isEntityMember(entity)) {
 		addMemberToFamily(Family::RENDER_SYSTEM, new RenderNode(entity));
 	}
+
+	//Entity zu MotionControlNode-Family hinzufuegen
+	if(MotionControlNode().isEntityMember(entity)) {
+		addMemberToFamily(Family::MOTION_CONTROL_SYSTEM, new MotionControlNode(entity));
+	}
+
+	//Entity zu MovementNode-Family hinzufuegen
+	if(MovementNode().isEntityMember(entity)) {
+		addMemberToFamily(Family::MOVEMENT_SYSTEM, new MovementNode(entity));
+	}
 }
 
 void FamilyManager::removeEntityFromFamilies(Entity* entity) {
