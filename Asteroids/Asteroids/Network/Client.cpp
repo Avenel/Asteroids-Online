@@ -32,7 +32,7 @@ void Client::registerObject(Entity *object) {
 
 void Client::registerToServer() {
 	sf::Packet packet;
-	packet << -1 << this->clientId << 0;
+	packet << this->clientId << -1 << 0;
 
 	socket.send(packet, this->serverAddress, this->port);
 }

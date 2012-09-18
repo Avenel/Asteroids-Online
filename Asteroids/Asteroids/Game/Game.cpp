@@ -24,6 +24,9 @@ void Game::startUp() {
 	server->setMaster(false);
 	server->start();
 
+	// EntityCreator
+	this->entityCreator = new EntityCreator();
+
 	this->client = new Client(sf::IpAddress("192.168.2.101"), 1337);
 	if (server->isMaster()) {
 		client->setServerAddress(sf::IpAddress("127.0.0.1"));

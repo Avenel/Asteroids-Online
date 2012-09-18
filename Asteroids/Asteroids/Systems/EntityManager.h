@@ -6,11 +6,13 @@
 
 #include <list>
 #include <map>
+#include "FamilyManager.h"
 
 class EntityManager : public SystemCore
 {
 public:
 	EntityManager(void);
+	EntityManager(FamilyManager *familyManager);
 	~EntityManager(void);
 
 	void addEntity(Entity *newEntity);
@@ -31,6 +33,9 @@ private:
 	std::map<int, std::map<int, Entity*>*> *clientEntities;
 
 	int getNextId(int clientId);
+
+	// Verbindung zum FamilyManager
+	FamilyManager* familyManager;
 
 	// Flache Hierarchie um schnell alle Entities durchgehen zu können
 	list<Entity*> *entitiesFlat;

@@ -9,6 +9,7 @@
 #include "..\Systems\RenderSystem.h"
 #include "..\Network\Server.h"
 #include "..\Network\Client.h"
+#include "..\Entity\EntityCreator.h"
 
 using namespace std;
 
@@ -31,6 +32,9 @@ private:
 	MotionControlSystem *motionControlSystem;
 	RenderSystem *renderSystem;
 	
+	// EntityCreator
+	EntityCreator *entityCreator;
+
 	// Netzwerkarchitektur
 	Server *server;
 	Client *client;

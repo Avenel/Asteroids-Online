@@ -55,6 +55,14 @@ void Server::listen() {
 
 	int id;
 	int clientId;
+	/**
+		Funktioniert wie folgt:
+		controlTag: >= 0 => Wird als Unit-Enum verstanden
+					= -1 => Entity wird neu angelegt
+					= -2 => Entity wird entfernt
+		Wenn controlTag = -1, dann werden der nachfolgende Int Entity-Type verstanden und der EntityCreator dementsprechend benutzt.
+	*/
+	int controlTag;
 	unsigned short tempPort;
 	Entity* temp;
 
@@ -64,7 +72,7 @@ void Server::listen() {
 		this->socket.receive(packet, address, tempPort);
 
 		bool ipFound = false;
-		if (packet >> id >> clientId) {
+		if (packet >> clientId >> id) {
 			//cout << "RECEIVED DATA: " << address.toString() << endl;
 			// Ip-Adresse bekannt?
 			for (list<sf::IpAddress>::iterator it = this->clientList->begin(); it != this->clientList->end(); ++it) {
@@ -81,16 +89,21 @@ void Server::listen() {
 				continue;
 			}
 		
-			// Id auspacken und weiterleiten, falls Entity schon bekannt
-			bool idFound = false;
-			
+			// Id auspacken und weiterleiten, falls Entity schon bekannt			
 			temp = this->entityManager->getEntity(id, clientId);
+
+			sf::Packet tempPacket = packet;
+			tempPacket >> controlTag;
 			if (temp != 0) {
-				temp->refresh(packet);
+				if (controlTag == -2) {
+					this->deRegisterObject(temp);
+				} else {
+					temp->refresh(packet);
+				}
 			} else {
 				// Entity noch nicht bekannt -> anlegen	
-				if (id > -1) {
-					this->registerObject(this->generateEntity(id, clientId, packet));
+				if (controlTag == -1) {
+					this->registerObject(this->generateEntity(id, clientId, tempPacket));
 				}
 			}
 		}
