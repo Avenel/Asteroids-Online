@@ -3,7 +3,7 @@
 #include <SFML/Network.hpp>
 #include <iostream>
 #include "..\Components\Unit.h"
-#include <list>
+#include <map>
 
 using namespace std;
 
@@ -34,13 +34,15 @@ public:
 
 	void addUnit(Unit *unit);
 	void deleteUnit(Unit *unit);
-	list<Unit*>* getAllUnits();
+	std::map<Unit::UnitType, Unit*>* getAllUnits();
+	bool hasComponent(Unit::UnitType type);
+	Unit* getComponent(Unit::UnitType type);
 
 protected:
 	int id;
 	int clientId;
 
 private:
-	list<Unit*> *units;
+	std::map<Unit::UnitType, Unit*> *units;
 };
 
