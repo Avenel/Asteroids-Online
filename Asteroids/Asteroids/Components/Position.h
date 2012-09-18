@@ -13,6 +13,11 @@ public:
 
 	sf::Packet* getPacket(int clientId, int id);
 	void refresh(sf::Packet packet);
+
+	void rotateLeft();
+	void rotateRight();
+	int getRotation();
+
 private:
 	int x;
 	int y;

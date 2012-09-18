@@ -37,3 +37,15 @@ sf::Packet* Position::getPacket(int clientId, int id) {
 
 void Position::refresh(sf::Packet packet) {
 }
+
+void Position::rotateLeft() {
+	--(this->rotation);
+}
+
+void Position::rotateRight() {
+	++(this->rotation);
+}
+
+int Position::getRotation() {
+	return (this->rotation)%360;
+}

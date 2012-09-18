@@ -3,6 +3,12 @@
 
 MotionControlSystem::MotionControlSystem(void)
 {
+	this->familyManager = 0;
+}
+
+MotionControlSystem::MotionControlSystem(FamilyManager* familyManager)
+{
+	this->familyManager = familyManager;
 }
 
 
@@ -23,4 +29,33 @@ void MotionControlSystem::update() {
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
 		cout << "Leertaste" << endl;
 	}	
+
+	list<Node*>* motionControlNodes;
+	motionControlNodes = familyManager->getMemberOfFamilies(FamilyManager::Family::MOTION_CONTROL_SYSTEM);
+
+	Position* position;
+	Motion* motion;
+	MotionControl* motionControl;
+
+	for (list<Node*>::iterator it = motionControlNodes->begin(); it != motionControlNodes->end(); ++it) {
+		position = ((MotionControlNode*)(*it))->getPosition();
+		motion = ((MotionControlNode*)(*it))->getMotion();
+		motionControl = ((MotionControlNode*)(*it))->getMotionControl();
+		
+		if(sf::Keyboard::isKeyPressed(motionControl->getLeft())) {
+			cout << "Links" << endl;
+			position->rotateLeft();
+		}
+
+		if(sf::Keyboard::isKeyPressed(motionControl->getRight())) {
+			cout << "Rechts" << endl;
+			position->rotateRight();
+		}
+
+		if(sf::Keyboard::isKeyPressed(motionControl->getRight())) {
+			cout << "Beschleunigen" << endl;
+			motion->increaseSpeed(position->getRotation(), motionControl->getAccelerationRate());
+		}
+
+	}
 }

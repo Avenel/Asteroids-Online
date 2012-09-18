@@ -2,6 +2,8 @@
 
 #include "..\Nodes\Node.h"
 #include "..\Nodes\RenderNode.h"
+#include "..\Nodes\MotionControlNode.h"
+#include "..\Nodes\MovementNode.h"
 #include "SystemCore.h"
 #include <list>
 
@@ -12,7 +14,8 @@ public:
 	enum Family{
 		GAME_MANAGER,
 		MOTION_CONTROL_SYSTEM,
-		RENDER_SYSTEM
+		RENDER_SYSTEM,
+		MOVEMENT_SYSTEM
 	};
 
 	FamilyManager(void);

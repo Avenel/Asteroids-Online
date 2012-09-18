@@ -23,6 +23,11 @@ Entity* EntityCreator::createStarship() {
 	starship->addUnit(motion);
 	
 	MotionControl* motionControl = new MotionControl();
+	motionControl->setLeft(sf::Keyboard::Left);
+	motionControl->setRight(sf::Keyboard::Right);
+	motionControl->setAccelerate(sf::Keyboard::Up);
+	motionControl->setAccelerationRate(2);
+	motionControl->setRotationRate(2);
 	starship->addUnit(motionControl);
 
 	Gun* gun = new Gun();
