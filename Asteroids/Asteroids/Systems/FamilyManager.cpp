@@ -25,37 +25,10 @@ std::list<Node*>* FamilyManager::getMemberOfFamilies(Family family) {
 }
 
 void FamilyManager::addEntityToFamilies(Entity* entity) {
-	std::list<Unit*> *units = entity->getAllUnits();
-
-	for (std::list<Unit*>::iterator it = units->begin(); it != units->end(); ++it) {
-		/**
-			Gefällt mir noch nicht so ganz...
-		**/
-		switch((*it)->getType()) {
-		case(Unit::ASTEROID):
-			break;
-		case(Unit::DISPLAY):
-			addMemberToFamily(Family::RENDER_SYSTEM, new RenderNode(entity));
-			break;
-		case(Unit::GAMEMAP):
-			break;
-		case(Unit::GUN):
-			break;
-		case(Unit::GUNCONTROL):
-			break;
-		case(Unit::ITEM):
-			break;
-		case(Unit::MOTION):
-			break;
-		case(Unit::MOTIONCONTROL):
-			break;
-		case(Unit::POSITION):
-			break;
-		case(Unit::STARSHIP):
-			break;
-		default:
-			break;
-		}
+	//Entity zu RenderNode-Family hinzufuegen
+	RenderNode* rNode = new RenderNode(entity);
+	if(rNode->isEntityMember()) {
+		addMemberToFamily(Family::RENDER_SYSTEM, rNode);
 	}
 }
 

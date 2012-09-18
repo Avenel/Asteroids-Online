@@ -2,6 +2,7 @@
 
 #include "..\Nodes\Node.h"
 #include "..\Nodes\RenderNode.h"
+#include <list>
 
 class FamilyManager
 {
