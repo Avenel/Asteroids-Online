@@ -41,5 +41,7 @@ private:
 	Server* server;
 	Client* client;
 
+	// Window
+	sf::RenderWindow *window;
 };
 

@@ -16,6 +16,10 @@ Entity::~Entity(void){
 }
 
 void Entity::refresh(sf::Packet packet){
+	int componentType;
+	packet >> componentType;
+
+	(*this->units)[Unit::UnitType(componentType)]->refresh(packet);
 }
 
 int Entity::getId() { 

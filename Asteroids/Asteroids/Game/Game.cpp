@@ -11,13 +11,16 @@ Game::~Game(void) {
 void Game::startUp() {
 	// Bootsrap, Initialisierungskram
 
+	// Window erstellen
+	this->window = new sf::RenderWindow(sf::VideoMode(200, 200), "Asteroids Online!");
+
 	// Systeme hinzufügen
 	this->systemManager = new SystemManager();
 	this->familyManager = new FamilyManager();
 	this->entityManager = new EntityManager(this->familyManager);
 	this->gameManager = new GameManager();
 	this->motionControlSystem = new MotionControlSystem();
-	this->renderSystem = new RenderSystem(this->familyManager);
+	this->renderSystem = new RenderSystem(this->familyManager, this->window);
 	addSystems();
 
 	// Netzwerk
@@ -46,17 +49,14 @@ void Game::addSystems() {
 }
 
 void Game::run() {
-	// Spielstart, evtl Mainloop
-
-	sf::RenderWindow window(sf::VideoMode(200, 200), "Asteroids Online!");
-    
+	// Spielstart, evtl Mainloop    
 	bool active = true;
 
-    while (window.isOpen()) {
+    while (this->window->isOpen()) {
         sf::Event event;
-        while (window.pollEvent(event)) {
+        while (this->window->pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
-				window.close();
+				this->window->close();
 				server->stop();
 				return;
 			}
@@ -67,8 +67,8 @@ void Game::run() {
 
 		this->systemManager->updateSystems();
 
-		window.clear();
-		window.display();
+		this->window->clear();
+		this->window->display();
     }
 
 }
