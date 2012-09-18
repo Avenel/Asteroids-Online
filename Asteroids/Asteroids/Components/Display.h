@@ -12,6 +12,7 @@ public:
 
 	sf::Packet getPacket();
 	void refresh(sf::Packet packet);
+	void draw(sf::RenderWindow *target, sf::RenderStates &states);
 private:
 	View* displayObject;
 };

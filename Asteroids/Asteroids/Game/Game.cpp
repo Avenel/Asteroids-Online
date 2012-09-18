@@ -31,6 +31,8 @@ void Game::startUp() {
 	// EntityCreator
 	this->entityCreator = new EntityCreator();
 
+	this->entityManager->addEntity(this->entityCreator->createStarship());
+
 	this->client = new Client(sf::IpAddress("192.168.2.101"), 1337);
 	if (server->isMaster()) {
 		client->setServerAddress(sf::IpAddress("127.0.0.1"));
@@ -65,9 +67,8 @@ void Game::run() {
 			if (event.type == sf::Event::LostFocus) active = false;
         }
 
-		this->systemManager->updateSystems();
-
 		this->window->clear();
+		this->systemManager->updateSystems();
 		this->window->display();
     }
 

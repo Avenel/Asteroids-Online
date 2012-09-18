@@ -26,3 +26,7 @@ sf::Packet Display::getPacket() {
 
 void Display::refresh(sf::Packet packet) {
 }
+
+void Display::draw(sf::RenderWindow *target, sf::RenderStates &states) {
+	this->displayObject->draw(target, states);
+}
