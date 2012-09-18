@@ -19,8 +19,9 @@ void Game::startUp() {
 	this->familyManager = new FamilyManager();
 	this->entityManager = new EntityManager(this->familyManager);
 	this->gameManager = new GameManager();
-	this->motionControlSystem = new MotionControlSystem();
+	this->motionControlSystem = new MotionControlSystem(this->familyManager);
 	this->renderSystem = new RenderSystem(this->familyManager, this->window);
+	this->movementSystem = new MovementSystem(this->familyManager);
 	addSystems();
 
 	// Netzwerk
@@ -48,6 +49,7 @@ void Game::addSystems() {
 	this->systemManager->addSystem(this->entityManager);
 	this->systemManager->addSystem(this->gameManager);
 	this->systemManager->addSystem(this->renderSystem);
+	this->systemManager->addSystem(this->movementSystem);
 }
 
 void Game::run() {

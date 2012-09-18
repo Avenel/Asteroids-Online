@@ -17,7 +17,7 @@ MotionControlSystem::~MotionControlSystem(void)
 }
 
 void MotionControlSystem::update() {
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+	/*if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
 		cout << "Links" << endl;
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
@@ -28,7 +28,7 @@ void MotionControlSystem::update() {
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
 		cout << "Leertaste" << endl;
-	}	
+	}	*/
 
 	list<Node*>* motionControlNodes;
 	motionControlNodes = familyManager->getMemberOfFamilies(FamilyManager::Family::MOTION_CONTROL_SYSTEM);

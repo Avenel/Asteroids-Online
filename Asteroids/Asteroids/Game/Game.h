@@ -8,6 +8,7 @@
 #include "..\Systems\GameManager.h"
 #include "..\Systems\MotionControlSystem.h"
 #include "..\Systems\RenderSystem.h"
+#include "..\Systems\MovementSystem.h"
 #include "..\Network\Server.h"
 #include "..\Network\Client.h"
 #include "..\Entity\EntityCreator.h"
@@ -33,6 +34,7 @@ private:
 	GameManager* gameManager;
 	MotionControlSystem* motionControlSystem;
 	RenderSystem* renderSystem;
+	MovementSystem* movementSystem;
 	
 	// EntityCreator
 	EntityCreator* entityCreator;
