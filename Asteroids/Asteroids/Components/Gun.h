@@ -7,7 +7,7 @@ public:
 	Gun(void);
 	~Gun(void);
 
-	sf::Packet* getPacket(int clientId, int id);
+	sf::Packet getPacket(int clientId, int id);
 	void refresh(sf::Packet packet);
 };
 

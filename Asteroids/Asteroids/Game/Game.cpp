@@ -70,8 +70,28 @@ void Game::run() {
 
 	cout << sf::IpAddress().getLocalAddress().toString() << endl;
 
+	sf::Clock clock;
+	sf::Time time = clock.getElapsedTime();
+
+	sf::Text fps("FPS: ");
+	fps.setPosition(this->windowWidth-50, 10);
+	
+	int ticks = 0;
+	//window->setFramerateLimit(100);
+	window->setVerticalSyncEnabled(true);
+
     while (this->window->isOpen()) {
-        sf::Event event;
+		if (clock.getElapsedTime().asMilliseconds() >= time.asMilliseconds()+1000) {
+			std::ostringstream ss; 
+			ss << (ticks);
+			fps.setString("FPS: "+ss.str());
+			time = clock.getElapsedTime();
+			ticks = 0;
+		}
+		
+		if (!this->server->isMaster()) this->client->send();
+        
+		sf::Event event;
         while (this->window->pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
 				this->window->close();
@@ -83,11 +103,14 @@ void Game::run() {
 			if (event.type == sf::Event::LostFocus) active = false;
         }
 
-		//if (!this->server->isMaster()) this->client->send();
-
-		this->systemManager->updateSystems();
-		this->window->display();
 		this->window->clear();
+		this->systemManager->updateSystems();
+
+		this->window->draw(fps);
+
+		this->window->display();
+		
+		ticks++;
     }
 
 }

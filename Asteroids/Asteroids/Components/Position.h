@@ -11,11 +11,11 @@ public:
 	float getX();
 	float getY();
 
-	sf::Packet* getPacket(int clientId, int id);
+	sf::Packet getPacket(int clientId, int id);
 	void refresh(sf::Packet packet);
 
-	void rotateLeft();
-	void rotateRight();
+	void rotateLeft(float speed);
+	void rotateRight(float speed);
 	int getRotation();
 
 private:

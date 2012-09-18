@@ -44,12 +44,12 @@ void MotionControlSystem::update() {
 		
 		if(sf::Keyboard::isKeyPressed(motionControl->getLeft())) {
 			//cout << "Links" << endl;
-			position->rotateLeft();
+			position->rotateLeft(motionControl->getRotationRate());
 		}
 
 		if(sf::Keyboard::isKeyPressed(motionControl->getRight())) {
 			//cout << "Rechts" << endl;
-			position->rotateRight();
+			position->rotateRight(motionControl->getRotationRate());
 		}
 
 		if(sf::Keyboard::isKeyPressed(motionControl->getAccelerate())) {

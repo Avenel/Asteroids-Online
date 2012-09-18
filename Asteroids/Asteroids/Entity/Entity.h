@@ -31,7 +31,7 @@ public:
 	int getClientId();
 	void setClientId(int clientId);
 
-	std::list<sf::Packet*>* getPackets(int clientId);
+	std::list<sf::Packet> getPackets(int clientId);
 
 	void addUnit(Unit *unit);
 	void deleteUnit(Unit *unit);

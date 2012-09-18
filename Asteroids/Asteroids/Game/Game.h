@@ -12,6 +12,11 @@
 #include "..\Network\Server.h"
 #include "..\Network\Client.h"
 #include "..\Entity\EntityCreator.h"
+#include <string>
+#include <sstream>
+#include <iostream>
+
+#include <Windows.h>
 
 using namespace std;
 
