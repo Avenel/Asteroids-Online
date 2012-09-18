@@ -13,9 +13,6 @@ RenderSystem::RenderSystem(FamilyManager* familyManager, sf::RenderWindow *windo
 
 RenderSystem::~RenderSystem(void)
 {
-	if(this->familyManager != 0) {
-		delete this->familyManager;
-	}
 }
 
 void RenderSystem::update() {
