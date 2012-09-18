@@ -5,6 +5,7 @@ Node::Node(){
 
 Node::Node(Entity* entity)
 {
+	this->entity = entity;
 }
 
 
