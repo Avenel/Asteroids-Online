@@ -23,3 +23,6 @@ sf::Packet Display::getPacket() {
 	sf::Packet packet;
 	return packet;
 }
+
+void Display::refresh(sf::Packet packet) {
+}

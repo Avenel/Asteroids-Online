@@ -33,3 +33,6 @@ sf::Packet Position::getPacket() {
 	sf::Packet packet;
 	return packet;
 }
+
+void Position::refresh(sf::Packet packet) {
+}

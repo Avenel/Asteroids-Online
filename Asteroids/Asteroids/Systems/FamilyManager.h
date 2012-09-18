@@ -2,9 +2,10 @@
 
 #include "..\Nodes\Node.h"
 #include "..\Nodes\RenderNode.h"
+#include "SystemCore.h"
 #include <list>
 
-class FamilyManager
+class FamilyManager : public SystemCore
 {
 public:
 

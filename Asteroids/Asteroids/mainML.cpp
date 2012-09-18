@@ -9,7 +9,7 @@ int mainML() {
 
 	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
 	MotionControlSystem motionControlSystem;
-	EntityManager entityManager;
+	EntityManager entityManager(new FamilyManager());
 	EntityCreator entityCreator;
 
 	//Starship erstellen

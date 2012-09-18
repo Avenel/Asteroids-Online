@@ -3,7 +3,6 @@
 
 FamilyManager::FamilyManager(void) {
 	this->families = new std::map<Family, std::list<Node*>*>();
-
 }
 
 

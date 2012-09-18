@@ -8,6 +8,7 @@ public:
 	~Motion(void);
 
 	sf::Packet getPacket();
+	void refresh(sf::Packet packet);
 private:
 	float speedX;
 	float speedY;

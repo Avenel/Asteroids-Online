@@ -8,5 +8,6 @@ public:
 	~Gun(void);
 
 	sf::Packet getPacket();
+	void refresh(sf::Packet packet);
 };
 

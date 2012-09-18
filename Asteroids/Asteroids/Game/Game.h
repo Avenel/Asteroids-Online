@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "..\Systems\SystemManager.h"
+#include "..\Systems\FamilyManager.h"
 #include "..\Systems\EntityManager.h"
 #include "..\Systems\GameManager.h"
 #include "..\Systems\MotionControlSystem.h"
@@ -26,18 +27,19 @@ public:
 private:
 
 	// Systeme
-	SystemManager *systemManager;
-	EntityManager *entityManager;
-	GameManager *gameManager;
-	MotionControlSystem *motionControlSystem;
-	RenderSystem *renderSystem;
+	SystemManager* systemManager;
+	FamilyManager* familyManager;
+	EntityManager* entityManager;
+	GameManager* gameManager;
+	MotionControlSystem* motionControlSystem;
+	RenderSystem* renderSystem;
 	
 	// EntityCreator
-	EntityCreator *entityCreator;
+	EntityCreator* entityCreator;
 
 	// Netzwerkarchitektur
-	Server *server;
-	Client *client;
+	Server* server;
+	Client* client;
 
 };
 

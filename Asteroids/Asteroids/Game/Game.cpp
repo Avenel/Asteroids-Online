@@ -13,10 +13,11 @@ void Game::startUp() {
 
 	// Systeme hinzufügen
 	this->systemManager = new SystemManager();
-	this->entityManager = new EntityManager();
+	this->familyManager = new FamilyManager();
+	this->entityManager = new EntityManager(this->familyManager);
 	this->gameManager = new GameManager();
 	this->motionControlSystem = new MotionControlSystem();
-	this->renderSystem = new RenderSystem();
+	this->renderSystem = new RenderSystem(this->familyManager);
 	addSystems();
 
 	// Netzwerk
@@ -38,6 +39,7 @@ void Game::startUp() {
 
 void Game::addSystems() {
 	this->systemManager->addSystem(this->motionControlSystem);
+	this->systemManager->addSystem(this->familyManager);
 	this->systemManager->addSystem(this->entityManager);
 	this->systemManager->addSystem(this->gameManager);
 	this->systemManager->addSystem(this->renderSystem);
@@ -63,7 +65,7 @@ void Game::run() {
 			if (event.type == sf::Event::LostFocus) active = false;
         }
 
-		systemManager->updateSystems();
+		this->systemManager->updateSystems();
 
 		window.clear();
 		window.display();

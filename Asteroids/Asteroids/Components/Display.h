@@ -11,6 +11,7 @@ public:
 	View* getDisplayObject();
 
 	sf::Packet getPacket();
+	void refresh(sf::Packet packet);
 private:
 	View* displayObject;
 };

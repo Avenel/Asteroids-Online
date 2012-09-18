@@ -8,6 +8,7 @@ public:
 	~MotionControl(void);
 
 	sf::Packet getPacket();
+	void refresh(sf::Packet packet);
 private:
 	int left;
 	int right;

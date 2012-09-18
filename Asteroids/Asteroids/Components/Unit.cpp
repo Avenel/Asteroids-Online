@@ -22,3 +22,6 @@ sf::Packet Unit::getPacket() {
 	sf::Packet packet;
 	return packet;
 }
+
+void Unit::refresh(sf::Packet packet) {
+}

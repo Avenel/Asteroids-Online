@@ -15,3 +15,6 @@ sf::Packet MotionControl::getPacket() {
 	sf::Packet packet;
 	return packet;
 }
+
+void MotionControl::refresh(sf::Packet packet) {
+}

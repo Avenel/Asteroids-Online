@@ -15,3 +15,6 @@ sf::Packet GameMap::getPacket() {
 	sf::Packet packet;
 	return packet;
 }
+
+void GameMap::refresh(sf::Packet packet) {
+}

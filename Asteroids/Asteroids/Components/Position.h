@@ -12,6 +12,7 @@ public:
 	int getY();
 
 	sf::Packet getPacket();
+	void refresh(sf::Packet packet);
 private:
 	int x;
 	int y;

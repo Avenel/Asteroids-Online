@@ -15,3 +15,6 @@ sf::Packet Motion::getPacket() {
 	sf::Packet packet;
 	return packet;
 }
+
+void Motion::refresh(sf::Packet packet) {
+}

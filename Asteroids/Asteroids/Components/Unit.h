@@ -13,6 +13,7 @@ public:
 		GAMEMAP,
 		GUN,
 		GUNCONTROL,
+		GAMESYSTEM,
 		ITEM,
 		MOTION,
 		MOTIONCONTROL,
@@ -23,6 +24,8 @@ public:
 	UnitType getType();
 
 	virtual sf::Packet getPacket();
+	virtual void refresh(sf::Packet packet);
+
 private:
 	UnitType type;
 };

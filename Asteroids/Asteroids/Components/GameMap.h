@@ -8,6 +8,8 @@ public:
 	~GameMap(void);
 
 	sf::Packet getPacket();
+	void refresh(sf::Packet packet);
+
 private:
 
 };

@@ -7,6 +7,6 @@ int mainMB();
 
 int main()
 {
-	return mainML();
-	//return mainMB();
+	//return mainML();
+	return mainMB();
 }

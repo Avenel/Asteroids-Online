@@ -1,11 +1,12 @@
 #pragma once
+
 #include "Unit.h"
 
-class Asteroid : public Unit
+class GameState : public Unit
 {
 public:
-	Asteroid(void);
-	~Asteroid(void);
+	GameState(void);
+	~GameState(void);
 
 	sf::Packet getPacket();
 	void refresh(sf::Packet packet);

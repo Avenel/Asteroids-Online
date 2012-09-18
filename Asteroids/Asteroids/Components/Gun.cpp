@@ -15,3 +15,6 @@ sf::Packet Gun::getPacket() {
 	sf::Packet packet;
 	return packet;
 }
+
+void Gun::refresh(sf::Packet packet) {
+}

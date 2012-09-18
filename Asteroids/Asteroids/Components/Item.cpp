@@ -15,3 +15,6 @@ sf::Packet Item::getPacket() {
 	sf::Packet packet;
 	return packet;
 }
+
+void Item::refresh(sf::Packet packet) {
+}

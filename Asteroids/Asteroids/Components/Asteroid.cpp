@@ -13,3 +13,6 @@ sf::Packet Asteroid::getPacket() {
 	sf::Packet packet;
 	return packet;
 }
+
+void Asteroid::refresh(sf::Packet packet) {
+}
