@@ -5,6 +5,8 @@
 class RenderSystem : public SystemCore
 {
 public:
-	RenderSystem(void);
+	RenderSystem(FamiliyManager* familyManager);
 	~RenderSystem(void);
+private:
+	FamilyManager* familyManager;
 };

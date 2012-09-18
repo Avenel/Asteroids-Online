@@ -2,7 +2,7 @@
 
 RenderNode::RenderNode(Entity* entity)
 {
-	//::Node(entity);
+	this->Node::Node(entity);
 	list<Unit*>* units;
 	units = entity->getAllUnits();
 	for (list<Unit*>::iterator it = units->begin(); it != units->end(); ++it) {
