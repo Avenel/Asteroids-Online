@@ -23,3 +23,11 @@ void RenderNode::addEntity() {
 	this->display = (Display*)this->entity->getComponent(Unit::DISPLAY);
 	this->position = (Position*)this->entity->getComponent(Unit::POSITION);
 }
+
+Position* RenderNode::getPosition() {
+	return this->position;
+}
+
+Display* RenderNode::getDisplay() {
+	return this->display;
+}

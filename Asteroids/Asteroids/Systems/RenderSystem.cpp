@@ -22,7 +22,12 @@ void RenderSystem::update() {
 	list<Node*>* renderNodes;
 	renderNodes = familyManager->getMemberOfFamilies(FamilyManager::Family::RENDER_SYSTEM);
 
+	Position *position;
+	Display *display;
+
 	for (list<Node*>::iterator it = renderNodes->begin(); it != renderNodes->end(); ++it) {
+		position = ((RenderNode*)(*it))->getPosition();
+		display = ((RenderNode*)(*it))->getDisplay();
 	}
 
 }

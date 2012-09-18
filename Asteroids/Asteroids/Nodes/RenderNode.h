@@ -13,6 +13,8 @@ public:
 	static bool isEntityMember(Entity* entity);
 	void addEntity();
 
+	Position* getPosition();
+	Display* getDisplay();
 
 private:
 	Position* position;
