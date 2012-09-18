@@ -9,6 +9,7 @@ public:
 	RenderSystem();
 	RenderSystem(FamilyManager* familyManager);
 	~RenderSystem(void);
+	void update();
 private:
 	FamilyManager* familyManager;
 };

@@ -5,13 +5,11 @@ Node::Node(){
 
 Node::Node(Entity* entity)
 {
-	this->entity = entity;
 }
 
 
 Node::~Node(void)
 {
-	delete this->entity;
 }
 
 int Node::getEntityId() {
@@ -22,7 +20,7 @@ int Node::getEntityClientId() {
 	return this->entity->getClientId();
 }
 
-bool Node::isEntityMember() {
+bool Node::isEntityMember(Entity* entity) {
 	return false;
 }
 

@@ -7,9 +7,10 @@
 class RenderNode : public Node
 {
 public:
+	RenderNode();
 	RenderNode(Entity* entity);
 	~RenderNode(void);
-	bool isEntityMember();
+	static bool isEntityMember(Entity* entity);
 	void addEntity();
 
 

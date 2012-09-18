@@ -13,4 +13,12 @@ RenderSystem::RenderSystem(FamilyManager* familyManager)
 
 RenderSystem::~RenderSystem(void)
 {
+	if(this->familyManager != 0) {
+		delete this->familyManager;
+	}
+}
+
+void RenderSystem::update() {
+	list<Node*>* renderNodes;
+	renderNodes = familyManager->getMemberOfFamilies(FamilyManager::Family::RENDER_SYSTEM);
 }

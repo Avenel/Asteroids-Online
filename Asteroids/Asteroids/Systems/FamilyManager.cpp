@@ -26,9 +26,8 @@ std::list<Node*>* FamilyManager::getMemberOfFamilies(Family family) {
 
 void FamilyManager::addEntityToFamilies(Entity* entity) {
 	//Entity zu RenderNode-Family hinzufuegen
-	RenderNode* rNode = new RenderNode(entity);
-	if(rNode->isEntityMember()) {
-		addMemberToFamily(Family::RENDER_SYSTEM, rNode);
+	if(RenderNode().isEntityMember(entity)) {
+		addMemberToFamily(Family::RENDER_SYSTEM, new RenderNode(entity));
 	}
 }
 

@@ -11,7 +11,7 @@ public:
 	int getEntityId();
 	int getEntityClientId();
 
-	virtual bool isEntityMember();
+	static bool isEntityMember(Entity* entity);
 	virtual void addEntity();
 
 protected:
