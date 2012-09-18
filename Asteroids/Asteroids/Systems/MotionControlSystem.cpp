@@ -52,7 +52,7 @@ void MotionControlSystem::update() {
 			position->rotateRight();
 		}
 
-		if(sf::Keyboard::isKeyPressed(motionControl->getRight())) {
+		if(sf::Keyboard::isKeyPressed(motionControl->getAccelerate())) {
 			cout << "Beschleunigen" << endl;
 			motion->increaseSpeed(position->getRotation(), motionControl->getAccelerationRate());
 		}

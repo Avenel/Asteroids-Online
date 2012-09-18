@@ -17,10 +17,12 @@ MovementNode::~MovementNode(void)
 }
 
 bool MovementNode::isEntityMember(Entity* entity) {
-	return false;
+	return (entity->hasComponent(Unit::MOTION) && entity->hasComponent(Unit::POSITION));
 }
 
 void MovementNode::addEntity() {
+	this->motion = (Motion*)this->entity->getComponent(Unit::MOTION);
+	this->position = (Position*)this->entity->getComponent(Unit::POSITION);
 }
 
 Position* MovementNode::getPosition() {

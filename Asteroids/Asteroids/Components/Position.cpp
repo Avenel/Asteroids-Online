@@ -6,6 +6,7 @@ Position::Position(int x, int y)
 	this->setType(POSITION);
 	this->x = x;
 	this->y = y;
+	this->rotation = 0;
 }
 
 
@@ -48,5 +49,5 @@ void Position::rotateRight() {
 }
 
 int Position::getRotation() {
-	return (this->rotation)%360;
+	return ((this->rotation));
 }

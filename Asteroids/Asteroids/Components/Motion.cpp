@@ -4,6 +4,9 @@
 Motion::Motion(void)
 {
 	this->setType(MOTION);
+	this->speedX = 0;
+	this->speedY = 0;
+	this->damping = 0;
 }
 
 

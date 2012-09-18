@@ -26,6 +26,7 @@ void RenderSystem::update() {
 		position = ((RenderNode*)(*it))->getPosition();
 		display = ((RenderNode*)(*it))->getDisplay();
 		display->setPosition(position->getX(), position->getY());
+		display->setRotation((float)position->getRotation());
 		display->draw(this->window, sf::RenderStates());
 	}
 
