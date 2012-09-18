@@ -2,7 +2,7 @@
 
 int mainMB()
 {
-	Game game;
+	Game game(800, 600);
 
 	game.startUp();
 	game.run();

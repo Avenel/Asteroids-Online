@@ -2,8 +2,14 @@
 
 
 Game::Game(void) {
+	this->windowHeight = 800;
+	this->windowWidth = 600;
 }
 
+Game::Game(int windowHeight, int windowWidth) {
+	this->windowHeight = windowHeight;
+	this->windowWidth = windowWidth;
+}
 
 Game::~Game(void) {
 }
@@ -12,7 +18,7 @@ void Game::startUp() {
 	// Bootsrap, Initialisierungskram
 
 	// Window erstellen
-	this->window = new sf::RenderWindow(sf::VideoMode(800, 600), "Asteroids Online!");
+	this->window = new sf::RenderWindow(sf::VideoMode(this->windowHeight, this->windowWidth), "Asteroids Online!");
 
 	// Systeme hinzufügen
 	this->systemManager = new SystemManager();
@@ -21,7 +27,7 @@ void Game::startUp() {
 	this->gameManager = new GameManager();
 	this->motionControlSystem = new MotionControlSystem(this->familyManager);
 	this->renderSystem = new RenderSystem(this->familyManager, this->window);
-	this->movementSystem = new MovementSystem(this->familyManager);
+	this->movementSystem = new MovementSystem(this->familyManager, this->window->getSize());
 	addSystems();
 
 	// Netzwerk
@@ -84,4 +90,12 @@ void Game::run() {
 		this->window->clear();
     }
 
+}
+
+int Game::getWindowHeight() {
+	return this->windowHeight;
+}
+
+int Game::getWindowWidth() {
+	return this->windowWidth;
 }

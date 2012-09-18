@@ -19,11 +19,15 @@ class Game
 {
 public:
 	Game(void);
+	Game(int windowHeight, int windowWidth);
 	~Game(void);
 
 	void startUp();
 	void addSystems();
 	void run();
+
+	int getWindowHeight();
+	int getWindowWidth();
 
 private:
 
@@ -44,6 +48,8 @@ private:
 	Client* client;
 
 	// Window
+	int windowHeight;
+	int windowWidth;
 	sf::RenderWindow *window;
 };
 
