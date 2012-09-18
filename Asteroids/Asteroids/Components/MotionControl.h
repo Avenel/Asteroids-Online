@@ -8,7 +8,7 @@ public:
 	MotionControl();
 	~MotionControl(void);
 
-	sf::Packet getPacket();
+	sf::Packet* getPacket(int clientId, int id);
 	void refresh(sf::Packet packet);
 
 	void setLeft(sf::Keyboard::Key key);

@@ -4,11 +4,13 @@
 Entity::Entity(void) {
 	this->id = 0;
 	this->units = new map<Unit::UnitType, Unit*>();
+	this->synchronized = false;
 }
 
 Entity::Entity(int id) {
 	this->id = id;
 	this->units = new map<Unit::UnitType, Unit*>();
+	this->synchronized = false;
 }
 
 Entity::~Entity(void){
@@ -18,6 +20,8 @@ Entity::~Entity(void){
 void Entity::refresh(sf::Packet packet){
 	int componentType;
 	packet >> componentType;
+
+	if (!this->hasComponent(Unit::UnitType(componentType))) return;
 
 	(*this->units)[Unit::UnitType(componentType)]->refresh(packet);
 }
@@ -30,11 +34,26 @@ void Entity::setId(int id) {
 	this->id = id;
 }
 
-sf::Packet Entity::getPacket(int clientId) {
+std::list<sf::Packet*>* Entity::getPackets(int clientId) {
+	std::list<sf::Packet*> *packets = new std::list<sf::Packet*>();
 	if (clientId != 0) this->clientId = clientId;
-	sf::Packet packet;
-	packet << this->clientId << this->id;
-	return packet;
+	
+	sf::Packet *packet = new sf::Packet();
+	// Wenn Entity noch nicht synchronisiert wurde, setze ControlTag auf -1
+	if (!this->synchronized) {
+		(*packet) << this->clientId << this->id << -1;
+		this->synchronized = true;
+		packets->push_back(packet);
+	}
+
+	// Füge alle Packets aus den Komponenten dazu
+	// Später kann man noch durch ein isUpdated? unnötige Pakte vermeiden.
+	for (std::map<Unit::UnitType, Unit*>::iterator it = this->units->begin(); it != this->units->end(); ++it) {
+		sf::Packet *packet = (*it).second->getPacket(this->clientId, this->id);
+		packets->push_back(packet);
+	}
+
+	return packets;
 }
 
 int Entity::getClientId() {

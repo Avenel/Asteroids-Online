@@ -29,8 +29,9 @@ int Position::getY() {
 	return y;
 }
 
-sf::Packet Position::getPacket() {
-	sf::Packet packet;
+sf::Packet* Position::getPacket(int clientId, int id) {
+	sf::Packet* packet = new sf::Packet();
+	(*packet) << clientId << id << this->type;
 	return packet;
 }
 

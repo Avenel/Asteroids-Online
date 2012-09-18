@@ -3,7 +3,7 @@
 
 Server::Server(void){}
 
-Server::Server(unsigned short port, EntityManager *manager) {	
+Server::Server(unsigned short port, EntityManager *manager, EntityCreator *creator) {	
 	this->port = port;
 
 	this->socket.setBlocking(true);
@@ -13,6 +13,8 @@ Server::Server(unsigned short port, EntityManager *manager) {
 	this->entityMap = manager->getAllEntitiesMap();
 	this->entitiesFlat = manager->getAllEntitiesFlat();
 	
+	this->entityCreator = creator;
+
 	this->updateTime = 5;
 
 	this->clientList = new list<sf::IpAddress>();
@@ -37,7 +39,7 @@ Server::~Server(void) {
 
 
 void Server::start() {
-	this->registerObject(this);
+	//this->registerObject(this);
 	this->registerClient(sf::IpAddress::LocalHost);
 
 	this->listenThread->launch();
@@ -73,7 +75,7 @@ void Server::listen() {
 
 		bool ipFound = false;
 		if (packet >> clientId >> id) {
-			//cout << "RECEIVED DATA: " << address.toString() << endl;
+			cout << "RECEIVED DATA: " << address.toString() << ": " << clientId << ", " << id << endl;
 			// Ip-Adresse bekannt?
 			for (list<sf::IpAddress>::iterator it = this->clientList->begin(); it != this->clientList->end(); ++it) {
 				if ( it->toInteger() == address.toInteger()) {
@@ -84,8 +86,7 @@ void Server::listen() {
 
 			if (!ipFound && id == -1) {
 				// Client registrieren
-				packet << address.toString();
-				this->refresh(packet);
+				registerClient(address);
 				continue;
 			}
 		
@@ -94,24 +95,26 @@ void Server::listen() {
 
 			sf::Packet tempPacket = packet;
 			tempPacket >> controlTag;
-			if (temp != 0) {
+			cout << "ControlTag ist: " << controlTag << endl;
+			if (temp != 0 && controlTag != -1) {
 				if (controlTag == -2) {
+					cout << "Loesche Entity" << endl;
 					this->deRegisterObject(temp);
 				} else {
+					cout << "Aktualisiere Komponente" << endl;
 					temp->refresh(packet);
 				}
 			} else {
 				// Entity noch nicht bekannt -> anlegen	
-				if (controlTag == -1) {
-					this->registerObject(this->generateEntity(id, clientId, tempPacket));
-				}
+				cout << "Lege neues Objekt an" << endl;
+				this->registerObject(this->generateEntity(id, clientId, tempPacket));
 			}
 		}
 	}
 }
 
 void Server::registerObject(Entity *object) {
-	//cout << "Registered unknown Object: "<< object->getId() << ", " << object->getClientId() << endl;
+	cout << "Registered unknown Object: "<< object->getId() << ", " << object->getClientId() << endl;
 	this->entityManager->addEntity(object);
 }
 
@@ -131,19 +134,21 @@ void Server::deRegisterClient(sf::IpAddress address) {
 }
 
 void Server::refresh(sf::Packet packet) {
-	string address;
+	std::string address;
 	if (packet >> address) {
+		cout << "Gelesene Adresse: " << address << endl;
 		this->registerClient(sf::IpAddress(address));
 	}
 }
 
 Entity* Server::generateEntity(int id, int clientId, sf::Packet packet) {	
-	Entity *temp = new Entity(0);
+	Entity *temp = this->entityCreator->createStarship();
 	temp->setClientId(clientId);
 	temp->setId(id);
 	
-	// CREATE ENTITY mit dem EntityCreator
+	cout << "Generate Entity!" << endl;
 
+	// CREATE ENTITY mit dem EntityCreator
 	return temp;
 }
 
@@ -155,10 +160,24 @@ void Server::sendData(Entity *object) {
 		unsigned short temp = this->port;
 		if (object->getClientId() == this->id) {
 			// Server hat dieses Objekt erstellt
-			this->socket.send(object->getPacket(sf::IpAddress().getLocalAddress().toInteger()), (*it), temp);
+			std::list<sf::Packet*> *packets = object->getPackets(sf::IpAddress().getLocalAddress().toInteger());
+			for (std::list<sf::Packet*>::iterator packet = packets->begin(); packet != packets->end(); ++packet) {
+				this->socket.send((*(*packet)), (*it), temp);
+				delete (*packet);
+			}
+			delete packets;
 		} else {
 			// Objekt kommt von einem Clienten, verändere nicht die clientId
-			this->socket.send(object->getPacket(0), (*it), temp);
+			std::list<sf::Packet*> *packets = object->getPackets(0);
+			for (std::list<sf::Packet*>::iterator packet = packets->begin(); packet != packets->end(); ++packet) {
+				/*int clientId, id, type;
+				(*(*packet)) >> clientId >> id >> type;
+				cout << "Schicke: " << clientId << ", " << id << ", " << type << endl;
+				(*(*packet)) << clientId << id << type;*/
+				this->socket.send((*(*packet)), (*it), temp);
+				delete (*packet);
+			}
+			delete packets;
 		}
 	}
 }

@@ -23,10 +23,10 @@ public:
 	void setType(UnitType type);
 	UnitType getType();
 
-	virtual sf::Packet getPacket();
+	virtual sf::Packet* getPacket(int clientId, int id);
 	virtual void refresh(sf::Packet packet);
 
-private:
+protected:
 	UnitType type;
 };
 

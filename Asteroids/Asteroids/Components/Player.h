@@ -2,7 +2,7 @@
 #include "..\Entity\Entity.h"
 #include "Starship.h"
 
-class Player : public Entity
+class Player : public Unit
 {
 public:
 	Player(void);
@@ -10,7 +10,7 @@ public:
 	void setStarship();
 	Starship* getStarship();
 
-	sf::Packet getPacket();
+	sf::Packet* getPacket(int clientId, int id);
 	void refresh(sf::Packet packet);
 private:
 	Starship* starship;

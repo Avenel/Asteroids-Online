@@ -11,8 +11,9 @@ MotionControl::~MotionControl(void)
 {
 }
 
-sf::Packet MotionControl::getPacket() {
-	sf::Packet packet;
+sf::Packet* MotionControl::getPacket(int clientId, int id) {
+	sf::Packet* packet = new sf::Packet();
+	(*packet) << clientId << id << this->type;
 	return packet;
 }
 

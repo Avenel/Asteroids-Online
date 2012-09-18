@@ -9,7 +9,7 @@ public:
 	Motion(void);
 	~Motion(void);
 
-	sf::Packet getPacket();
+	sf::Packet* getPacket(int clientId, int id);
 	void refresh(sf::Packet packet);
 
 	void increaseSpeed(int rotation, int accelerationRate);

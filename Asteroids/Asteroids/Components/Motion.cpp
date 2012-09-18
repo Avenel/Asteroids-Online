@@ -11,8 +11,9 @@ Motion::~Motion(void)
 {
 }
 
-sf::Packet Motion::getPacket() {
-	sf::Packet packet;
+sf::Packet* Motion::getPacket(int clientId, int id) {
+	sf::Packet* packet = new sf::Packet();
+	(*packet) << clientId << id << this->type;
 	return packet;
 }
 

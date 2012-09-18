@@ -21,8 +21,10 @@ Client::~Client(void) {
 
 void Client::send() {
 	for (list<Entity*>::iterator it = this->objectList->begin(); it != this->objectList->end(); ++it) {
-		sf::Packet packet = (*it)->getPacket(this->clientId);
-		socket.send(packet, this->serverAddress, this->port);		
+		std::list<sf::Packet*> *packets = (*it)->getPackets(this->clientId);
+		for (std::list<sf::Packet*>::iterator it = packets->begin(); it != packets->end(); ++it) {
+			socket.send((*(*it)), this->serverAddress, this->port);			
+		}
 	}
 }
 

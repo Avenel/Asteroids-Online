@@ -10,9 +10,13 @@ public:
 	void setDisplayObject(View* view);
 	View* getDisplayObject();
 
-	sf::Packet getPacket();
+	sf::Packet* getPacket(int clientId, int id);
 	void refresh(sf::Packet packet);
+	
 	void draw(sf::RenderWindow *target, sf::RenderStates &states);
+	void setPosition(float x, float y);
+	void setRotation(float degree);
+
 private:
 	View* displayObject;
 };
