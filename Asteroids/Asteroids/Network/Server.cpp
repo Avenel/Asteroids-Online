@@ -75,7 +75,7 @@ void Server::listen() {
 
 		bool ipFound = false;
 		if (packet >> clientId >> id) {
-			cout << "RECEIVED DATA: " << address.toString() << ": " << clientId << ", " << id << endl;
+			// cout << "RECEIVED DATA: " << address.toString() << ": " << clientId << ", " << id << endl;
 			// Ip-Adresse bekannt?
 			for (list<sf::IpAddress>::iterator it = this->clientList->begin(); it != this->clientList->end(); ++it) {
 				if ( it->toInteger() == address.toInteger()) {
@@ -95,18 +95,18 @@ void Server::listen() {
 
 			sf::Packet tempPacket = packet;
 			tempPacket >> controlTag;
-			cout << "ControlTag ist: " << controlTag << endl;
+			//cout << "ControlTag ist: " << controlTag << endl;
 			if (temp != 0 && controlTag != -1) {
 				if (controlTag == -2) {
-					cout << "Loesche Entity" << endl;
+					//cout << "Loesche Entity" << endl;
 					this->deRegisterObject(temp);
 				} else {
-					cout << "Aktualisiere Komponente" << endl;
+					//cout << "Aktualisiere Komponente" << endl;
 					temp->refresh(packet);
 				}
 			} else {
 				// Entity noch nicht bekannt -> anlegen	
-				cout << "Lege neues Objekt an" << endl;
+				//cout << "Lege neues Objekt an" << endl;
 				this->registerObject(this->generateEntity(id, clientId, tempPacket));
 			}
 		}
@@ -136,7 +136,7 @@ void Server::deRegisterClient(sf::IpAddress address) {
 void Server::refresh(sf::Packet packet) {
 	std::string address;
 	if (packet >> address) {
-		cout << "Gelesene Adresse: " << address << endl;
+		//cout << "Gelesene Adresse: " << address << endl;
 		this->registerClient(sf::IpAddress(address));
 	}
 }

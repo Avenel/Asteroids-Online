@@ -31,11 +31,12 @@ int Position::getY() {
 
 sf::Packet* Position::getPacket(int clientId, int id) {
 	sf::Packet* packet = new sf::Packet();
-	(*packet) << clientId << id << this->type;
+	(*packet) << clientId << id << this->type << this->x << this->y;
 	return packet;
 }
 
 void Position::refresh(sf::Packet packet) {
+	packet >> this->x >> this->y;
 }
 
 void Position::rotateLeft() {

@@ -26,7 +26,7 @@ void Game::startUp() {
 
 	// Netzwerk
 	this->server = new Server(1337, this->entityManager, this->entityCreator);
-	server->setMaster(false);
+	server->setMaster(true);
 	server->start();
 
 	// EntityCreator
@@ -44,6 +44,7 @@ void Game::startUp() {
 		server->registerClient(sf::IpAddress("192.168.2.103"));
 		((Position*)starship->getComponent(Unit::POSITION))->setX(50);
 		((Position*)starship->getComponent(Unit::POSITION))->setY(150);
+		client->registerObject(starship); 
 	}
 	this->entityManager->addEntity(starship);
 }
@@ -75,6 +76,8 @@ void Game::run() {
 			if (event.type == sf::Event::GainedFocus) active = true;
 			if (event.type == sf::Event::LostFocus) active = false;
         }
+
+		if (!this->server->isMaster()) this->client->send();
 
 		this->window->clear();
 		this->systemManager->updateSystems();
