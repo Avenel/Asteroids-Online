@@ -9,6 +9,9 @@ class RenderNode : public Node
 public:
 	RenderNode(Entity* entity);
 	~RenderNode(void);
+	bool isEntityMember();
+	void addEntity();
+
 
 private:
 	Position* position;

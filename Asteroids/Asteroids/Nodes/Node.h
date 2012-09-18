@@ -11,6 +11,9 @@ public:
 	int getEntityId();
 	int getEntityClientId();
 
-private:
+	virtual bool isEntityMember();
+	virtual void addEntity();
+
+protected:
 	Entity* entity;
 };

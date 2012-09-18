@@ -21,3 +21,10 @@ int Node::getEntityId() {
 int Node::getEntityClientId() {
 	return this->entity->getClientId();
 }
+
+bool Node::isEntityMember() {
+	return false;
+}
+
+void Node::addEntity() {
+}
