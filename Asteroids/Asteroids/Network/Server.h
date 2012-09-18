@@ -5,6 +5,7 @@
 
 #include "..\Entity\Entity.h"
 #include "..\Systems\EntityManager.h"
+#include "..\Entity\EntityCreator.h"
 #include <iostream>
 #include <list>
 #include <Rpc.h>
@@ -15,7 +16,7 @@ class Server : Entity
 {
 public:
 	Server();
-	Server(unsigned short port, EntityManager *manager);
+	Server(unsigned short port, EntityManager *manager, EntityCreator *creator);
 
 	~Server(void);
 
@@ -61,5 +62,6 @@ protected:
 	std::list<Entity*>* entitiesFlat;
 
 	Entity* generateEntity(int id, int clientId, sf::Packet packet);
+	EntityCreator* entityCreator;
 };
 

@@ -7,7 +7,7 @@ public:
 	Starship();
 	~Starship(void);
 
-	sf::Packet getPacket();
+	sf::Packet* getPacket(int clientId, int id);
 	void refresh(sf::Packet packet);
 };
 

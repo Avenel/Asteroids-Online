@@ -4,6 +4,7 @@
 #include <iostream>
 #include "..\Components\Unit.h"
 #include <map>
+#include <list>
 
 using namespace std;
 
@@ -30,7 +31,7 @@ public:
 	int getClientId();
 	void setClientId(int clientId);
 
-	sf::Packet getPacket(int clientId);
+	std::list<sf::Packet*>* getPackets(int clientId);
 
 	void addUnit(Unit *unit);
 	void deleteUnit(Unit *unit);
@@ -41,6 +42,8 @@ public:
 protected:
 	int id;
 	int clientId;
+
+	bool synchronized;
 
 private:
 	std::map<Unit::UnitType, Unit*> *units;

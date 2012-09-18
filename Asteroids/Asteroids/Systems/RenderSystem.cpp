@@ -28,6 +28,7 @@ void RenderSystem::update() {
 	for (list<Node*>::iterator it = renderNodes->begin(); it != renderNodes->end(); ++it) {
 		position = ((RenderNode*)(*it))->getPosition();
 		display = ((RenderNode*)(*it))->getDisplay();
+		display->setPosition(position->getX(), position->getY());
 		display->draw(this->window, sf::RenderStates());
 	}
 

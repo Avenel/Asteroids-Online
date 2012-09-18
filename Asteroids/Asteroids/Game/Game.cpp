@@ -24,22 +24,27 @@ void Game::startUp() {
 	addSystems();
 
 	// Netzwerk
-	this->server = new Server(1337, this->entityManager);
+	this->server = new Server(1337, this->entityManager, this->entityCreator);
 	server->setMaster(false);
 	server->start();
 
 	// EntityCreator
 	this->entityCreator = new EntityCreator();
 
-	this->entityManager->addEntity(this->entityCreator->createStarship());
-
-	this->client = new Client(sf::IpAddress("192.168.2.101"), 1337);
+	// Testschiff
+	Entity* starship = this->entityCreator->createStarship();
+	this->client = new Client(sf::IpAddress("192.168.2.103"), 1337);
 	if (server->isMaster()) {
 		client->setServerAddress(sf::IpAddress("127.0.0.1"));
+		((Position*)starship->getComponent(Unit::POSITION))->setX(50);
+		((Position*)starship->getComponent(Unit::POSITION))->setY(50);
 	} else {
 		client->registerToServer();
-		server->registerClient(sf::IpAddress("192.168.2.101"));
+		server->registerClient(sf::IpAddress("192.168.2.103"));
+		((Position*)starship->getComponent(Unit::POSITION))->setX(50);
+		((Position*)starship->getComponent(Unit::POSITION))->setY(150);
 	}
+	this->entityManager->addEntity(starship);
 }
 
 void Game::addSystems() {
@@ -53,6 +58,8 @@ void Game::addSystems() {
 void Game::run() {
 	// Spielstart, evtl Mainloop    
 	bool active = true;
+
+	cout << sf::IpAddress().getLocalAddress().toString() << endl;
 
     while (this->window->isOpen()) {
         sf::Event event;
