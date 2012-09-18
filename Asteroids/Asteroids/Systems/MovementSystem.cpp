@@ -25,8 +25,8 @@ void MovementSystem::update() {
 		position = ((MovementNode*)(*it))->getPosition();
 		motion = ((MovementNode*)(*it))->getMotion();
 
-		position->setX(position->getX() + (position->getX() * motion->getSpeedX()));
-		position->setY(position->getY() + (position->getY() * motion->getSpeedY()));
+		position->setX((float)position->getX() + (float)motion->getSpeedX());
+		position->setY((float)position->getY() + (float)motion->getSpeedY());
 	}
 
 }

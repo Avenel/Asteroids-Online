@@ -44,18 +44,18 @@ sf::Keyboard::Key MotionControl::getAccelerate() {
 	return this->accelerate;
 }
 
-void MotionControl::setAccelerationRate(int accelerationRate) {
+void MotionControl::setAccelerationRate(float accelerationRate) {
 	this->accelerationRate = accelerationRate;
 }
 
-int MotionControl::getAccelerationRate() {
+float MotionControl::getAccelerationRate() {
 	return this->accelerationRate;
 }
 
-void MotionControl::setRotationRate(int rotationRate) {
+void MotionControl::setRotationRate(float rotationRate) {
 	this->rotationRate = rotationRate;
 }
 
-int MotionControl::getRotationRate() {
+float MotionControl::getRotationRate() {
 	return this->rotationRate;
 }

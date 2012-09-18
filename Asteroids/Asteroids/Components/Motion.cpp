@@ -23,9 +23,12 @@ sf::Packet* Motion::getPacket(int clientId, int id) {
 void Motion::refresh(sf::Packet packet) {
 }
 
-void Motion::increaseSpeed(int rotation, int accelerationRate) {
-	this->speedX = (cos(rotation * M_PI / 180)) * accelerationRate;
-	this->speedY = (sin(rotation * M_PI / 180)) * accelerationRate;
+void Motion::increaseSpeed(int rotation, float accelerationRate) {
+	this->speedX = (float)(cos(rotation * M_PI / 180)) * accelerationRate;
+	this->speedY = (float)(sin(rotation * M_PI / 180)) * accelerationRate;
+
+	this->speedX *= 0.55;
+	this->speedY *= 0.55;
 }
 
 float Motion::getSpeedX() {

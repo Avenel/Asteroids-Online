@@ -43,17 +43,17 @@ void MotionControlSystem::update() {
 		motionControl = ((MotionControlNode*)(*it))->getMotionControl();
 		
 		if(sf::Keyboard::isKeyPressed(motionControl->getLeft())) {
-			cout << "Links" << endl;
+			//cout << "Links" << endl;
 			position->rotateLeft();
 		}
 
 		if(sf::Keyboard::isKeyPressed(motionControl->getRight())) {
-			cout << "Rechts" << endl;
+			//cout << "Rechts" << endl;
 			position->rotateRight();
 		}
 
 		if(sf::Keyboard::isKeyPressed(motionControl->getAccelerate())) {
-			cout << "Beschleunigen" << endl;
+			//cout << "Beschleunigen" << endl;
 			motion->increaseSpeed(position->getRotation(), motionControl->getAccelerationRate());
 		}
 

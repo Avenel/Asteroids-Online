@@ -6,10 +6,10 @@ class Position : public Unit
 public:
 	Position(int x, int y);
 	~Position(void);
-	void setX(int x);
-	void setY(int y);
-	int getX();
-	int getY();
+	void setX(float x);
+	void setY(float y);
+	float getX();
+	float getY();
 
 	sf::Packet* getPacket(int clientId, int id);
 	void refresh(sf::Packet packet);
@@ -19,8 +19,8 @@ public:
 	int getRotation();
 
 private:
-	int x;
-	int y;
+	float x;
+	float y;
 	int rotation;
 };
 

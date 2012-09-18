@@ -14,30 +14,30 @@ Position::~Position(void)
 {
 }
 
-void Position::setX(int x) {
+void Position::setX(float x) {
 	this->x = x;
 }
 
-void Position::setY(int y) {
+void Position::setY(float y) {
 	this->y = y;
 }
 
-int Position::getX() {
+float Position::getX() {
 	return x;
 }
 
-int Position::getY() {
+float Position::getY() {
 	return y;
 }
 
 sf::Packet* Position::getPacket(int clientId, int id) {
 	sf::Packet* packet = new sf::Packet();
-	(*packet) << clientId << id << this->type << this->x << this->y;
+	(*packet) << clientId << id << this->type << this->x << this->y << this->rotation;
 	return packet;
 }
 
 void Position::refresh(sf::Packet packet) {
-	packet >> this->x >> this->y;
+	packet >> this->x >> this->y >> this->rotation;
 }
 
 void Position::rotateLeft() {

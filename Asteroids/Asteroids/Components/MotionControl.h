@@ -20,17 +20,17 @@ public:
 	void setAccelerate(sf::Keyboard::Key key);
 	sf::Keyboard::Key getAccelerate();
 
-	void setAccelerationRate(int accelerationRate);
-	int getAccelerationRate();
+	void setAccelerationRate(float accelerationRate);
+	float getAccelerationRate();
 
-	void setRotationRate(int rotationRate);
-	int getRotationRate();
+	void setRotationRate(float rotationRate);
+	float getRotationRate();
 
 private:
 	sf::Keyboard::Key left;
 	sf::Keyboard::Key right;
 	sf::Keyboard::Key accelerate;
-	int accelerationRate;
-	int	rotationRate;
+	float accelerationRate;
+	float rotationRate;
 };
 

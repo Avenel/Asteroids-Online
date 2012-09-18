@@ -15,7 +15,7 @@ Server::Server(unsigned short port, EntityManager *manager, EntityCreator *creat
 	
 	this->entityCreator = creator;
 
-	this->updateTime = 5;
+	this->updateTime = 0;
 
 	this->clientList = new list<sf::IpAddress>();
 
@@ -39,9 +39,7 @@ Server::~Server(void) {
 
 
 void Server::start() {
-	//this->registerObject(this);
 	this->registerClient(sf::IpAddress::LocalHost);
-
 	this->listenThread->launch();
 
 	if (this->master) this->synchronizeThread->launch();
@@ -188,12 +186,12 @@ void Server::synchronizeClients() {
 	sf::Clock clock;
 	sf::Time time = clock.getElapsedTime();
 	while(true) {
-		if (clock.getElapsedTime().asMilliseconds() >= time.asMilliseconds()+this->updateTime) {
+		//if (clock.getElapsedTime().asMilliseconds() >= time.asMilliseconds()+this->updateTime) {
 			for (list<Entity*>::iterator it = this->entitiesFlat->begin(); it != this->entitiesFlat->end(); ++it) {
 				sendData((*it));
 			}
-			time = clock.restart();
-		}
+			//time = clock.restart();
+		//}
 	}
 }
 

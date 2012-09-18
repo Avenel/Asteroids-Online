@@ -12,7 +12,7 @@ void Game::startUp() {
 	// Bootsrap, Initialisierungskram
 
 	// Window erstellen
-	this->window = new sf::RenderWindow(sf::VideoMode(200, 200), "Asteroids Online!");
+	this->window = new sf::RenderWindow(sf::VideoMode(800, 600), "Asteroids Online!");
 
 	// Systeme hinzufügen
 	this->systemManager = new SystemManager();
@@ -34,14 +34,14 @@ void Game::startUp() {
 
 	// Testschiff
 	Entity* starship = this->entityCreator->createStarship();
-	this->client = new Client(sf::IpAddress("192.168.2.103"), 1337);
+	this->client = new Client(sf::IpAddress("192.168.2.101"), 1337);
 	if (server->isMaster()) {
 		client->setServerAddress(sf::IpAddress("127.0.0.1"));
-		((Position*)starship->getComponent(Unit::POSITION))->setX(50);
-		((Position*)starship->getComponent(Unit::POSITION))->setY(50);
+		((Position*)starship->getComponent(Unit::POSITION))->setX(400);
+		((Position*)starship->getComponent(Unit::POSITION))->setY(400);
 	} else {
 		client->registerToServer();
-		server->registerClient(sf::IpAddress("192.168.2.103"));
+		server->registerClient(sf::IpAddress("192.168.2.101"));
 		((Position*)starship->getComponent(Unit::POSITION))->setX(50);
 		((Position*)starship->getComponent(Unit::POSITION))->setY(150);
 		client->registerObject(starship); 
@@ -79,9 +79,9 @@ void Game::run() {
 
 		if (!this->server->isMaster()) this->client->send();
 
-		this->window->clear();
 		this->systemManager->updateSystems();
 		this->window->display();
+		this->window->clear();
     }
 
 }
