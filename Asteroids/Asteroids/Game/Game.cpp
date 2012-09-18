@@ -32,7 +32,7 @@ void Game::startUp() {
 
 	// Netzwerk
 	this->server = new Server(1337, this->entityManager, this->entityCreator);
-	server->setMaster(true);
+	server->setMaster(false);
 	server->start();
 
 	// EntityCreator
@@ -83,7 +83,7 @@ void Game::run() {
 			if (event.type == sf::Event::LostFocus) active = false;
         }
 
-		if (!this->server->isMaster()) this->client->send();
+		//if (!this->server->isMaster()) this->client->send();
 
 		this->systemManager->updateSystems();
 		this->window->display();

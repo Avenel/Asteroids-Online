@@ -73,7 +73,7 @@ void Server::listen() {
 
 		bool ipFound = false;
 		if (packet >> clientId >> id) {
-			// cout << "RECEIVED DATA: " << address.toString() << ": " << clientId << ", " << id << endl;
+			//cout << "RECEIVED DATA: " << address.toString() << ": " << clientId << ", " << id << endl;
 			// Ip-Adresse bekannt?
 			for (list<sf::IpAddress>::iterator it = this->clientList->begin(); it != this->clientList->end(); ++it) {
 				if ( it->toInteger() == address.toInteger()) {
@@ -105,7 +105,9 @@ void Server::listen() {
 			} else {
 				// Entity noch nicht bekannt -> anlegen	
 				//cout << "Lege neues Objekt an" << endl;
-				this->registerObject(this->generateEntity(id, clientId, tempPacket));
+				if (controlTag == -1) {
+					this->registerObject(this->generateEntity(id, clientId, tempPacket));
+				}
 			}
 		}
 	}
