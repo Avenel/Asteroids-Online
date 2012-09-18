@@ -16,10 +16,13 @@ MotionControlNode::~MotionControlNode(void)
 }
 
 bool MotionControlNode::isEntityMember(Entity* entity) {
-	return false;
+	return (entity->hasComponent(Unit::MOTION) && entity->hasComponent(Unit::POSITION) && entity->hasComponent(Unit::MOTIONCONTROL));
 }
 
 void MotionControlNode::addEntity() {
+	this->motion = (Motion*)this->entity->getComponent(Unit::MOTION);
+	this->motionControl = (MotionControl*)this->entity->getComponent(Unit::MOTIONCONTROL);
+	this->position = (Position*)this->entity->getComponent(Unit::POSITION);
 }
 
 Position* MotionControlNode::getPosition() {
