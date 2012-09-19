@@ -1,7 +1,7 @@
 #include "Position.h"
 
 
-Position::Position(int x, int y)
+Position::Position(float x, float y)
 {
 	this->setType(POSITION);
 	this->x = x;

@@ -24,11 +24,11 @@ void Motion::refresh(sf::Packet packet) {
 }
 
 void Motion::increaseSpeed(int rotation, float accelerationRate) {
-	this->speedX = (float)(cos(rotation * M_PI / 180)) * accelerationRate;
-	this->speedY = (float)(sin(rotation * M_PI / 180)) * accelerationRate;
+	this->speedX += (float)(cos(rotation * M_PI / 180)) * accelerationRate;
+	this->speedY += (float)(sin(rotation * M_PI / 180)) * accelerationRate;
 
-	this->speedX *= 0.55;
-	this->speedY *= 0.55;
+	this->speedX *= 0.55f;
+	this->speedY *= 0.55f;
 }
 
 float Motion::getSpeedX() {
@@ -37,4 +37,12 @@ float Motion::getSpeedX() {
 
 float Motion::getSpeedY() {
 	return this->speedY;
+}
+
+float Motion::getDamping() {
+	return this->damping;
+}
+
+void Motion::setDamping(float damping) {
+	this->damping = damping;
 }

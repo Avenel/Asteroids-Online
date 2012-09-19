@@ -17,6 +17,8 @@ public:
 
 	float getSpeedX();
 	float getSpeedY();
+	float getDamping();
+	void setDamping(float damping);
 
 private:
 	float speedX;

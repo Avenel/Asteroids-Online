@@ -21,10 +21,12 @@ void MovementSystem::update() {
 
 	Position* position;
 	Motion* motion;
+	float damping;
 
 	for (list<Node*>::iterator it = movementNodes->begin(); it != movementNodes->end(); ++it) {
 		position = ((MovementNode*)(*it))->getPosition();
 		motion = ((MovementNode*)(*it))->getMotion();
+		damping = motion->getDamping();
 
 		float newX = (float)position->getX() + (float)motion->getSpeedX();
 		if(newX > this->windowSize.x) {
@@ -41,6 +43,8 @@ void MovementSystem::update() {
 		else if( newY < 0.0 ) {
 			newY += this->windowSize.y;
 		}
+
+		
 
 		position->setX(newX);
 		position->setY(newY);

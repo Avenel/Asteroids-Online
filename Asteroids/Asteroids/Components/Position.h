@@ -4,7 +4,7 @@
 class Position : public Unit
 {
 public:
-	Position(int x, int y);
+	Position(float x, float y);
 	~Position(void);
 	void setX(float x);
 	void setY(float y);
