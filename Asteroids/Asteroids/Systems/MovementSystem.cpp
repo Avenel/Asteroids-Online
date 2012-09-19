@@ -22,6 +22,11 @@ void MovementSystem::update() {
 	Position* position;
 	Motion* motion;
 	float damping;
+	float rotation;
+	float dampingX;
+	float dampingY;
+	float speedX;
+	float speedY;
 
 	for (list<Node*>::iterator it = movementNodes->begin(); it != movementNodes->end(); ++it) {
 		position = ((MovementNode*)(*it))->getPosition();
@@ -44,8 +49,32 @@ void MovementSystem::update() {
 			newY += this->windowSize.y;
 		}
 
-		motion->setSpeedX(motion->getSpeedX()*0.99f);
-		motion->setSpeedY(motion->getSpeedY()*0.99f);
+		
+		rotation = motion->getSpeedRotation();
+		dampingX = (float)(cos(rotation * M_PI / 180)) * damping;
+		dampingY = (float)(sin(rotation * M_PI / 180)) * damping;
+		speedX = motion->getSpeedX();
+		speedY = motion->getSpeedY();
+		dampingX *= sqrt(pow(speedX,2) + pow(speedY,2));
+		dampingY *= sqrt(pow(speedX,2) + pow(speedY,2));
+
+		if((abs(speedX) - dampingX) < 0) {
+			motion->setSpeedX(0);
+		}
+		else {
+			motion->setSpeedX(speedX - dampingX);
+		}
+
+		if((abs(speedY) - dampingY) < 0) {
+			motion->setSpeedY(0);
+		}
+		else {
+			motion->setSpeedY(speedY - dampingY);
+		}
+
+
+		//motion->setSpeedX(motion->getSpeedX()*0.90f);
+		//motion->setSpeedY(motion->getSpeedY()*0.90f);
 
 		position->setX(newX);
 		position->setY(newY);

@@ -20,14 +20,14 @@ Entity* EntityCreator::createStarship() {
 	starship->addUnit(starship_unit);
 
 	Motion* motion = new Motion();
-	motion->setDamping(1.5f);
+	motion->setDamping(0.06f);
 	starship->addUnit(motion);
 	
 	MotionControl* motionControl = new MotionControl();
 	motionControl->setLeft(sf::Keyboard::Left);
 	motionControl->setRight(sf::Keyboard::Right);
 	motionControl->setAccelerate(sf::Keyboard::Up);
-	motionControl->setAccelerationRate(4.5f);
+	motionControl->setAccelerationRate(1.5f);
 	motionControl->setRotationRate(5.0f);
 	starship->addUnit(motionControl);
 

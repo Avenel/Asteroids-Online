@@ -21,6 +21,7 @@ public:
 	float getDamping();
 	void setSpeedY(float dy);
 	void setDamping(float damping);
+	float getSpeedRotation();
 
 private:
 	float speedX;
