@@ -15,7 +15,7 @@ Server::Server(unsigned short port, EntityManager *manager, EntityCreator *creat
 	
 	this->entityCreator = creator;
 
-	this->updateTime = 0;
+	this->updateTime = 10;
 
 	this->clientList = new list<sf::IpAddress>();
 
@@ -73,7 +73,7 @@ void Server::listen() {
 
 		bool ipFound = false;
 		if (packet >> clientId >> id) {
-			// cout << "RECEIVED DATA: " << address.toString() << ": " << clientId << ", " << id << endl;
+			//cout << "RECEIVED DATA: " << address.toString() << ": " << clientId << ", " << id << endl;
 			// Ip-Adresse bekannt?
 			for (list<sf::IpAddress>::iterator it = this->clientList->begin(); it != this->clientList->end(); ++it) {
 				if ( it->toInteger() == address.toInteger()) {
@@ -105,7 +105,9 @@ void Server::listen() {
 			} else {
 				// Entity noch nicht bekannt -> anlegen	
 				//cout << "Lege neues Objekt an" << endl;
-				this->registerObject(this->generateEntity(id, clientId, tempPacket));
+				if (controlTag == -1) {
+					this->registerObject(this->generateEntity(id, clientId, tempPacket));
+				}
 			}
 		}
 	}
@@ -158,24 +160,22 @@ void Server::sendData(Entity *object) {
 		unsigned short temp = this->port;
 		if (object->getClientId() == this->id) {
 			// Server hat dieses Objekt erstellt
-			std::list<sf::Packet*> *packets = object->getPackets(sf::IpAddress().getLocalAddress().toInteger());
+			/*std::list<sf::Packet*> *packets = object->getPackets(sf::IpAddress().getLocalAddress().toInteger());
 			for (std::list<sf::Packet*>::iterator packet = packets->begin(); packet != packets->end(); ++packet) {
 				this->socket.send((*(*packet)), (*it), temp);
 				delete (*packet);
 			}
-			delete packets;
+			delete packets;*/
 		} else {
 			// Objekt kommt von einem Clienten, verändere nicht die clientId
-			std::list<sf::Packet*> *packets = object->getPackets(0);
-			for (std::list<sf::Packet*>::iterator packet = packets->begin(); packet != packets->end(); ++packet) {
+			std::list<sf::Packet> packets = object->getPackets(0);
+			for (std::list<sf::Packet>::iterator packet = packets.begin(); packet != packets.end(); ++packet) {
 				/*int clientId, id, type;
 				(*(*packet)) >> clientId >> id >> type;
 				cout << "Schicke: " << clientId << ", " << id << ", " << type << endl;
 				(*(*packet)) << clientId << id << type;*/
-				this->socket.send((*(*packet)), (*it), temp);
-				delete (*packet);
+				this->socket.send((*packet), (*it), temp);
 			}
-			delete packets;
 		}
 	}
 }
@@ -186,12 +186,12 @@ void Server::synchronizeClients() {
 	sf::Clock clock;
 	sf::Time time = clock.getElapsedTime();
 	while(true) {
-		//if (clock.getElapsedTime().asMilliseconds() >= time.asMilliseconds()+this->updateTime) {
+		if (clock.getElapsedTime().asMilliseconds() >= time.asMilliseconds()+this->updateTime) {
 			for (list<Entity*>::iterator it = this->entitiesFlat->begin(); it != this->entitiesFlat->end(); ++it) {
 				sendData((*it));
 			}
-			//time = clock.restart();
-		//}
+			time = clock.getElapsedTime();
+		}
 	}
 }
 

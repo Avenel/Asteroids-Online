@@ -10,7 +10,7 @@ public:
 	void setDisplayObject(View* view);
 	View* getDisplayObject();
 
-	sf::Packet* getPacket(int clientId, int id);
+	sf::Packet getPacket(int clientId, int id);
 	void refresh(sf::Packet packet);
 	
 	void draw(sf::RenderWindow *target, sf::RenderStates &states);

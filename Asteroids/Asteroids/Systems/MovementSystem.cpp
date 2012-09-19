@@ -44,7 +44,8 @@ void MovementSystem::update() {
 			newY += this->windowSize.y;
 		}
 
-		
+		motion->setSpeedX(motion->getSpeedX()*0.99f);
+		motion->setSpeedY(motion->getSpeedY()*0.99f);
 
 		position->setX(newX);
 		position->setY(newY);

@@ -10,14 +10,16 @@ public:
 	Motion(void);
 	~Motion(void);
 
-	sf::Packet* getPacket(int clientId, int id);
+	sf::Packet getPacket(int clientId, int id);
 	void refresh(sf::Packet packet);
 
 	void increaseSpeed(int rotation, float accelerationRate);
 
 	float getSpeedX();
 	float getSpeedY();
+	void setSpeedX(float dx);
 	float getDamping();
+	void setSpeedY(float dy);
 	void setDamping(float damping);
 
 private:

@@ -34,23 +34,23 @@ void Entity::setId(int id) {
 	this->id = id;
 }
 
-std::list<sf::Packet*>* Entity::getPackets(int clientId) {
-	std::list<sf::Packet*> *packets = new std::list<sf::Packet*>();
+std::list<sf::Packet> Entity::getPackets(int clientId) {
+	std::list<sf::Packet> packets;
 	if (clientId != 0) this->clientId = clientId;
 	
-	sf::Packet *packet = new sf::Packet();
+	sf::Packet packet;
 	// Wenn Entity noch nicht synchronisiert wurde, setze ControlTag auf -1
 	if (!this->synchronized) {
-		(*packet) << this->clientId << this->id << -1;
+		packet << this->clientId << this->id << -1;
 		this->synchronized = true;
-		packets->push_back(packet);
+		packets.push_back(packet);
 	}
 
 	// Füge alle Packets aus den Komponenten dazu
 	// Später kann man noch durch ein isUpdated? unnötige Pakte vermeiden.
 	for (std::map<Unit::UnitType, Unit*>::iterator it = this->units->begin(); it != this->units->end(); ++it) {
-		sf::Packet *packet = (*it).second->getPacket(this->clientId, this->id);
-		packets->push_back(packet);
+		sf::Packet packet = (*it).second->getPacket(this->clientId, this->id);
+		packets.push_back(packet);
 	}
 
 	return packets;
