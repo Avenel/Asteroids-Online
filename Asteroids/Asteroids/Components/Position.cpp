@@ -1,12 +1,12 @@
 #include "Position.h"
 
 
-Position::Position(float x, float y)
+Position::Position(float x, float y, int rotation)
 {
 	this->setType(POSITION);
 	this->x = x;
 	this->y = y;
-	this->rotation = 0;
+	this->rotation = rotation;
 }
 
 

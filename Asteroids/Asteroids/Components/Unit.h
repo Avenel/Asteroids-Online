@@ -9,6 +9,7 @@ public:
 
 	enum UnitType {
 		ASTEROID,
+		BULLET,
 		DISPLAY,
 		GAMEMAP,
 		GUN,

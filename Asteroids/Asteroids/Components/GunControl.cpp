@@ -19,3 +19,11 @@ sf::Packet GunControl::getPacket(int clientId, int id) {
 
 void GunControl::refresh(sf::Packet packet) {
 }
+
+void GunControl::setShootKey(sf::Keyboard::Key key) {
+	this->shootKey = key;
+}
+
+sf::Keyboard::Key GunControl::getShootKey() {
+	return this->shootKey;
+}

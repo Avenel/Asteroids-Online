@@ -9,6 +9,7 @@
 #include "..\Systems\MotionControlSystem.h"
 #include "..\Systems\RenderSystem.h"
 #include "..\Systems\MovementSystem.h"
+#include "..\Systems\GunControlSystem.h"
 #include "..\Network\Server.h"
 #include "..\Network\Client.h"
 #include "..\Entity\EntityCreator.h"
@@ -44,6 +45,7 @@ private:
 	MotionControlSystem* motionControlSystem;
 	RenderSystem* renderSystem;
 	MovementSystem* movementSystem;
+	GunControlSystem* gunControlSystem;
 	
 	// EntityCreator
 	EntityCreator* entityCreator;
