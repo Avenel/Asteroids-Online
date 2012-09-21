@@ -15,24 +15,63 @@ MovementSystem::~MovementSystem(void)
 {
 }
 
+void MovementSystem::damping(Motion* motion) {
+	float speedX = motion->getSpeedX();
+	float speedY = motion->getSpeedY();
+	float damping = motion->getDamping();
+	float speedAtan;
+	float dampingX;
+	float dampingY;
+
+	if(speedX != 0.0f) {
+		speedAtan = atanf(speedY/speedX);
+	}
+	else if (speedY >= 0.0f) {
+		speedAtan = (float)M_PI_2;
+	}
+	else {
+		speedAtan = (float)(M_PI + M_PI_2);
+	}
+
+	if(speedX >= 0.0f && speedY < 0.0f) {
+		speedAtan += (float)(2 * M_PI);
+	}
+	else if(speedX < 0.0f) {
+		speedAtan += (float)M_PI;	
+	}
+
+
+	dampingX = cos(speedAtan) * damping;
+	dampingY = sin(speedAtan) * damping;
+	dampingX *= sqrt(pow(speedX,2) + pow(speedY,2));
+	dampingY *= sqrt(pow(speedX,2) + pow(speedY,2));
+
+	if((abs(speedX) - dampingX) < 0) {
+		motion->setSpeedX(0);
+	}
+	else {
+		motion->setSpeedX(speedX - dampingX);
+	}
+
+	if((abs(speedY) - dampingY) < 0) {
+		motion->setSpeedY(0);
+	}
+	else {
+		motion->setSpeedY(speedY - dampingY);
+	}
+}
+
 void MovementSystem::update() {
 	list<Node*>* movementNodes;
 	movementNodes = familyManager->getMemberOfFamilies(FamilyManager::Family::MOVEMENT_SYSTEM);
 
 	Position* position;
 	Motion* motion;
-	float damping;
-	float rotation;
-	float dampingX;
-	float dampingY;
-	float speedX;
-	float speedY;
 
 	for (list<Node*>::iterator it = movementNodes->begin(); it != movementNodes->end(); ++it) {
 		position = ((MovementNode*)(*it))->getPosition();
 		motion = ((MovementNode*)(*it))->getMotion();
-		damping = motion->getDamping();
-
+		
 		float newX = (float)position->getX() + (float)motion->getSpeedX();
 		if(newX > this->windowSize.x) {
 			newX -= this->windowSize.x;
@@ -49,32 +88,7 @@ void MovementSystem::update() {
 			newY += this->windowSize.y;
 		}
 
-		
-		rotation = motion->getSpeedRotation();
-		dampingX = (float)(cos(rotation * M_PI / 180)) * damping;
-		dampingY = (float)(sin(rotation * M_PI / 180)) * damping;
-		speedX = motion->getSpeedX();
-		speedY = motion->getSpeedY();
-		dampingX *= sqrt(pow(speedX,2) + pow(speedY,2));
-		dampingY *= sqrt(pow(speedX,2) + pow(speedY,2));
-
-		if((abs(speedX) - dampingX) < 0) {
-			motion->setSpeedX(0);
-		}
-		else {
-			motion->setSpeedX(speedX - dampingX);
-		}
-
-		if((abs(speedY) - dampingY) < 0) {
-			motion->setSpeedY(0);
-		}
-		else {
-			motion->setSpeedY(speedY - dampingY);
-		}
-
-
-		//motion->setSpeedX(motion->getSpeedX()*0.90f);
-		//motion->setSpeedY(motion->getSpeedY()*0.90f);
+		this->damping(motion);
 
 		position->setX(newX);
 		position->setY(newY);

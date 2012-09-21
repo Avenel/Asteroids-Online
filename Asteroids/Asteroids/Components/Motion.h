@@ -1,8 +1,5 @@
 #pragma once
-#define _USE_MATH_DEFINES
 #include "Unit.h"
-#include <cmath>
-#include <iostream>
 
 class Motion : public Unit
 {
@@ -13,7 +10,7 @@ public:
 	sf::Packet getPacket(int clientId, int id);
 	void refresh(sf::Packet packet);
 
-	void increaseSpeed(int rotation, float accelerationRate);
+	void increaseSpeed(float speedX, float speedY);
 
 	float getSpeedX();
 	float getSpeedY();
@@ -21,7 +18,6 @@ public:
 	float getDamping();
 	void setSpeedY(float dy);
 	void setDamping(float damping);
-	float getSpeedRotation();
 
 private:
 	float speedX;

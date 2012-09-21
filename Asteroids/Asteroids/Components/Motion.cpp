@@ -23,10 +23,9 @@ sf::Packet Motion::getPacket(int clientId, int id) {
 void Motion::refresh(sf::Packet packet) {
 }
 
-void Motion::increaseSpeed(int rotation, float accelerationRate) {
-	this->speedX += (float)(cos(rotation * M_PI / 180)) * accelerationRate;
-	this->speedY += (float)(sin(rotation * M_PI / 180)) * accelerationRate;
-	this->getSpeedRotation();
+void Motion::increaseSpeed(float speedX, float speedY) {
+	this->speedX += speedX;
+	this->speedY += speedY;
 }
 float Motion::getSpeedX() {
 	return this->speedX;
@@ -49,26 +48,4 @@ float Motion::getDamping() {
 
 void Motion::setDamping(float damping) {
 	this->damping = damping;
-}
-
-float Motion::getSpeedRotation() {
-	float speedRotation = 0.0f;
-	if(this->speedX != 0.0f) {
-		speedRotation = atan (this->speedY/this->speedX) * 180 / M_PI;
-	}
-	else if (this->speedY >= 0.0f) {
-		speedRotation = 90.0f;
-	}
-	else {
-		speedRotation = 270.f;
-	}
-
-	if(this->speedX >= 0.0f && this->speedY < 0.0f) {
-		speedRotation += 360.0f;
-	}
-	else if(this->speedX < 0.0f) {
-		speedRotation += 180.0f;	
-	}
-	
-	return speedRotation;
 }

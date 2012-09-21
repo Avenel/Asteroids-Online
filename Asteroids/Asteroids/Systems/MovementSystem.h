@@ -11,6 +11,8 @@ public:
 	MovementSystem(void);
 	MovementSystem(FamilyManager* familyManager, sf::Vector2u windowSize);
 	~MovementSystem(void);
+	void damping(Motion* motion);
+
 	void update();
 
 	private:

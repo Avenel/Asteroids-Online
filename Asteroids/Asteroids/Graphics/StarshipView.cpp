@@ -10,7 +10,7 @@ StarshipView::StarshipView(void)
 	this->shipPolygon->setPointCount(3);
 	this->shipPolygon->setPoint(0, sf::Vector2f(0,0));
 	this->shipPolygon->setPoint(1, sf::Vector2f(0,this->size));
-	this->shipPolygon->setPoint(2, sf::Vector2f(this->size,this->size/2.0f));
+	this->shipPolygon->setPoint(2, sf::Vector2f(this->size * 1.5f,this->size/2.0f));
 
 	//Farbe und Aussehen
 	//this->shipPolygon->setFillColor(sf::Color::Black);

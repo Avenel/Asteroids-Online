@@ -27,7 +27,7 @@ Entity* EntityCreator::createStarship() {
 	motionControl->setLeft(sf::Keyboard::Left);
 	motionControl->setRight(sf::Keyboard::Right);
 	motionControl->setAccelerate(sf::Keyboard::Up);
-	motionControl->setAccelerationRate(1.5f);
+	motionControl->setAccelerationRate(0.6f);
 	motionControl->setRotationRate(5.0f);
 	starship->addUnit(motionControl);
 

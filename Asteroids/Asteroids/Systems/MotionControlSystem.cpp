@@ -36,6 +36,10 @@ void MotionControlSystem::update() {
 	Position* position;
 	Motion* motion;
 	MotionControl* motionControl;
+	float angle;
+	float accelerationRate;
+	float speedX;
+	float speedY;
 
 	for (list<Node*>::iterator it = motionControlNodes->begin(); it != motionControlNodes->end(); ++it) {
 		position = ((MotionControlNode*)(*it))->getPosition();
@@ -54,7 +58,12 @@ void MotionControlSystem::update() {
 
 		if(sf::Keyboard::isKeyPressed(motionControl->getAccelerate())) {
 			//cout << "Beschleunigen" << endl;
-			motion->increaseSpeed(position->getRotation(), motionControl->getAccelerationRate());
+			angle = position->getRotation() * M_PI / 180.0f;
+			accelerationRate = motionControl->getAccelerationRate();
+			speedX = cosf(angle) * accelerationRate;
+			speedY = sinf(angle) * accelerationRate;
+
+			motion->increaseSpeed(speedX, speedY);
 		}
 
 	}
