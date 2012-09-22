@@ -28,6 +28,9 @@ private:
 	sf::UdpSocket socket;
 	unsigned short port;
 	int clientId;
+	int seqNr;
+
+	int getNextSeq();
 
 	std::list<Entity*> *objectList;
 };

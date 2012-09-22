@@ -51,6 +51,8 @@ void Game::startUp() {
 		((Position*)starship->getComponent(Unit::POSITION))->setY(150);
 		client->registerObject(starship); 
 	}
+
+	//this->client->send();
 }
 
 void Game::addSystems() {

@@ -95,7 +95,7 @@ void Server::listen() {
 
 		bool ipFound = false;
 		if (packet >> seqNr >> clientId >> request) {
-			//cout << "RECEIVED DATA: " << address.toString() << ": " << clientId << ", " << id << endl;
+			cout << "RECEIVED DATA: " << address.toString() << ": " << clientId << ", " << id << endl;
 			// Ip-Adresse bekannt?
 			for (list<sf::IpAddress>::iterator it = this->clientList->begin(); it != this->clientList->end(); ++it) {
 				if ( it->toInteger() == address.toInteger()) {

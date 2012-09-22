@@ -7,10 +7,12 @@ Client::Client(sf::IpAddress address, unsigned short port) {
 	this->serverAddress = address;
 	this->port = port;
 
+	this->seqNr = 0;
+
 	this->socket.bind(port);
 	this->socket.setBlocking(false);
 	
-	this->clientId = sf::IpAddress().getPublicAddress().toInteger();
+	this->clientId = sf::IpAddress().getLocalAddress().toInteger();
 	this->objectList = new list<Entity*>();
 }
 
@@ -34,7 +36,7 @@ void Client::registerObject(Entity *object) {
 
 void Client::registerToServer() {
 	sf::Packet packet;
-	packet << this->clientId << -1 << 0;
+	packet << this->getNextSeq() << this->clientId << true << -1 << 0;
 
 	socket.send(packet, this->serverAddress, this->port);
 }
@@ -42,3 +44,8 @@ void Client::registerToServer() {
 void Client::setServerAddress(sf::IpAddress address) {
 	this->serverAddress = address;
 }
+
+int Client::getNextSeq() {
+	return this->seqNr++;
+}
+	
