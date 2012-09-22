@@ -94,8 +94,9 @@ void Server::listen() {
 		this->socket.receive(packet, address, tempPort);
 
 		bool ipFound = false;
-		if (packet >> seqNr >> clientId >> request) {
-			cout << "RECEIVED DATA: " << address.toString() << ": " << clientId << ", " << id << endl;
+		if (packet >> seqNr >> clientId >> request >> controlTag) {
+			cout << "RECEIVED DATA: " << address.toString() << ": " << seqNr << ", "<< clientId << ", " << request << ", controlTag: " << controlTag << endl;
+
 			// Ip-Adresse bekannt?
 			for (list<sf::IpAddress>::iterator it = this->clientList->begin(); it != this->clientList->end(); ++it) {
 				if ( it->toInteger() == address.toInteger()) {
@@ -104,7 +105,6 @@ void Server::listen() {
 				}
 			}
 
-			packet >> controlTag;
 			if (!ipFound && controlTag == -1) {
 				// Client registrieren
 				registerClient(address);
@@ -144,6 +144,7 @@ void Server::listen() {
 					answerPacket << seqNr << clientId << 1 << -3 << 0;
 					Request newRequest(seqNr, clientId, answerPacket);
 					this->incomingRequests->push_back(newRequest);
+					cout << "New Incoming Request from: " << sf::IpAddress(clientId).toString() << endl;
 				}
 
 				// OUTGOING REQUESTS

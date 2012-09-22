@@ -7,6 +7,5 @@ int mainMB()
 	game.startUp();
 	game.run();
 
-	system("PAUSE");
     return 0;
 }
