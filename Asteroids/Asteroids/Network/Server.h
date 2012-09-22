@@ -54,6 +54,7 @@ protected:
 	std::list<sf::IpAddress> *clientList;
 
 	float updateTime;
+	float updateRequestTime;
 	sf::IpAddress localThreadAddress;
 
 	EntityManager *entityManager;

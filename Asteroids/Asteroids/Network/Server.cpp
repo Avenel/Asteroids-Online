@@ -16,6 +16,7 @@ Server::Server(unsigned short port, EntityManager *manager, EntityCreator *creat
 	this->entityCreator = creator;
 
 	this->updateTime = 10;
+	this->updateRequestTime = 200;
 
 	this->clientList = new list<sf::IpAddress>();
 
@@ -288,24 +289,33 @@ void Server::handleRequests() {
 	sf::Clock clock;
 	sf::Time time = clock.getElapsedTime();
 	while(true) {
-		
-		if (clock.getElapsedTime().asMilliseconds() >= time.asMilliseconds()+this->updateTime) {		
+		if (clock.getElapsedTime().asMilliseconds() >= time.asMilliseconds()+this->updateRequestTime) {		
+
 			// INCOMING REQUESTS (Antworten auf diese, ctrlTag = -3)
-			Request answer = this->incomingRequests->front();
-			this->socket.send(answer.getPacket(), sf::IpAddress(answer.getClientId()), this->port);
-			this->incomingRequests->push_back(answer);
-			this->incomingRequests->pop_front();
+			if (!this->incomingRequests->empty()) {
+				Request answer = this->incomingRequests->front();
+				this->socket.send(answer.getPacket(), sf::IpAddress(answer.getClientId()), this->port);
+				this->incomingRequests->push_back(answer);
+				this->incomingRequests->pop_front();
+				cout << "IncomingRequestCount: " << this->incomingRequests->size() << endl;
+			}
 
 			// AFFIRMED REQUESTS (Antworten auf diese, ctrlTag = -4)
-			Request affirmRequest = this->affirmedRequests->front();
-			this->socket.send(answer.getPacket(), sf::IpAddress(answer.getClientId()), this->port);
-			this->incomingRequests->pop_front();
+			if (!this->affirmedRequests->empty()) {
+				Request affirmRequest = this->affirmedRequests->front();
+				this->socket.send(affirmRequest.getPacket(), sf::IpAddress(affirmRequest.getClientId()), this->port);
+				this->incomingRequests->pop_front();
+				cout << "AffirmedRequestCount: " << this->affirmedRequests->size() << endl;
+			}
 
 			// OUTGOING REQUESTS (Eigene Anfragen versenden)
-			Request outgoingRequest = this->outgoingRequests->front();
-			this->socket.send(outgoingRequest.getPacket(), sf::IpAddress(outgoingRequest.getClientId()), this->port);
-			this->outgoingRequests->push_back(outgoingRequest);
-			this->outgoingRequests->pop_front();
+			if (!this->outgoingRequests->empty()) {
+				Request outgoingRequest = this->outgoingRequests->front();
+				this->socket.send(outgoingRequest.getPacket(), sf::IpAddress(outgoingRequest.getClientId()), this->port);
+				this->outgoingRequests->push_back(outgoingRequest);
+				this->outgoingRequests->pop_front();
+				cout << "OutgoingRequestCount: " << this->outgoingRequests->size() << endl;
+			}
 
 			time = clock.getElapsedTime();
 		}
