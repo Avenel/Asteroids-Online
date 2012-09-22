@@ -21,7 +21,7 @@ Server::Server(unsigned short port, EntityManager *manager, EntityCreator *creat
 
 	this->listenThread = new sf::Thread(&Server::listen, this);
 	this->synchronizeThread = new sf::Thread(&Server::synchronizeClients, this);
-	this->handleRequestsThread = new sf::Thread();
+	this->handleRequestsThread = new sf::Thread(&Server::handleRequests, this);
 
 	this->id = sf::IpAddress().getLocalAddress().toInteger();
 	this->clientId = sf::IpAddress().getLocalAddress().toInteger();
@@ -116,7 +116,7 @@ void Server::listen() {
 					if ((*it).getClientId() == clientId && (*it).getSeqNr() == seqNr) {
 						requestFound = true;
 						packet >> data;
-						this->incomingRequests->remove((*it));
+						this->incomingRequests->erase(it);
 					}
 				}
 
