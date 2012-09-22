@@ -65,6 +65,7 @@ protected:
 
 	std::list<Request>* incomingRequests;
 	std::list<Request>* outgoingRequests;
+	std::list<Request>* affirmedRequests;
 
 	void listen();
 	void synchronizeClients();

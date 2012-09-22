@@ -30,6 +30,7 @@ Server::Server(unsigned short port, EntityManager *manager, EntityCreator *creat
 
 	this->incomingRequests = new std::list<Request>();
 	this->outgoingRequests = new std::list<Request>();
+	this->affirmedRequests = new std::list<Request>();
 }
 
 
@@ -43,6 +44,7 @@ Server::~Server(void) {
 	delete this->clientList;
 	delete this->incomingRequests;
 	delete this->outgoingRequests;
+	delete this->affirmedRequests;
 }
 
 
@@ -67,10 +69,16 @@ void Server::listen() {
 	int clientId;
 	/**
 		Funktioniert wie folgt:
-		controlTag: >= 0 => Wird als Unit-Enum verstanden
-					= -1 => Entity wird neu angelegt
-					= -2 => Entity wird entfernt
-		Wenn controlTag = -1, dann werden der nachfolgende Int Entity-Type verstanden und der EntityCreator dementsprechend benutzt.
+		controlTag: = -4 => AffirmedRequest senden
+					= -3 => Answer auf Request
+					= -2 => DeRegister Client
+					= -1 => Register Client
+					=  0 => Create Entity
+					=  1 => Refresh Entity
+		
+		request:	=  0 => Keine Antwort
+				    =  1 => Antworten
+
 	*/
 	int controlTag;
 	int seqNr;
@@ -100,31 +108,65 @@ void Server::listen() {
 				// Client registrieren
 				registerClient(address);
 				packet >> data;
-				continue;
 			} else if(controlTag == -2) {
 				// Client deregistrieren
 				deRegisterClient(address);
 				packet >> data;
-				continue;
 			}
 			
-			// Wenn Paket eine Antwort erwartet, lege sie in die entsprechende Queue ab
+			// Incoming/Outgoing Requests
 			if (request) {
+
+				// INCOMING REQUESTS
 				// Nachsehen ob es sich um einen vorhandenen Request handelt, der auf eine Antwort vom Clienten gewartet hat
-				bool requestFound = false;
+				// ->IncomingRequests 
+
+				bool incomingRequestFound = false;
 				for (std::list<Request>::iterator it = this->incomingRequests->begin(); it != this->incomingRequests->end(); ++it) {
 					if ((*it).getClientId() == clientId && (*it).getSeqNr() == seqNr) {
-						requestFound = true;
+						incomingRequestFound = true;
 						packet >> data;
-						this->incomingRequests->erase(it);
+						
+						// Wenn ctrlTag = -4 => AffirmedRequest Antwort erhalten => IncomingRequest löschen, da abgearbeitet
+						if (controlTag == -4) {
+							this->incomingRequests->erase(it);
+						}
+						break;
 					}
 				}
 
 				// Basic-Antwort Paket. Vll könnte man hier später mal über Server Dienste reden (ScoreList, mapchangeRequest, ...)
-				sf::Packet answerPacket;
-				answerPacket << seqNr << clientId << 0;
-				Request newRequest(seqNr, clientId, answerPacket);
-				this->incomingRequests->push_back(newRequest);
+				// IncomingRequest aufnehmen
+				if (!incomingRequestFound) {
+					sf::Packet answerPacket;
+					//				SeqNr,	ClientId, request, ctrlTag, Data
+					answerPacket << seqNr << clientId << 1 << -3 << 0;
+					Request newRequest(seqNr, clientId, answerPacket);
+					this->incomingRequests->push_back(newRequest);
+				}
+
+				// OUTGOING REQUESTS
+				bool outgoingRequestFound = false;
+				for (std::list<Request>::iterator it = this->outgoingRequests->begin(); it != this->outgoingRequests->end(); ++it) {
+					if ((*it).getClientId() == clientId && (*it).getSeqNr() == seqNr) {
+						outgoingRequestFound = true;
+						packet >> data;
+						this->outgoingRequests->erase(it);							
+					}
+					break;
+				}
+			
+				// Wenn ctrlTag = -3 => Antwort auf Request erhalten => OutgoingRequest löschen, da abgearbeitet, AffirmedRequest senden
+				if (controlTag == -3) {
+					sf::Packet answerPacket;
+					answerPacket << seqNr << clientId << 1 << -4 << 0;
+					Request	newRequest(seqNr, clientId, answerPacket);
+					this->affirmedRequests->push_back(newRequest);
+				}
+
+				// Anmeldungen und Abmeldungen werden alleine, ohne weitere Daten, versand.
+				// Answers und AffirmedRequests ebenso
+				if (controlTag == -1 || controlTag == -2 || controlTag == -3 || controlTag == -4) continue;
 			}
 
 			while(!packet.endOfPacket()) {
@@ -246,11 +288,25 @@ void Server::handleRequests() {
 	sf::Clock clock;
 	sf::Time time = clock.getElapsedTime();
 	while(true) {
-		if (clock.getElapsedTime().asMilliseconds() >= time.asMilliseconds()+this->updateTime) {
+		
+		if (clock.getElapsedTime().asMilliseconds() >= time.asMilliseconds()+this->updateTime) {		
+			// INCOMING REQUESTS (Antworten auf diese, ctrlTag = -3)
 			Request answer = this->incomingRequests->front();
 			this->socket.send(answer.getPacket(), sf::IpAddress(answer.getClientId()), this->port);
 			this->incomingRequests->push_back(answer);
 			this->incomingRequests->pop_front();
+
+			// AFFIRMED REQUESTS (Antworten auf diese, ctrlTag = -4)
+			Request affirmRequest = this->affirmedRequests->front();
+			this->socket.send(answer.getPacket(), sf::IpAddress(answer.getClientId()), this->port);
+			this->incomingRequests->pop_front();
+
+			// OUTGOING REQUESTS (Eigene Anfragen versenden)
+			Request outgoingRequest = this->outgoingRequests->front();
+			this->socket.send(outgoingRequest.getPacket(), sf::IpAddress(outgoingRequest.getClientId()), this->port);
+			this->outgoingRequests->push_back(outgoingRequest);
+			this->outgoingRequests->pop_front();
+
 			time = clock.getElapsedTime();
 		}
 	}
