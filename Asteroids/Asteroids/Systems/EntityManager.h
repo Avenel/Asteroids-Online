@@ -17,8 +17,8 @@ public:
 	void addEntity(Entity *newEntity);
 	void deleteEntity(Entity *entity);
 
-	void createStarship();
-	void createBullet(Gun* gun, Position* startPosition);
+	Entity* createStarship();
+	Entity* createBullet(Gun* gun, Position* startPosition);
 
 	Entity* getEntity(int id, int clientId);
 	std::list<Entity*>* getAllEntitiesFlat();

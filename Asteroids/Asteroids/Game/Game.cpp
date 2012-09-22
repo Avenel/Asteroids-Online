@@ -33,28 +33,24 @@ void Game::startUp() {
 
 	// Netzwerk
 	this->server = new Server(1337, this->entityManager, this->entityCreator);
-	server->setMaster(true);
+	server->setMaster(false);
 	server->start();
 
-	// EntityCreator
-	//this->entityCreator = new EntityCreator();
-
 	// Testschiff
-	this->entityManager->createStarship();
+	Entity* starship = this->entityManager->createStarship();
 
-	this->client = new Client(sf::IpAddress("127.0.0.1"), 1337);
+	this->client = new Client(sf::IpAddress("192.168.2.104"), 1337);
 	if (server->isMaster()) {
 		client->setServerAddress(sf::IpAddress("127.0.0.1"));
-		//((Position*)starship->getComponent(Unit::POSITION))->setX(400);
-		//((Position*)starship->getComponent(Unit::POSITION))->setY(400);
+		((Position*)starship->getComponent(Unit::POSITION))->setX(400);
+		((Position*)starship->getComponent(Unit::POSITION))->setY(400);
 	} else {
 		client->registerToServer();
 		server->registerClient(sf::IpAddress("127.0.0.1"));
-		//((Position*)starship->getComponent(Unit::POSITION))->setX(50);
-		//((Position*)starship->getComponent(Unit::POSITION))->setY(150);
-		//client->registerObject(starship); 
+		((Position*)starship->getComponent(Unit::POSITION))->setX(50);
+		((Position*)starship->getComponent(Unit::POSITION))->setY(150);
+		client->registerObject(starship); 
 	}
-	//this->entityManager->addEntity(starship);
 }
 
 void Game::addSystems() {
@@ -78,7 +74,6 @@ void Game::run() {
 	fps.setPosition(this->windowWidth-50, 10);
 	
 	int ticks = 0;
-	//window->setFramerateLimit(100);
 	window->setVerticalSyncEnabled(true);
 
     while (this->window->isOpen()) {
