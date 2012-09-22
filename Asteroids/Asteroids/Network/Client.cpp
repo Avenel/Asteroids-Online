@@ -3,7 +3,7 @@
 
 Client::Client(void) {}
 
-Client::Client(sf::IpAddress address, unsigned short port) {
+Client::Client(sf::IpAddress address, unsigned short port, std::list<Request>* outgoingRequests) {
 	this->serverAddress = address;
 	this->port = port;
 
@@ -14,6 +14,9 @@ Client::Client(sf::IpAddress address, unsigned short port) {
 	
 	this->clientId = sf::IpAddress().getLocalAddress().toInteger();
 	this->objectList = new list<Entity*>();
+
+	// Anfragen an den Server benötigen eine Liste, die vom Server verwaltet wird
+	this->outgoingRequests = outgoingRequests;
 }
 
 
@@ -37,8 +40,9 @@ void Client::registerObject(Entity *object) {
 void Client::registerToServer() {
 	sf::Packet packet;
 	packet << this->getNextSeq() << this->clientId << true << -1 << 0;
-
-	socket.send(packet, this->serverAddress, this->port);
+	
+	Request	newRequest(seqNr, clientId, packet);
+	this->outgoingRequests->push_back(newRequest);
 }
 
 void Client::setServerAddress(sf::IpAddress address) {

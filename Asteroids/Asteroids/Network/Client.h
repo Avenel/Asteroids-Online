@@ -2,6 +2,7 @@
 
 #include <SFML/Network.hpp>
 #include "..\Entity\Entity.h"
+#include "Request.h"
 #include <iostream>
 #include <list>
 
@@ -12,7 +13,7 @@ class Client
 public:
 	Client(void);
 
-	Client(sf::IpAddress address, unsigned short port);
+	Client(sf::IpAddress address, unsigned short port, std::list<Request>* outgoingRequests);
 
 	~Client(void);
 
@@ -31,6 +32,8 @@ private:
 	int seqNr;
 
 	int getNextSeq();
+
+	std::list<Request>* outgoingRequests;
 
 	std::list<Entity*> *objectList;
 };
