@@ -6,6 +6,7 @@
 #include "..\Entity\Entity.h"
 #include "..\Systems\EntityManager.h"
 #include "..\Entity\EntityCreator.h"
+#include "Request.h"
 #include <iostream>
 #include <list>
 #include <Rpc.h>
@@ -22,10 +23,6 @@ public:
 
 	void start();
 	void stop();
-
-	void listen();
-	void synchronizeClients();
-	void sendData(Entity *object);
 
 	void registerClient(sf::IpAddress address);
 	void registerObject(Entity *object);
@@ -44,6 +41,7 @@ protected:
 	bool master;
 
 	int serverId;
+	int seqNr;
 
 	unsigned int port;
 	sf::UdpSocket socket;
@@ -51,6 +49,7 @@ protected:
 	// Später soll es mehrere Threads geben -> Skalierbarkeit
 	sf::Thread *listenThread;
 	sf::Thread *synchronizeThread;
+	sf::Thread *handleRequestsThread;
 
 	std::list<sf::IpAddress> *clientList;
 
@@ -63,5 +62,14 @@ protected:
 
 	Entity* generateEntity(int id, int clientId, sf::Packet packet);
 	EntityCreator* entityCreator;
+
+	std::list<Request>* incomingRequests;
+	std::list<Request>* outgoingRequests;
+
+	void listen();
+	void synchronizeClients();
+	void sendData(Entity *object);
+	void handleRequests();
+
 };
 

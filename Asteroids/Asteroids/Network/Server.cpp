@@ -21,9 +21,15 @@ Server::Server(unsigned short port, EntityManager *manager, EntityCreator *creat
 
 	this->listenThread = new sf::Thread(&Server::listen, this);
 	this->synchronizeThread = new sf::Thread(&Server::synchronizeClients, this);
+	this->handleRequestsThread = new sf::Thread();
+
 	this->id = sf::IpAddress().getLocalAddress().toInteger();
 	this->clientId = sf::IpAddress().getLocalAddress().toInteger();
 	this->master = false;
+	this->seqNr = 0;
+
+	this->incomingRequests = new std::list<Request>();
+	this->outgoingRequests = new std::list<Request>();
 }
 
 
@@ -35,12 +41,15 @@ Server::~Server(void) {
 	delete this->listenThread;
 	delete this->synchronizeThread;
 	delete this->clientList;
+	delete this->incomingRequests;
+	delete this->outgoingRequests;
 }
 
 
 void Server::start() {
 	this->registerClient(sf::IpAddress::LocalHost);
 	this->listenThread->launch();
+	this->handleRequestsThread->launch();
 
 	if (this->master) this->synchronizeThread->launch();
 }
@@ -48,6 +57,7 @@ void Server::start() {
 void Server::stop() {
 	this->listenThread->terminate();
 	this->synchronizeThread->terminate();
+	this->handleRequestsThread->terminate();
 }
 
 void Server::listen() {
@@ -63,6 +73,9 @@ void Server::listen() {
 		Wenn controlTag = -1, dann werden der nachfolgende Int Entity-Type verstanden und der EntityCreator dementsprechend benutzt.
 	*/
 	int controlTag;
+	int seqNr;
+	bool request;
+	int data;
 	unsigned short tempPort;
 	Entity* temp;
 
@@ -72,7 +85,7 @@ void Server::listen() {
 		this->socket.receive(packet, address, tempPort);
 
 		bool ipFound = false;
-		if (packet >> clientId >> id) {
+		if (packet >> seqNr >> clientId >> request) {
 			//cout << "RECEIVED DATA: " << address.toString() << ": " << clientId << ", " << id << endl;
 			// Ip-Adresse bekannt?
 			for (list<sf::IpAddress>::iterator it = this->clientList->begin(); it != this->clientList->end(); ++it) {
@@ -82,31 +95,63 @@ void Server::listen() {
 				}
 			}
 
-			if (!ipFound && id == -1) {
+			packet >> controlTag;
+			if (!ipFound && controlTag == -1) {
 				// Client registrieren
 				registerClient(address);
+				packet >> data;
+				continue;
+			} else if(controlTag == -2) {
+				// Client deregistrieren
+				deRegisterClient(address);
+				packet >> data;
 				continue;
 			}
-		
-			// Id auspacken und weiterleiten, falls Entity schon bekannt			
-			temp = this->entityManager->getEntity(id, clientId);
-
-			sf::Packet tempPacket = packet;
-			tempPacket >> controlTag;
-			//cout << "ControlTag ist: " << controlTag << endl;
-			if (temp != 0 && controlTag != -1) {
-				if (controlTag == -2) {
-					//cout << "Loesche Entity" << endl;
-					this->deRegisterObject(temp);
-				} else {
-					//cout << "Aktualisiere Komponente" << endl;
-					temp->refresh(packet);
+			
+			// Wenn Paket eine Antwort erwartet, lege sie in die entsprechende Queue ab
+			if (request) {
+				// Nachsehen ob es sich um einen vorhandenen Request handelt, der auf eine Antwort vom Clienten gewartet hat
+				bool requestFound = false;
+				for (std::list<Request>::iterator it = this->incomingRequests->begin(); it != this->incomingRequests->end(); ++it) {
+					if ((*it).getClientId() == clientId && (*it).getSeqNr() == seqNr) {
+						requestFound = true;
+						packet >> data;
+						this->incomingRequests->remove((*it));
+					}
 				}
-			} else {
-				// Entity noch nicht bekannt -> anlegen	
-				//cout << "Lege neues Objekt an" << endl;
-				if (controlTag == -1) {
-					this->registerObject(this->generateEntity(id, clientId, tempPacket));
+
+				// Basic-Antwort Paket. Vll könnte man hier später mal über Server Dienste reden (ScoreList, mapchangeRequest, ...)
+				sf::Packet answerPacket;
+				answerPacket << seqNr << clientId << 0;
+				Request newRequest(seqNr, clientId, answerPacket);
+				this->incomingRequests->push_back(newRequest);
+			}
+
+			while(!packet.endOfPacket()) {
+				packet >> controlTag >> id;
+				// Id auspacken und weiterleiten, falls Entity schon bekannt			
+				temp = this->entityManager->getEntity(id, clientId);
+
+				//cout << "ControlTag ist: " << controlTag << endl;
+				if (temp != 0) {
+					switch(controlTag) {
+					case 1:
+						// aktualisiere Entity inkl. Components
+						temp->refresh(packet);
+						break;
+					case 2:
+						// lösche Entity
+						this->deRegisterObject(temp);
+						break;
+					default:
+						break;
+					}				
+				} else {
+					// Entity noch nicht bekannt -> anlegen	
+					//cout << "Lege neues Objekt an" << endl;
+					if (controlTag == 0) {
+						this->registerObject(this->generateEntity(id, clientId, packet));
+					}
 				}
 			}
 		}
@@ -190,6 +235,22 @@ void Server::synchronizeClients() {
 			for (list<Entity*>::iterator it = this->entitiesFlat->begin(); it != this->entitiesFlat->end(); ++it) {
 				sendData((*it));
 			}
+			time = clock.getElapsedTime();
+		}
+	}
+}
+
+// Beantworte alle x ms die Anfragen eines clienten
+void Server::handleRequests() {
+	cout << "HandleRequest Thread startet" << endl;
+	sf::Clock clock;
+	sf::Time time = clock.getElapsedTime();
+	while(true) {
+		if (clock.getElapsedTime().asMilliseconds() >= time.asMilliseconds()+this->updateTime) {
+			Request answer = this->incomingRequests->front();
+			this->socket.send(answer.getPacket(), sf::IpAddress(answer.getClientId()), this->port);
+			this->incomingRequests->push_back(answer);
+			this->incomingRequests->pop_front();
 			time = clock.getElapsedTime();
 		}
 	}
