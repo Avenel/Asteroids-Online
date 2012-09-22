@@ -141,7 +141,7 @@ void Server::listen() {
 				if (!incomingRequestFound) {
 					sf::Packet answerPacket;
 					//				SeqNr,	ClientId, request, ctrlTag, Data
-					answerPacket << seqNr << clientId << 1 << -3 << 0;
+					answerPacket << seqNr << clientId << true << -3 << 0;
 					Request newRequest(seqNr, clientId, answerPacket);
 					this->incomingRequests->push_back(newRequest);
 					cout << "New Incoming Request from: " << sf::IpAddress(clientId).toString() << endl;
@@ -161,7 +161,7 @@ void Server::listen() {
 				// Wenn ctrlTag = -3 => Antwort auf Request erhalten => OutgoingRequest löschen, da abgearbeitet, AffirmedRequest senden
 				if (controlTag == -3) {
 					sf::Packet answerPacket;
-					answerPacket << seqNr << clientId << 1 << -4 << 0;
+					answerPacket << seqNr << clientId << true << -4 << 0;
 					Request	newRequest(seqNr, clientId, answerPacket);
 					this->affirmedRequests->push_back(newRequest);
 				}
@@ -263,7 +263,9 @@ void Server::sendData(Entity *object) {
 				(*(*packet)) >> clientId >> id >> type;
 				cout << "Schicke: " << clientId << ", " << id << ", " << type << endl;
 				(*(*packet)) << clientId << id << type;*/
-				this->socket.send((*packet), (*it), temp);
+				//this->socket.send((*packet), (*it), temp);
+
+				// TODO
 			}
 		}
 	}
