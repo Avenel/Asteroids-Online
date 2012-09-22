@@ -337,3 +337,7 @@ void Server::setMaster(bool master) {
 std::list<Entity*>* Server::getObjectList() {
 	return this->entitiesFlat;
 }
+
+std::list<Request>* Server::getOutgoingRequests() {
+	return this->outgoingRequests;
+}

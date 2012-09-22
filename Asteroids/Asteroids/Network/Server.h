@@ -35,6 +35,7 @@ public:
 	bool isMaster();
 	void setMaster(bool master);
 
+	std::list<Request>* getOutgoingRequests();
 	std::list<Entity*>* getObjectList();
 	
 protected:

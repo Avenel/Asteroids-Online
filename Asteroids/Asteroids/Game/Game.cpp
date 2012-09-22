@@ -33,13 +33,13 @@ void Game::startUp() {
 
 	// Netzwerk
 	this->server = new Server(1337, this->entityManager, this->entityCreator);
-	server->setMaster(false);
+	server->setMaster(true);
 	server->start();
 
 	// Testschiff
 	Entity* starship = this->entityManager->createStarship();
 
-	this->client = new Client(sf::IpAddress("192.168.2.104"), 1337);
+	this->client = new Client(sf::IpAddress("192.168.2.104"), 1337, this->server->getOutgoingRequests());
 	if (server->isMaster()) {
 		client->setServerAddress(sf::IpAddress("127.0.0.1"));
 		((Position*)starship->getComponent(Unit::POSITION))->setX(400);
