@@ -9,5 +9,15 @@ public:
 
 	sf::Packet getPacket(int clientId, int id);
 	void refresh(sf::Packet packet);
+
+	void setBulletRange(float bulletRange);
+	float getBulletRange();
+
+	void setBulletSpeed(float bulletSpeed);
+	float getBulletSpeed();
+
+private:
+	float bulletRange;
+	float bulletSpeed;
 };
 

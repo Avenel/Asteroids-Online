@@ -14,7 +14,6 @@ public:
 
 private:	
 	static float const size; 
-
 	sf::ConvexShape *shipPolygon;
 };
 

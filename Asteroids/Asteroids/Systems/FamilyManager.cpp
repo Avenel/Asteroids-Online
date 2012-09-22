@@ -34,6 +34,11 @@ void FamilyManager::addEntityToFamilies(Entity* entity) {
 		addMemberToFamily(Family::MOTION_CONTROL_SYSTEM, new MotionControlNode(entity));
 	}
 
+	//Entity zu GunControlNode-Family hinzufuegen
+	if(GunControlNode().isEntityMember(entity)) {
+		addMemberToFamily(Family::GUN_CONTROL_SYSTEM, new GunControlNode(entity));
+	}
+
 	//Entity zu MovementNode-Family hinzufuegen
 	if(MovementNode().isEntityMember(entity)) {
 		addMemberToFamily(Family::MOVEMENT_SYSTEM, new MovementNode(entity));

@@ -66,5 +66,12 @@ int EntityManager::getNextId(int clientId) {
 	return (*this->clientEntities)[clientId]->size();
 }
 
-void EntityManager::update() {
+void EntityManager::createStarship() {
+	this->addEntity(this->EntityCreator::createStarship());
+}
+
+void EntityManager::createBullet(Gun* gun, Position* startPosition) {
+	Entity* entity = this->EntityCreator::createBullet(gun, startPosition);
+	//entity->setId(this->getNextId(BLA BLA BLA));
+	this->addEntity(entity);
 }

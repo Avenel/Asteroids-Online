@@ -28,6 +28,7 @@ void Game::startUp() {
 	this->motionControlSystem = new MotionControlSystem(this->familyManager);
 	this->renderSystem = new RenderSystem(this->familyManager, this->window);
 	this->movementSystem = new MovementSystem(this->familyManager, this->window->getSize());
+	this->gunControlSystem = new GunControlSystem(this->familyManager, this->entityManager);
 	addSystems();
 
 	// Netzwerk
@@ -36,29 +37,29 @@ void Game::startUp() {
 	server->start();
 
 	// EntityCreator
-	this->entityCreator = new EntityCreator();
+	//this->entityCreator = new EntityCreator();
 
 	// Testschiff
-	Entity* starship = this->entityCreator->createStarship();
-	this->client = new Client(sf::IpAddress("192.168.2.101"), 1337);
+	this->entityManager->createStarship();
+
+	this->client = new Client(sf::IpAddress("127.0.0.1"), 1337);
 	if (server->isMaster()) {
 		client->setServerAddress(sf::IpAddress("127.0.0.1"));
-		((Position*)starship->getComponent(Unit::POSITION))->setX(400);
-		((Position*)starship->getComponent(Unit::POSITION))->setY(400);
+		//((Position*)starship->getComponent(Unit::POSITION))->setX(400);
+		//((Position*)starship->getComponent(Unit::POSITION))->setY(400);
 	} else {
 		client->registerToServer();
-		server->registerClient(sf::IpAddress("192.168.2.101"));
-		((Position*)starship->getComponent(Unit::POSITION))->setX(50);
-		((Position*)starship->getComponent(Unit::POSITION))->setY(150);
-		client->registerObject(starship); 
+		server->registerClient(sf::IpAddress("127.0.0.1"));
+		//((Position*)starship->getComponent(Unit::POSITION))->setX(50);
+		//((Position*)starship->getComponent(Unit::POSITION))->setY(150);
+		//client->registerObject(starship); 
 	}
-	this->entityManager->addEntity(starship);
+	//this->entityManager->addEntity(starship);
 }
 
 void Game::addSystems() {
+	this->systemManager->addSystem(this->gunControlSystem);
 	this->systemManager->addSystem(this->motionControlSystem);
-	this->systemManager->addSystem(this->familyManager);
-	this->systemManager->addSystem(this->entityManager);
 	this->systemManager->addSystem(this->gameManager);
 	this->systemManager->addSystem(this->renderSystem);
 	this->systemManager->addSystem(this->movementSystem);

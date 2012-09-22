@@ -2,13 +2,12 @@
 
 #include "..\Entity\Entity.h"
 #include "..\Nodes\RenderNode.h"
-#include "SystemCore.h"
-
+#include "..\Entity\EntityCreator.h"
 #include <list>
 #include <map>
 #include "FamilyManager.h"
 
-class EntityManager : public SystemCore
+class EntityManager : public EntityCreator
 {
 public:
 	EntityManager(void);
@@ -18,12 +17,13 @@ public:
 	void addEntity(Entity *newEntity);
 	void deleteEntity(Entity *entity);
 
+	void createStarship();
+	void createBullet(Gun* gun, Position* startPosition);
+
 	Entity* getEntity(int id, int clientId);
 	std::list<Entity*>* getAllEntitiesFlat();
 	std::map<int, std::map<int, Entity*>*>* getAllEntitiesMap();
 	std::map<int, Entity*>* getClientEntities(int clientId);
-
-	void update();
 
 private:
 	/** Es gibt 2 Hashmaps:	1) Geordnet nach ClientIds
