@@ -314,6 +314,8 @@ void Server::handleRequests() {
 			// OUTGOING REQUESTS (Eigene Anfragen versenden)
 			if (!this->outgoingRequests->empty()) {
 				Request outgoingRequest = this->outgoingRequests->front();
+				std::cout << "Send Request to: " << outgoingRequest.getAddress().toString() << std::endl;
+
 				this->socket.send(outgoingRequest.getPacket(), outgoingRequest.getAddress(), this->port);
 				this->outgoingRequests->push_back(outgoingRequest);
 				this->outgoingRequests->pop_front();

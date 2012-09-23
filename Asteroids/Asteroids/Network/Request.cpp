@@ -24,7 +24,6 @@ int Request::getSeqNr() {
 }
 
 sf::Packet Request::getPacket() {
-	std::cout << "Packet-Size AFTER: " << this->packet.getDataSize() << std::endl;
 	return this->packet;
 }
 

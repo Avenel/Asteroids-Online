@@ -28,7 +28,7 @@ void Client::send() {
 	for (list<Entity*>::iterator it = this->objectList->begin(); it != this->objectList->end(); ++it) {
 		std::list<sf::Packet> packets = (*it)->getPackets(this->clientId);
 		for (std::list<sf::Packet>::iterator it = packets.begin(); it != packets.end(); ++it) {
-			socket.send((*it), this->serverAddress, this->port);			
+			//socket.send((*it), this->serverAddress, this->port);			
 		}
 	}
 }
@@ -39,10 +39,8 @@ void Client::registerObject(Entity *object) {
 
 void Client::registerToServer() {
 	sf::Packet packet;
-	int seqNr = this->getNextSeq();
+	int seqNr = 12345;//this->getNextSeq();
 	packet << seqNr << this->clientId << true << -1 << 0;
-	
-	std::cout << "PACKET SIZE BEFORE SEND " << packet.getDataSize() << endl;
 
 	Request	newRequest(this->serverAddress, seqNr, clientId, packet);
 	this->outgoingRequests->push_back(newRequest);
