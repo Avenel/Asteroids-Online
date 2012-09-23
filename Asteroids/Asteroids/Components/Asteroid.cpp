@@ -13,5 +13,7 @@ void Asteroid::addDataToPacket(sf::Packet* packet){
 	(*packet) << this->type << 0;
 }
 
-void Asteroid::refresh(sf::Packet packet) {
+void Asteroid::refresh(sf::Packet *packet) {
+	int data;
+	(*packet) >> data; 
 }

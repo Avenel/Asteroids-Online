@@ -12,7 +12,7 @@ public:
 	float getY();
 
 	void addDataToPacket(sf::Packet* packet);
-	void refresh(sf::Packet packet);
+	void refresh(sf::Packet *packet);
 
 	void rotateLeft(float speed);
 	void rotateRight(float speed);

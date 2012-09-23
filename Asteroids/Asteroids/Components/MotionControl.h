@@ -9,7 +9,7 @@ public:
 	~MotionControl(void);
 
 	void addDataToPacket(sf::Packet* packet);
-	void refresh(sf::Packet packet);
+	void refresh(sf::Packet *packet);
 
 	void setLeft(sf::Keyboard::Key key);
 	sf::Keyboard::Key getLeft();

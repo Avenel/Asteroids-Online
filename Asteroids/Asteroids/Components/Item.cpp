@@ -15,5 +15,7 @@ void Item::addDataToPacket(sf::Packet* packet){
 	(*packet) << this->type << 0;
 }
 
-void Item::refresh(sf::Packet packet) {
+void Item::refresh(sf::Packet *packet) {
+	int data;
+	(*packet) >> data; 
 }

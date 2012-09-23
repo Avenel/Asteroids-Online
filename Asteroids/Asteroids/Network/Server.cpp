@@ -181,7 +181,7 @@ void Server::listen() {
 					switch(controlTag) {
 					case 1:
 						// aktualisiere Entity inkl. Components
-						temp->refresh(packet);
+						temp->refresh(&packet);
 						break;
 					case 2:
 						// lösche Entity

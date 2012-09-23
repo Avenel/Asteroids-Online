@@ -14,5 +14,7 @@ void Player::addDataToPacket(sf::Packet* packet){
 	(*packet) << this->type << 0;
 }
 
-void Player::refresh(sf::Packet packet) {
+void Player::refresh(sf::Packet *packet) {
+	int data;
+	(*packet) >> data; 
 }

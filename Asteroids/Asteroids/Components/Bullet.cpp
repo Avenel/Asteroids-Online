@@ -16,7 +16,9 @@ void Bullet::addDataToPacket(sf::Packet* packet){
 	(*packet) << this->type << 0;
 }
 
-void Bullet::refresh(sf::Packet packet) {
+void Bullet::refresh(sf::Packet *packet) {
+	int data;
+	(*packet) >> data; 
 }
 
 void Bullet::setRangeRemaining(float rangeRemaining) {

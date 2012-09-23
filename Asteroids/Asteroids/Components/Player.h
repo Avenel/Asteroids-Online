@@ -11,7 +11,7 @@ public:
 	Starship* getStarship();
 
 	void addDataToPacket(sf::Packet* packet);
-	void refresh(sf::Packet packet);
+	void refresh(sf::Packet *packet);
 private:
 	Starship* starship;
 };

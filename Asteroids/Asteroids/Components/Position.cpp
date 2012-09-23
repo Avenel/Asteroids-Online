@@ -34,8 +34,8 @@ void Position::addDataToPacket(sf::Packet* packet){
 	(*packet) << this->type << this->x << this->y << this->rotation;
 }
 
-void Position::refresh(sf::Packet packet) {
-	packet >> this->x >> this->y >> this->rotation;
+void Position::refresh(sf::Packet *packet) {
+	(*packet) >> this->x >> this->y >> this->rotation;
 }
 
 void Position::rotateLeft(float speed) {

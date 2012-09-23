@@ -11,7 +11,7 @@ public:
 	View* getDisplayObject();
 
 	void addDataToPacket(sf::Packet* packet);
-	void refresh(sf::Packet packet);
+	void refresh(sf::Packet *packet);
 	
 	void draw(sf::RenderWindow *target, sf::RenderStates &states);
 	void setPosition(float x, float y);

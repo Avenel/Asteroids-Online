@@ -16,7 +16,9 @@ void Gun::addDataToPacket(sf::Packet* packet){
 	(*packet) << this->type << 0;
 }
 
-void Gun::refresh(sf::Packet packet) {
+void Gun::refresh(sf::Packet *packet) {
+	int data;
+	(*packet) >> data; 
 }
 
 void Gun::setBulletRange(float bulletRange) {

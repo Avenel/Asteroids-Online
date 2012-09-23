@@ -12,5 +12,7 @@ void GameState::addDataToPacket(sf::Packet* packet){
 	(*packet) << this->type << 0;
 }
 
-void GameState::refresh(sf::Packet packet) {
+void GameState::refresh(sf::Packet *packet) {
+	int data;
+	(*packet) >> data; 
 }

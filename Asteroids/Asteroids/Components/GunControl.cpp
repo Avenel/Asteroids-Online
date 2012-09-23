@@ -14,7 +14,10 @@ GunControl::~GunControl(void)
 void GunControl::addDataToPacket(sf::Packet* packet){
 	(*packet) << this->type << 0;
 }
-void GunControl::refresh(sf::Packet packet) {
+
+void GunControl::refresh(sf::Packet *packet) {
+	int data;
+	(*packet) >> data; 
 }
 
 void GunControl::setShootKey(sf::Keyboard::Key key) {

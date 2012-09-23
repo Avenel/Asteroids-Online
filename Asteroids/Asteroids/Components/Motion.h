@@ -8,7 +8,7 @@ public:
 	~Motion(void);
 
 	void addDataToPacket(sf::Packet* packet);
-	void refresh(sf::Packet packet);
+	void refresh(sf::Packet *packet);
 
 	void increaseSpeed(float speedX, float speedY);
 

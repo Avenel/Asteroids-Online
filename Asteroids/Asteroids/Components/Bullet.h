@@ -8,7 +8,7 @@ public:
 	~Bullet(void);
 
 	void addDataToPacket(sf::Packet* packet);
-	void refresh(sf::Packet packet);
+	void refresh(sf::Packet *packet);
 
 	void setRangeRemaining(float rangeRemaining);
 	float getRangeRemaining();

@@ -15,5 +15,7 @@ void Starship::addDataToPacket(sf::Packet* packet){
 	(*packet) << this->type << 0;
 }
 
-void Starship::refresh(sf::Packet packet) {
+void Starship::refresh(sf::Packet *packet) {
+	int data;
+	(*packet) >> data; 
 }

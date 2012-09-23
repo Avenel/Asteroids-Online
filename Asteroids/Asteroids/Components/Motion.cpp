@@ -18,7 +18,9 @@ void Motion::addDataToPacket(sf::Packet* packet){
 	(*packet) << this->type << 0;
 }
 
-void Motion::refresh(sf::Packet packet) {
+void Motion::refresh(sf::Packet *packet) {
+	int data;
+	(*packet) >> data; 
 }
 
 void Motion::increaseSpeed(float speedX, float speedY) {

@@ -17,13 +17,23 @@ Entity::~Entity(void){
 	delete this->units;
 }
 
-void Entity::refresh(sf::Packet packet){
+void Entity::refresh(sf::Packet *packet){
+	sf::Packet tempPacket = (*packet);
+	std::string seperator;
 	int componentType;
-	packet >> componentType;
 
-	if (!this->hasComponent(Unit::UnitType(componentType))) return;
-
-	(*this->units)[Unit::UnitType(componentType)]->refresh(packet);
+	while(true) {
+		// Wenn der Trenner da ist, breche ab
+		if (tempPacket >> seperator) {
+			if (seperator.compare(std::string("###"))) break;
+		} else {
+			// Falls nicht, aktualisiere entsprechende Komponente
+			(*packet) >> componentType;
+			if (!this->hasComponent(Unit::UnitType(componentType))) return;
+			(*this->units)[Unit::UnitType(componentType)]->refresh(packet);
+		}
+		tempPacket = (*packet);
+	}
 }
 
 int Entity::getId() { 

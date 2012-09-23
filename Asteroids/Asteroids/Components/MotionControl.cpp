@@ -15,7 +15,9 @@ void MotionControl::addDataToPacket(sf::Packet* packet){
 	(*packet) << this->type << 0;
 }
 
-void MotionControl::refresh(sf::Packet packet) {
+void MotionControl::refresh(sf::Packet *packet) {
+	int data;
+	(*packet) >> data; 
 }
 
 void MotionControl::setLeft(sf::Keyboard::Key key) {

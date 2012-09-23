@@ -22,5 +22,7 @@ void Unit::addDataToPacket(sf::Packet* packet){
 	(*packet) << this->type << 0;
 }
 
-void Unit::refresh(sf::Packet packet) {
+void Unit::refresh(sf::Packet *packet) {
+	int data;
+	(*packet) >> data; 
 }

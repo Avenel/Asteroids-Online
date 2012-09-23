@@ -23,7 +23,9 @@ void Display::addDataToPacket(sf::Packet* packet){
 	(*packet) << this->type << 0;
 }
 
-void Display::refresh(sf::Packet packet) {
+void Display::refresh(sf::Packet *packet) {
+	int data;
+	(*packet) >> data; 
 }
 
 void Display::draw(sf::RenderWindow *target, sf::RenderStates &states) {

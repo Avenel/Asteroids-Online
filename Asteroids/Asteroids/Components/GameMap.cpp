@@ -15,5 +15,7 @@ void GameMap::addDataToPacket(sf::Packet* packet){
 	(*packet) << this->type << 0;
 }
 
-void GameMap::refresh(sf::Packet packet) {
+void GameMap::refresh(sf::Packet *packet) {
+	int data;
+	(*packet) >> data; 
 }

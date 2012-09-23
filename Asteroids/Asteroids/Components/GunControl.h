@@ -9,7 +9,7 @@ public:
 	~GunControl(void);
 
 	void addDataToPacket(sf::Packet* packet);
-	void refresh(sf::Packet packet);
+	void refresh(sf::Packet *packet);
 
 	void setShootKey(sf::Keyboard::Key key);
 	sf::Keyboard::Key getShootKey();

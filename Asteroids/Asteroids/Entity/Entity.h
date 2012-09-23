@@ -23,7 +23,7 @@ public:
 	Entity(int id);
 	~Entity(void);
 
-	virtual void refresh(sf::Packet packet);
+	virtual void refresh(sf::Packet *packet);
 	
 	void setId(int id);
 	int getId();
