@@ -16,7 +16,7 @@ Server::Server(unsigned short port, EntityManager *manager, EntityCreator *creat
 	this->entityCreator = creator;
 
 	this->updateTime = 10;
-	this->updateRequestTime = 200;
+	this->updateRequestTime = 4000;
 
 	this->clientList = new list<sf::IpAddress>();
 
@@ -142,7 +142,9 @@ void Server::listen() {
 					if ((*it).getClientId() == clientId && (*it).getSeqNr() == seqNr) {
 						outgoingRequestFound = true;
 						packet >> data;
+						cout << "ERASE IT BABY!!" << endl;
 						this->outgoingRequests->erase(it);							
+						cout << this->outgoingRequests->size << endl;
 					}
 					break;
 				}
@@ -307,7 +309,7 @@ void Server::handleRequests() {
 			if (!this->affirmedRequests->empty()) {
 				Request affirmRequest = this->affirmedRequests->front();
 				this->socket.send(affirmRequest.getPacket(), affirmRequest.getAddress(), this->port);
-				this->incomingRequests->pop_front();
+				this->affirmedRequests->pop_front();
 				cout << "AffirmedRequestCount: " << this->affirmedRequests->size() << endl;
 			}
 
