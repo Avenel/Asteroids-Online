@@ -33,7 +33,7 @@ void Game::startUp() {
 
 	// Netzwerk
 	this->server = new Server(1337, this->entityManager, this->entityCreator);
-	server->setMaster(true);
+	server->setMaster(false);
 	server->start();
 
 	// Testschiff

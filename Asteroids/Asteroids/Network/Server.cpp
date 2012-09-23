@@ -142,7 +142,7 @@ void Server::listen() {
 					sf::Packet answerPacket;
 					//				SeqNr,	ClientId, request, ctrlTag, Data
 					answerPacket << seqNr << clientId << true << -3 << 0;
-					Request newRequest(seqNr, clientId, answerPacket);
+					Request newRequest(sf::IpAddress(clientId), seqNr, clientId, answerPacket);
 					this->incomingRequests->push_back(newRequest);
 					cout << "New Incoming Request from: " << sf::IpAddress(clientId).toString() << endl;
 				}
@@ -162,7 +162,7 @@ void Server::listen() {
 				if (controlTag == -3) {
 					sf::Packet answerPacket;
 					answerPacket << seqNr << clientId << true << -4 << 0;
-					Request	newRequest(seqNr, clientId, answerPacket);
+					Request	newRequest(sf::IpAddress(clientId), seqNr, clientId, answerPacket);
 					this->affirmedRequests->push_back(newRequest);
 				}
 
@@ -297,7 +297,7 @@ void Server::handleRequests() {
 			// INCOMING REQUESTS (Antworten auf diese, ctrlTag = -3)
 			if (!this->incomingRequests->empty()) {
 				Request answer = this->incomingRequests->front();
-				this->socket.send(answer.getPacket(), sf::IpAddress(answer.getClientId()), this->port);
+				this->socket.send(answer.getPacket(), answer.getAddress(), this->port);
 				this->incomingRequests->push_back(answer);
 				this->incomingRequests->pop_front();
 				cout << "IncomingRequestCount: " << this->incomingRequests->size() << endl;
@@ -306,7 +306,7 @@ void Server::handleRequests() {
 			// AFFIRMED REQUESTS (Antworten auf diese, ctrlTag = -4)
 			if (!this->affirmedRequests->empty()) {
 				Request affirmRequest = this->affirmedRequests->front();
-				this->socket.send(affirmRequest.getPacket(), sf::IpAddress(affirmRequest.getClientId()), this->port);
+				this->socket.send(affirmRequest.getPacket(), affirmRequest.getAddress(), this->port);
 				this->incomingRequests->pop_front();
 				cout << "AffirmedRequestCount: " << this->affirmedRequests->size() << endl;
 			}
@@ -314,7 +314,7 @@ void Server::handleRequests() {
 			// OUTGOING REQUESTS (Eigene Anfragen versenden)
 			if (!this->outgoingRequests->empty()) {
 				Request outgoingRequest = this->outgoingRequests->front();
-				this->socket.send(outgoingRequest.getPacket(), sf::IpAddress(outgoingRequest.getClientId()), this->port);
+				this->socket.send(outgoingRequest.getPacket(), outgoingRequest.getAddress(), this->port);
 				this->outgoingRequests->push_back(outgoingRequest);
 				this->outgoingRequests->pop_front();
 				cout << "OutgoingRequestCount: " << this->outgoingRequests->size() << endl;

@@ -39,10 +39,15 @@ void Client::registerObject(Entity *object) {
 
 void Client::registerToServer() {
 	sf::Packet packet;
-	packet << this->getNextSeq() << this->clientId << true << -1 << 0;
+	int seqNr = this->getNextSeq();
+	packet << seqNr << this->clientId << true << -1 << 0;
 	
-	Request	newRequest(seqNr, clientId, packet);
+	std::cout << "PACKET SIZE BEFORE SEND " << packet.getDataSize() << endl;
+
+	Request	newRequest(this->serverAddress, seqNr, clientId, packet);
 	this->outgoingRequests->push_back(newRequest);
+
+	//this->socket.send(packet, this->serverAddress, this->port);
 }
 
 void Client::setServerAddress(sf::IpAddress address) {

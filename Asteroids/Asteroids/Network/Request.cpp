@@ -4,7 +4,8 @@
 Request::Request(void) {
 }
 
-Request::Request(int seqNr, int clientId, sf::Packet packet) {
+Request::Request(sf::IpAddress address, int seqNr, int clientId, sf::Packet packet) {
+	this->address = address;
 	this->seqNr = seqNr;
 	this->clientId = clientId;
 	this->packet = packet;
@@ -23,5 +24,10 @@ int Request::getSeqNr() {
 }
 
 sf::Packet Request::getPacket() {
+	std::cout << "Packet-Size AFTER: " << this->packet.getDataSize() << std::endl;
 	return this->packet;
+}
+
+sf::IpAddress Request::getAddress() {
+	return this->address;
 }
