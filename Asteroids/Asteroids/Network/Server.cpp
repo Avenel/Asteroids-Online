@@ -142,7 +142,7 @@ void Server::listen() {
 					sf::Packet answerPacket;
 					//				SeqNr,	ClientId, request, ctrlTag, Data
 					answerPacket << seqNr << clientId << true << -3 << 0;
-					Request newRequest(sf::IpAddress(clientId), seqNr, clientId, answerPacket);
+					Request newRequest(address, seqNr, clientId, answerPacket);
 					this->incomingRequests->push_back(newRequest);
 					cout << "New Incoming Request from: " << sf::IpAddress(clientId).toString() << endl;
 				}
@@ -162,7 +162,7 @@ void Server::listen() {
 				if (controlTag == -3) {
 					sf::Packet answerPacket;
 					answerPacket << seqNr << clientId << true << -4 << 0;
-					Request	newRequest(sf::IpAddress(clientId), seqNr, clientId, answerPacket);
+					Request	newRequest(address, seqNr, clientId, answerPacket);
 					this->affirmedRequests->push_back(newRequest);
 				}
 

@@ -39,7 +39,7 @@ void Client::registerObject(Entity *object) {
 
 void Client::registerToServer() {
 	sf::Packet packet;
-	int seqNr = 12345;//this->getNextSeq();
+	int seqNr = this->getNextSeq();
 	packet << seqNr << this->clientId << true << -1 << 0;
 
 	Request	newRequest(this->serverAddress, seqNr, clientId, packet);
