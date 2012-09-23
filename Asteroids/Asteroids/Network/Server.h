@@ -62,7 +62,7 @@ protected:
 	std::map<int, std::map<int, Entity*>*>* entityMap;
 	std::list<Entity*>* entitiesFlat;
 
-	Entity* generateEntity(int id, int clientId, sf::Packet packet);
+	Entity* generateEntity(int id, int clientId, sf::Packet *packet);
 	EntityCreator* entityCreator;
 
 	std::list<Request>* incomingRequests;

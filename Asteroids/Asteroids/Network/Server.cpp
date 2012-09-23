@@ -194,7 +194,7 @@ void Server::listen() {
 					// Entity noch nicht bekannt -> anlegen	
 					//cout << "Lege neues Objekt an" << endl;
 					if (controlTag == 0) {
-						this->registerObject(this->generateEntity(id, clientId, packet));
+						this->registerObject(this->generateEntity(id, clientId, &packet));
 					}
 				}
 			}
@@ -230,7 +230,7 @@ void Server::refresh(sf::Packet packet) {
 	}
 }
 
-Entity* Server::generateEntity(int id, int clientId, sf::Packet packet) {	
+Entity* Server::generateEntity(int id, int clientId, sf::Packet *packet) {	
 	Entity *temp = this->entityCreator->createStarship();
 	temp->setClientId(clientId);
 	temp->setId(id);
@@ -238,6 +238,8 @@ Entity* Server::generateEntity(int id, int clientId, sf::Packet packet) {
 	cout << "Generate Entity!" << endl;
 
 	// CREATE ENTITY mit dem EntityCreator
+	
+	packet->clear();
 	return temp;
 }
 
