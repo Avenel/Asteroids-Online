@@ -71,8 +71,9 @@ protected:
 
 	void listen();
 	void synchronizeClients();
-	void sendData(Entity *object);
+	void sendData(sf::Packet packet, int seqNr);
 	void handleRequests();
 
+	int getNextSeq();
 };
 

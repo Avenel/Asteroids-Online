@@ -37,10 +37,10 @@ void Entity::setId(int id) {
 void Entity::addDataToPacket(sf::Packet *packet) {
 	// Wenn Entity noch nicht synchronisiert wurde, setze ControlTag auf 0
 	if (!this->synchronized) {
-		(*packet) << 0 << this->id;
+		(*packet) << 0 << this->clientId << this->id;
 		this->synchronized = true;
 	} else {
-		(*packet) << 1 << this->id;
+		(*packet) << 1 << this->clientId << this->id;
 	}
 
 	// Füge alle Packets aus den Komponenten dazu

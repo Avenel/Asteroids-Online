@@ -172,7 +172,7 @@ void Server::listen() {
 			}
 
 			while(!packet.endOfPacket()) {
-				packet >> controlTag >> id;
+				packet >> controlTag >> id >> clientId;
 				// Id auspacken und weiterleiten, falls Entity schon bekannt			
 				temp = this->entityManager->getEntity(id, clientId);
 
@@ -241,26 +241,16 @@ Entity* Server::generateEntity(int id, int clientId, sf::Packet packet) {
 	return temp;
 }
 
-void Server::sendData(Entity *object) {
+void Server::sendData(sf::Packet packet, int seqNr) {
 	for (list<sf::IpAddress>::iterator it = this->clientList->begin(); it != this->clientList->end(); ++it) {
 		// Keine Pakete an sich selbst versenden.
 		if (it->toInteger() == sf::IpAddress::LocalHost.toInteger() || it->toInteger() == sf::IpAddress().getLocalAddress().toInteger()) continue;
 
+		Request	newRequest((*it), seqNr, this->id, packet);
+		this->outgoingRequests->push_back(newRequest);
+
 		unsigned short temp = this->port;
-		if (object->getClientId() == this->id) {
-			// Server hat dieses Objekt erstellt
-			/*std::list<sf::Packet*> *packets = object->getPackets(sf::IpAddress().getLocalAddress().toInteger());
-			for (std::list<sf::Packet*>::iterator packet = packets->begin(); packet != packets->end(); ++packet) {
-				this->socket.send((*(*packet)), (*it), temp);
-				delete (*packet);
-			}
-			delete packets;*/
-		} else {
-			// Objekt kommt von einem Clienten, verändere nicht die clientId
-			sf::Packet packet;
-			object->addDataToPacket(&packet);
-			this->socket.send(packet, (*it), temp);
-		}
+		this->socket.send(packet, (*it), temp);
 	}
 }
 
@@ -271,9 +261,21 @@ void Server::synchronizeClients() {
 	sf::Time time = clock.getElapsedTime();
 	while(true) {
 		if (clock.getElapsedTime().asMilliseconds() >= time.asMilliseconds()+this->updateTime) {
+			// Paket erstellen
+			sf::Packet packet;
+
+			// Header
+			int seqNr = this->getNextSeq(); 
+			packet << seqNr << this->id << true;
+
+			// Paket mit Daten aus den Entities befüllen
 			for (list<Entity*>::iterator it = this->entitiesFlat->begin(); it != this->entitiesFlat->end(); ++it) {
-				sendData((*it));
+				(*it)->addDataToPacket(&packet);
 			}
+
+			//Paket an Clients senden
+			sendData(packet, seqNr);
+
 			time = clock.getElapsedTime();
 		}
 	}
@@ -334,4 +336,8 @@ std::list<Entity*>* Server::getObjectList() {
 
 std::list<Request>* Server::getOutgoingRequests() {
 	return this->outgoingRequests;
+}
+
+int Server::getNextSeq() {
+	return this->seqNr++;
 }

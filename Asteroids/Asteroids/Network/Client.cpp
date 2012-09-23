@@ -32,8 +32,12 @@ void Client::send() {
 	packet << this->getNextSeq() << this->clientId << true;
 
 	for (list<Entity*>::iterator it = this->objectList->begin(); it != this->objectList->end(); ++it) {
+		(*it)->setClientId(this->clientId);
 		(*it)->addDataToPacket(&packet);
 	}
+
+	Request	newRequest(this->serverAddress, seqNr, clientId, packet);
+	this->outgoingRequests->push_back(newRequest);
 
 	socket.send(packet, this->serverAddress, this->port);			
 }
