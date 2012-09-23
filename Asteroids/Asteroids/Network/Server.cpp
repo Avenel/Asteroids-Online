@@ -16,7 +16,7 @@ Server::Server(unsigned short port, EntityManager *manager, EntityCreator *creat
 	this->entityCreator = creator;
 
 	this->updateTime = 10;
-	this->updateRequestTime = 4000;
+	this->updateRequestTime = 100;
 
 	this->clientList = new list<sf::IpAddress>();
 
@@ -257,16 +257,9 @@ void Server::sendData(Entity *object) {
 			delete packets;*/
 		} else {
 			// Objekt kommt von einem Clienten, verändere nicht die clientId
-			std::list<sf::Packet> packets = object->getPackets(0);
-			for (std::list<sf::Packet>::iterator packet = packets.begin(); packet != packets.end(); ++packet) {
-				/*int clientId, id, type;
-				(*(*packet)) >> clientId >> id >> type;
-				cout << "Schicke: " << clientId << ", " << id << ", " << type << endl;
-				(*(*packet)) << clientId << id << type;*/
-				//this->socket.send((*packet), (*it), temp);
-
-				// TODO
-			}
+			sf::Packet packet;
+			object->addDataToPacket(&packet);
+			this->socket.send(packet, (*it), temp);
 		}
 	}
 }

@@ -19,10 +19,8 @@ View* Display::getDisplayObject() {
 	return this->displayObject;
 }
 
-sf::Packet Display::getPacket(int clientId, int id) {
-	sf::Packet packet;
-	packet << clientId << id << this->type;
-	return packet;
+void Display::addDataToPacket(sf::Packet* packet){
+	(*packet) << this->type << 0;
 }
 
 void Display::refresh(sf::Packet packet) {

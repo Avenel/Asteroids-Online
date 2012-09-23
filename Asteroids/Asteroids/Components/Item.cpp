@@ -11,10 +11,8 @@ Item::~Item(void)
 {
 }
 
-sf::Packet Item::getPacket(int clientId, int id) {
-	sf::Packet packet;
-	packet << clientId << id << this->type;
-	return packet;
+void Item::addDataToPacket(sf::Packet* packet){
+	(*packet) << this->type << 0;
 }
 
 void Item::refresh(sf::Packet packet) {

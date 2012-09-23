@@ -12,10 +12,8 @@ Bullet::~Bullet(void)
 {
 }
 
-sf::Packet Bullet::getPacket(int clientId, int id) {
-	sf::Packet packet;
-	packet << clientId << id << this->type;
-	return packet;
+void Bullet::addDataToPacket(sf::Packet* packet){
+	(*packet) << this->type << 0;
 }
 
 void Bullet::refresh(sf::Packet packet) {

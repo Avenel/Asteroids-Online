@@ -8,10 +8,8 @@ GameState::GameState(void) {
 GameState::~GameState(void) {
 }
 
-sf::Packet GameState::getPacket(int clientId, int id) {
-	sf::Packet packet;
-	packet << clientId << id << this->type;
-	return packet;
+void GameState::addDataToPacket(sf::Packet* packet){
+	(*packet) << this->type << 0;
 }
 
 void GameState::refresh(sf::Packet packet) {

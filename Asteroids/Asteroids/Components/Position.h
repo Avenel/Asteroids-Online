@@ -11,7 +11,7 @@ public:
 	float getX();
 	float getY();
 
-	sf::Packet getPacket(int clientId, int id);
+	void addDataToPacket(sf::Packet* packet);
 	void refresh(sf::Packet packet);
 
 	void rotateLeft(float speed);

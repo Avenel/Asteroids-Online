@@ -18,10 +18,8 @@ Unit::UnitType Unit::getType() {
 	return this->type;
 }
 
-sf::Packet Unit::getPacket(int clientId, int id) {
-	sf::Packet packet;
-	packet << clientId << id << this->type;
-	return packet;
+void Unit::addDataToPacket(sf::Packet* packet){
+	(*packet) << this->type << 0;
 }
 
 void Unit::refresh(sf::Packet packet) {

@@ -10,10 +10,8 @@ Player::~Player(void)
 {
 }
 
-sf::Packet Player::getPacket(int clientId, int id) {
-	sf::Packet packet;
-	packet << clientId << id << this->type;
-	return packet;
+void Player::addDataToPacket(sf::Packet* packet){
+	(*packet) << this->type << 0;
 }
 
 void Player::refresh(sf::Packet packet) {

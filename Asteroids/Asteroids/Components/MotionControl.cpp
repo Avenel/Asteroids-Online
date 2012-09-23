@@ -11,10 +11,8 @@ MotionControl::~MotionControl(void)
 {
 }
 
-sf::Packet MotionControl::getPacket(int clientId, int id) {
-	sf::Packet packet;
-	packet << clientId << id << this->type;
-	return packet;
+void MotionControl::addDataToPacket(sf::Packet* packet){
+	(*packet) << this->type << 0;
 }
 
 void MotionControl::refresh(sf::Packet packet) {

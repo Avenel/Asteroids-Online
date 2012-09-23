@@ -7,7 +7,7 @@ public:
 	Gun(void);
 	~Gun(void);
 
-	sf::Packet getPacket(int clientId, int id);
+	void addDataToPacket(sf::Packet* packet);
 	void refresh(sf::Packet packet);
 
 	void setBulletRange(float bulletRange);

@@ -11,10 +11,8 @@ GameMap::~GameMap(void)
 {
 }
 
-sf::Packet GameMap::getPacket(int clientId, int id) {
-	sf::Packet packet;
-	packet << clientId << id << this->type;
-	return packet;
+void GameMap::addDataToPacket(sf::Packet* packet){
+	(*packet) << this->type << 0;
 }
 
 void GameMap::refresh(sf::Packet packet) {

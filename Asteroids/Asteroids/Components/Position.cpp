@@ -30,10 +30,8 @@ float Position::getY() {
 	return y;
 }
 
-sf::Packet Position::getPacket(int clientId, int id) {
-	sf::Packet packet;
-	packet << clientId << id << this->type << this->x << this->y << this->rotation;
-	return packet;
+void Position::addDataToPacket(sf::Packet* packet){
+	(*packet) << this->type << this->x << this->y << this->rotation;
 }
 
 void Position::refresh(sf::Packet packet) {

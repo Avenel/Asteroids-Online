@@ -14,10 +14,8 @@ Motion::~Motion(void)
 {
 }
 
-sf::Packet Motion::getPacket(int clientId, int id) {
-	sf::Packet packet;
-	packet << clientId << id << this->type;
-	return packet;
+void Motion::addDataToPacket(sf::Packet* packet){
+	(*packet) << this->type << 0;
 }
 
 void Motion::refresh(sf::Packet packet) {
