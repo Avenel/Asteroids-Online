@@ -142,9 +142,7 @@ void Server::listen() {
 					if ((*it).getClientId() == clientId && (*it).getSeqNr() == seqNr) {
 						outgoingRequestFound = true;
 						packet >> data;
-						cout << "ERASE IT BABY!!" << endl;
 						this->outgoingRequests->erase(it);							
-						cout << this->outgoingRequests->size << endl;
 					}
 					break;
 				}
@@ -302,7 +300,7 @@ void Server::handleRequests() {
 				this->socket.send(answer.getPacket(), answer.getAddress(), this->port);
 				this->incomingRequests->push_back(answer);
 				this->incomingRequests->pop_front();
-				cout << "IncomingRequestCount: " << this->incomingRequests->size() << endl;
+				// cout << "IncomingRequestCount: " << this->incomingRequests->size() << endl;
 			}
 
 			// AFFIRMED REQUESTS (Antworten auf diese, ctrlTag = -4)
@@ -310,18 +308,17 @@ void Server::handleRequests() {
 				Request affirmRequest = this->affirmedRequests->front();
 				this->socket.send(affirmRequest.getPacket(), affirmRequest.getAddress(), this->port);
 				this->affirmedRequests->pop_front();
-				cout << "AffirmedRequestCount: " << this->affirmedRequests->size() << endl;
+				// cout << "AffirmedRequestCount: " << this->affirmedRequests->size() << endl;
 			}
 
 			// OUTGOING REQUESTS (Eigene Anfragen versenden)
 			if (!this->outgoingRequests->empty()) {
 				Request outgoingRequest = this->outgoingRequests->front();
-				std::cout << "Send Request to: " << outgoingRequest.getAddress().toString() << std::endl;
 
 				this->socket.send(outgoingRequest.getPacket(), outgoingRequest.getAddress(), this->port);
 				this->outgoingRequests->push_back(outgoingRequest);
 				this->outgoingRequests->pop_front();
-				cout << "OutgoingRequestCount: " << this->outgoingRequests->size() << endl;
+				// cout << "OutgoingRequestCount: " << this->outgoingRequests->size() << endl;
 			}
 
 			time = clock.getElapsedTime();
