@@ -136,17 +136,6 @@ void Server::listen() {
 					}
 				}
 
-				// Basic-Antwort Paket. Vll könnte man hier später mal über Server Dienste reden (ScoreList, mapchangeRequest, ...)
-				// IncomingRequest aufnehmen
-				if (!incomingRequestFound) {
-					sf::Packet answerPacket;
-					//				SeqNr,	ClientId, request, ctrlTag, Data
-					answerPacket << seqNr << clientId << true << -3 << 0;
-					Request newRequest(address, seqNr, clientId, answerPacket);
-					this->incomingRequests->push_back(newRequest);
-					cout << "New Incoming Request from: " << sf::IpAddress(clientId).toString() << endl;
-				}
-
 				// OUTGOING REQUESTS
 				bool outgoingRequestFound = false;
 				for (std::list<Request>::iterator it = this->outgoingRequests->begin(); it != this->outgoingRequests->end(); ++it) {
@@ -157,7 +146,18 @@ void Server::listen() {
 					}
 					break;
 				}
-			
+
+				// Basic-Antwort Paket. Vll könnte man hier später mal über Server Dienste reden (ScoreList, mapchangeRequest, ...)
+				// IncomingRequest aufnehmen
+				if (!incomingRequestFound && !outgoingRequestFound) {
+					sf::Packet answerPacket;
+					//				SeqNr,	ClientId, request, ctrlTag, Data
+					answerPacket << seqNr << clientId << true << -3 << 0;
+					Request newRequest(address, seqNr, clientId, answerPacket);
+					this->incomingRequests->push_back(newRequest);
+					cout << "New Incoming Request from: " << sf::IpAddress(clientId).toString() << endl;
+				}
+
 				// Wenn ctrlTag = -3 => Antwort auf Request erhalten => OutgoingRequest löschen, da abgearbeitet, AffirmedRequest senden
 				if (controlTag == -3) {
 					sf::Packet answerPacket;
