@@ -171,7 +171,7 @@ void Server::listen() {
 			}
 
 			while(!packet.endOfPacket()) {
-				packet >> controlTag >> id >> clientId;
+				packet >> id >> clientId;
 				// Id auspacken und weiterleiten, falls Entity schon bekannt			
 				temp = this->entityManager->getEntity(id, clientId);
 
@@ -199,6 +199,7 @@ void Server::listen() {
 						cout << packet.getDataSize() << endl;
 					}
 				}
+				packet >> controlTag;
 			}
 		}
 	}
