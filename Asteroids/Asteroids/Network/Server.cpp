@@ -192,12 +192,9 @@ void Server::listen() {
 				} else {
 					// Entity noch nicht bekannt -> anlegen	
 					//cout << "Lege neues Objekt an" << endl;
-					if (controlTag == 0) {
-						this->registerObject(this->generateEntity(id, clientId, &packet));
-						packet.clear();
-
-						cout << packet.getDataSize() << endl;
-					}
+					this->registerObject(this->generateEntity(id, clientId, &packet));
+					packet.clear();
+					cout << packet.getDataSize() << endl;
 				}
 				packet >> controlTag;
 			}
