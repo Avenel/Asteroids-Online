@@ -15,7 +15,7 @@ Server::Server(unsigned short port, EntityManager *manager, EntityCreator *creat
 	
 	this->entityCreator = creator;
 
-	this->updateTime = 10;
+	this->updateTime = 4000;
 	this->updateRequestTime = 100;
 
 	this->clientList = new list<sf::IpAddress>();
@@ -126,8 +126,6 @@ void Server::listen() {
 				for (std::list<Request>::iterator it = this->incomingRequests->begin(); it != this->incomingRequests->end(); ++it) {
 					if ((*it).getClientId() == clientId && (*it).getSeqNr() == seqNr) {
 						incomingRequestFound = true;
-						packet >> data;
-						
 						// Wenn ctrlTag = -4 => AffirmedRequest Antwort erhalten => IncomingRequest löschen, da abgearbeitet
 						if (controlTag == -4) {
 							this->incomingRequests->erase(it);
@@ -141,7 +139,6 @@ void Server::listen() {
 				for (std::list<Request>::iterator it = this->outgoingRequests->begin(); it != this->outgoingRequests->end(); ++it) {
 					if ((*it).getClientId() == clientId && (*it).getSeqNr() == seqNr) {
 						outgoingRequestFound = true;
-						packet >> data;
 						this->outgoingRequests->erase(it);							
 					}
 					break;
@@ -169,6 +166,8 @@ void Server::listen() {
 				// Anmeldungen und Abmeldungen werden alleine, ohne weitere Daten, versand.
 				// Answers und AffirmedRequests ebenso
 				if (controlTag == -1 || controlTag == -2 || controlTag == -3 || controlTag == -4) continue;
+
+				if (incomingRequestFound || outgoingRequestFound) continue;
 			}
 
 			while(!packet.endOfPacket()) {
@@ -195,6 +194,9 @@ void Server::listen() {
 					//cout << "Lege neues Objekt an" << endl;
 					if (controlTag == 0) {
 						this->registerObject(this->generateEntity(id, clientId, &packet));
+						packet.clear();
+
+						cout << packet.getDataSize() << endl;
 					}
 				}
 			}

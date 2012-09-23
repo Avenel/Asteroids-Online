@@ -33,7 +33,7 @@ void Game::startUp() {
 
 	// Netzwerk
 	this->server = new Server(1337, this->entityManager, this->entityCreator);
-	server->setMaster(true);
+	server->setMaster(false);
 	server->start();
 
 	// Testschiff
@@ -87,7 +87,7 @@ void Game::run() {
 			ticks = 0;
 		}
 		
-		if (!this->server->isMaster()) this->client->send();
+		//if (!this->server->isMaster()) this->client->send();
         
 		sf::Event event;
         while (this->window->pollEvent(event)) {
